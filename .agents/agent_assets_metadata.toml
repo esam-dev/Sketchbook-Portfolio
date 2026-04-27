@@ -1,0 +1,20 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "b_-m0trZ_4fb4Mmm8mBRK"
+uri = "file://artifacts/portfolio/src/assets/images/portrait.png"
+type = "image"
+title = "Portrait sketch of a developer"
+
+[[generated]]
+id = "qqOA4ihNdTeJJkF9xZ13L"
+uri = "file://artifacts/portfolio/src/assets/images/project-ecommerce.png"
+type = "image"
+title = "Sketch of a web app UI"
+
+[[generated]]
+id = "pC0zjNkykSYTeWAfx_ca5"
+uri = "file://artifacts/portfolio/src/assets/images/project-app.png"
+type = "image"
+title = "Sketch of a mobile app UI"
