@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowMarker, StarMarker, CircleMarker, UnderlineMarker, RealMarkerGraphic } from "@/components/Doodles";
 import { Github, Linkedin, Mail, Twitter, Code2, Terminal, Database, Server, Smartphone, Monitor } from "lucide-react";
-import { SiPython, SiJavascript, SiReact, SiNodedotjs, SiTailwindcss, SiPostgresql } from "react-icons/si";
+import { SiPython, SiJavascript, SiReact, SiNodedotjs, SiTailwindcss, SiPostgresql, SiTypescript, SiExpo, SiMongodb } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
 import portraitImg from "@/assets/images/portrait.png";
 import projectAppImg from "@/assets/images/project-app.png";
@@ -121,82 +121,345 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SKILLS SECTION - MIND MAP */}
+        {/* SKILLS SECTION - ARCHITECTURE MIND MAP */}
         <section id="skills" className="py-32">
-          <div className="text-center mb-24 relative">
+          <div className="text-center mb-20 relative">
             <h2 className="text-5xl sm:text-7xl font-archivo font-black uppercase relative inline-block">
               HABILIDADES
               <UnderlineMarker className="absolute -bottom-4 left-0 w-full text-[#29c46a]" delayOrder={0} />
             </h2>
-            <div className="font-caveat text-3xl text-muted-foreground mt-4 font-bold">(Lo que hago mejor)</div>
+            <div className="font-caveat text-3xl text-muted-foreground mt-4 font-bold">(Cómo construyo y conecto las cosas)</div>
           </div>
 
-          <div className="relative w-full max-w-4xl mx-auto aspect-square sm:aspect-video flex items-center justify-center">
-            
-            {/* Center Core */}
-            <div className="absolute z-20 flex flex-col items-center justify-center p-8 bg-white border-4 border-black rounded-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-              <span className="font-archivo text-2xl font-black uppercase">Core</span>
+          {/* DESKTOP LAYOUT — 4 quadrant architecture diagram */}
+          <div className="relative w-full max-w-6xl mx-auto hidden md:block" style={{ minHeight: "720px" }}>
+
+            {/* ===== FRONTEND REACT — top left ===== */}
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="absolute top-0 left-0 z-20 w-[280px]"
+            >
+              <div className="bg-white border-4 border-black rounded-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Monitor className="w-7 h-7 text-[#18a0fb]" strokeWidth={2.5} />
+                  <span className="font-archivo text-2xl font-black uppercase">Frontend</span>
+                </div>
+                <div className="font-caveat text-xl text-[#18a0fb] font-bold mb-4 -mt-2">¡Lo que el usuario ve!</div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="flex flex-col items-center gap-1 p-2 bg-[#18a0fb]/10 border-2 border-black rounded-lg hover:-translate-y-1 transition-transform cursor-pointer">
+                    <SiReact className="w-9 h-9 text-[#18a0fb]" />
+                    <span className="font-archivo text-[10px] font-bold">REACT</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1 p-2 bg-[#F7DF1E]/10 border-2 border-black rounded-lg hover:-translate-y-1 transition-transform cursor-pointer">
+                    <SiJavascript className="w-9 h-9 text-[#F0DB4F]" />
+                    <span className="font-archivo text-[10px] font-bold">JS</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1 p-2 bg-[#3178C6]/10 border-2 border-black rounded-lg hover:-translate-y-1 transition-transform cursor-pointer">
+                    <SiTypescript className="w-9 h-9 text-[#3178C6]" />
+                    <span className="font-archivo text-[10px] font-bold">TS</span>
+                  </div>
+                  <div className="col-span-3 flex justify-center gap-3 mt-1">
+                    <div className="flex items-center gap-1 px-2 py-1 bg-[#06B6D4]/10 border-2 border-black rounded-lg hover:-translate-y-1 transition-transform cursor-pointer">
+                      <SiTailwindcss className="w-5 h-5 text-[#06B6D4]" />
+                      <span className="font-archivo text-[10px] font-bold">TAILWIND</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* ===== MOBILE REACT NATIVE — top right ===== */}
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="absolute top-0 right-0 z-20 w-[280px]"
+            >
+              <div className="bg-white border-4 border-black rounded-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Smartphone className="w-7 h-7 text-[#ff5e93]" strokeWidth={2.5} />
+                  <span className="font-archivo text-2xl font-black uppercase">Mobile</span>
+                </div>
+                <div className="font-caveat text-xl text-[#ff5e93] font-bold mb-4 -mt-2">¡En el bolsillo!</div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col items-center gap-1 p-3 bg-[#18a0fb]/10 border-2 border-black rounded-lg hover:-translate-y-1 transition-transform cursor-pointer">
+                    <SiReact className="w-10 h-10 text-[#18a0fb]" />
+                    <span className="font-archivo text-[10px] font-bold text-center">REACT NATIVE</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1 p-3 bg-black/5 border-2 border-black rounded-lg hover:-translate-y-1 transition-transform cursor-pointer">
+                    <SiExpo className="w-10 h-10 text-black" />
+                    <span className="font-archivo text-[10px] font-bold">EXPO</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* ===== BACKEND — center ===== */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3, type: "spring" }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-[340px]"
+            >
+              <div className="bg-white border-4 border-black rounded-2xl shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] p-6">
+                <div className="flex items-center justify-center gap-3 mb-1">
+                  <Server className="w-8 h-8 text-[#ff4757]" strokeWidth={2.5} />
+                  <span className="font-archivo text-3xl font-black uppercase">Backend</span>
+                </div>
+                <div className="font-caveat text-2xl text-[#ff4757] font-bold mb-4 text-center">¡El cerebro!</div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="flex flex-col items-center gap-1 p-3 bg-[#3776AB]/10 border-2 border-black rounded-lg hover:-translate-y-1 transition-transform cursor-pointer">
+                    <SiPython className="w-10 h-10 text-[#3776AB]" />
+                    <span className="font-archivo text-[11px] font-bold">PYTHON</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1 p-3 bg-[#f89820]/10 border-2 border-black rounded-lg hover:-translate-y-1 transition-transform cursor-pointer">
+                    <FaJava className="w-10 h-10 text-[#f89820]" />
+                    <span className="font-archivo text-[11px] font-bold">JAVA</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1 p-3 bg-[#29c46a]/10 border-2 border-black rounded-lg hover:-translate-y-1 transition-transform cursor-pointer">
+                    <SiNodedotjs className="w-10 h-10 text-[#29c46a]" />
+                    <span className="font-archivo text-[11px] font-bold">NODE.JS</span>
+                  </div>
+                </div>
+                <div className="mt-3 text-center font-caveat text-base text-muted-foreground font-bold">APIs REST · Lógica · Auth</div>
+              </div>
+            </motion.div>
+
+            {/* ===== DATABASE — bottom center ===== */}
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.45 }}
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 w-[300px]"
+            >
+              <div className="bg-white border-4 border-black rounded-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6">
+                <div className="flex items-center justify-center gap-3 mb-1">
+                  <Database className="w-7 h-7 text-[#ffc700]" strokeWidth={2.5} />
+                  <span className="font-archivo text-2xl font-black uppercase">Base de Datos</span>
+                </div>
+                <div className="font-caveat text-xl text-[#ffc700] font-bold mb-4 text-center">¡Donde vive todo!</div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col items-center gap-1 p-3 bg-[#336791]/10 border-2 border-black rounded-lg hover:-translate-y-1 transition-transform cursor-pointer">
+                    <SiPostgresql className="w-10 h-10 text-[#336791]" />
+                    <span className="font-archivo text-[11px] font-bold">POSTGRES</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1 p-3 bg-[#47A248]/10 border-2 border-black rounded-lg hover:-translate-y-1 transition-transform cursor-pointer">
+                    <SiMongodb className="w-10 h-10 text-[#47A248]" />
+                    <span className="font-archivo text-[11px] font-bold">MONGODB</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* ===== COMMUNICATION ARROWS (SVG) ===== */}
+            <svg
+              className="absolute inset-0 w-full h-full pointer-events-none z-10"
+              viewBox="0 0 1152 720"
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <marker id="arrowhead-black" markerWidth="12" markerHeight="12" refX="6" refY="6" orient="auto">
+                  <path d="M 0 0 L 12 6 L 0 12 z" fill="#1a1a2e" />
+                </marker>
+              </defs>
+
+              {/* Frontend ↔ Backend */}
+              <motion.path
+                d="M 240 130 C 380 200, 460 260, 520 330"
+                stroke="#1a1a2e"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                fill="none"
+                strokeDasharray="0 1"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.6 }}
+                markerEnd="url(#arrowhead-black)"
+              />
+              <motion.path
+                d="M 540 320 C 470 250, 380 200, 250 145"
+                stroke="#1a1a2e"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.7 }}
+                markerEnd="url(#arrowhead-black)"
+              />
+
+              {/* Mobile ↔ Backend */}
+              <motion.path
+                d="M 912 130 C 800 200, 720 260, 660 330"
+                stroke="#1a1a2e"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.8 }}
+                markerEnd="url(#arrowhead-black)"
+              />
+              <motion.path
+                d="M 640 320 C 720 250, 800 200, 905 145"
+                stroke="#1a1a2e"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.9 }}
+                markerEnd="url(#arrowhead-black)"
+              />
+
+              {/* Backend ↔ Database */}
+              <motion.path
+                d="M 555 460 C 540 510, 540 560, 540 610"
+                stroke="#1a1a2e"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 1.0 }}
+                markerEnd="url(#arrowhead-black)"
+              />
+              <motion.path
+                d="M 600 610 C 605 560, 605 510, 595 460"
+                stroke="#1a1a2e"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 1.1 }}
+                markerEnd="url(#arrowhead-black)"
+              />
+            </svg>
+
+            {/* ===== ARROW LABELS ===== */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 1.2 }}
+              className="absolute top-[200px] left-[260px] z-20 bg-[#ffc700] border-2 border-black px-3 py-1 rounded-md font-caveat font-bold text-lg rotate-[-12deg] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+            >
+              HTTP / API REST
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 1.3 }}
+              className="absolute top-[200px] right-[260px] z-20 bg-[#ff5e93] border-2 border-black px-3 py-1 rounded-md font-caveat font-bold text-lg rotate-[12deg] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-white"
+            >
+              JSON / Fetch
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 1.4 }}
+              className="absolute bottom-[210px] left-1/2 -translate-x-1/2 z-20 bg-[#29c46a] border-2 border-black px-3 py-1 rounded-md font-caveat font-bold text-lg rotate-[-3deg] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-white"
+            >
+              Queries / ORM
+            </motion.div>
+
+            {/* Floating annotations */}
+            <div className="absolute top-[150px] left-[-20px] font-caveat text-2xl font-bold rotate-[-10deg] text-[#18a0fb]">¡UI bonita!</div>
+            <div className="absolute top-[150px] right-[-30px] font-caveat text-2xl font-bold rotate-[10deg] text-[#ff5e93]">¡iOS + Android!</div>
+            <div className="absolute bottom-[80px] left-[40px] font-caveat text-2xl font-bold rotate-[-8deg] text-[#ffc700]">¡SQL & NoSQL!</div>
+            <div className="absolute bottom-[80px] right-[40px] font-caveat text-2xl font-bold rotate-[8deg] text-[#ff4757]">¡Servidores!</div>
+
+            {/* Stars/decorations */}
+            <StarMarker className="absolute top-[10px] left-1/2 -translate-x-1/2 w-12 h-12 text-[#ffc700]" delayOrder={2} />
+            <StarMarker className="absolute bottom-[20px] left-[20%] w-10 h-10 text-[#ff5e93]" delayOrder={3} />
+            <StarMarker className="absolute top-[50%] right-[5%] w-10 h-10 text-[#29c46a]" delayOrder={4} />
+          </div>
+
+          {/* MOBILE LAYOUT — vertical stack */}
+          <div className="md:hidden flex flex-col gap-8 max-w-md mx-auto px-4">
+            {/* Frontend */}
+            <div className="bg-white border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-5">
+              <div className="flex items-center gap-3 mb-3">
+                <Monitor className="w-6 h-6 text-[#18a0fb]" strokeWidth={2.5} />
+                <span className="font-archivo text-xl font-black uppercase">Frontend React</span>
+              </div>
+              <div className="font-caveat text-lg text-[#18a0fb] font-bold mb-3">¡Lo que el usuario ve!</div>
+              <div className="flex flex-wrap gap-2">
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#18a0fb]/10 border-2 border-black rounded-lg"><SiReact className="w-6 h-6 text-[#18a0fb]" /><span className="font-archivo text-xs font-bold">REACT</span></div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#F7DF1E]/10 border-2 border-black rounded-lg"><SiJavascript className="w-6 h-6 text-[#F0DB4F]" /><span className="font-archivo text-xs font-bold">JS</span></div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#3178C6]/10 border-2 border-black rounded-lg"><SiTypescript className="w-6 h-6 text-[#3178C6]" /><span className="font-archivo text-xs font-bold">TS</span></div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#06B6D4]/10 border-2 border-black rounded-lg"><SiTailwindcss className="w-6 h-6 text-[#06B6D4]" /><span className="font-archivo text-xs font-bold">TAILWIND</span></div>
+              </div>
             </div>
 
-            {/* Python - Top Left */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="absolute top-[10%] left-[15%] sm:top-[20%] sm:left-[20%] z-20 flex flex-col items-center group cursor-pointer"
-            >
-              <div className="p-6 bg-white border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] group-hover:-translate-y-2 group-hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all bg-[#3776AB]/10">
-                <SiPython className="w-16 h-16 text-[#3776AB]" />
-              </div>
-              <span className="font-archivo text-xl font-bold mt-4 bg-white px-2 border-2 border-black">PYTHON</span>
-            </motion.div>
-
-            {/* Java - Top Right */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="absolute top-[10%] right-[15%] sm:top-[20%] sm:right-[20%] z-20 flex flex-col items-center group cursor-pointer"
-            >
-              <div className="p-6 bg-white border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] group-hover:-translate-y-2 group-hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all bg-[#f89820]/10">
-                <FaJava className="w-16 h-16 text-[#f89820]" />
-              </div>
-              <span className="font-archivo text-xl font-bold mt-4 bg-white px-2 border-2 border-black">JAVA</span>
-            </motion.div>
-
-            {/* JavaScript - Bottom Center */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              className="absolute bottom-[10%] left-1/2 -translate-x-1/2 sm:bottom-[15%] z-20 flex flex-col items-center group cursor-pointer"
-            >
-              <div className="p-6 bg-white border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] group-hover:-translate-y-2 group-hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all bg-[#F7DF1E]/10">
-                <SiJavascript className="w-16 h-16 text-[#F0DB4F]" />
-              </div>
-              <span className="font-archivo text-xl font-bold mt-4 bg-white px-2 border-2 border-black">JAVASCRIPT</span>
-            </motion.div>
-
-            {/* Connecting Arrows */}
-            <div className="absolute inset-0 pointer-events-none hidden sm:block">
-              {/* Center to Python */}
-              <ArrowMarker className="absolute top-[35%] left-[30%] w-40 h-40 text-black rotate-[-160deg]" wobbly delayOrder={1} />
-              {/* Center to Java */}
-              <ArrowMarker className="absolute top-[35%] right-[30%] w-40 h-40 text-black rotate-[-20deg]" wobbly delayOrder={2} />
-              {/* Center to JS */}
-              <ArrowMarker className="absolute bottom-[35%] left-1/2 -translate-x-1/2 w-32 h-40 text-black rotate-[90deg]" wobbly delayOrder={3} />
+            {/* Down arrow with label */}
+            <div className="flex flex-col items-center gap-1">
+              <ArrowMarker className="w-10 h-12 text-black rotate-90" wobbly delayOrder={1} />
+              <div className="bg-[#ffc700] border-2 border-black px-3 py-1 rounded-md font-caveat font-bold text-base shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">HTTP / API REST</div>
             </div>
 
-            {/* Secondary Skills Scattered */}
-            <div className="absolute top-0 left-[45%] text-[#18a0fb] hover:scale-125 transition-transform"><SiReact className="w-10 h-10" /></div>
-            <div className="absolute bottom-[40%] left-[10%] text-[#29c46a] hover:scale-125 transition-transform"><SiNodedotjs className="w-10 h-10" /></div>
-            <div className="absolute bottom-[40%] right-[10%] text-[#336791] hover:scale-125 transition-transform"><SiPostgresql className="w-10 h-10" /></div>
-            <div className="absolute top-[50%] right-[5%] text-[#06B6D4] hover:scale-125 transition-transform"><SiTailwindcss className="w-10 h-10" /></div>
-            
-            <div className="absolute top-1/4 left-[5%] font-caveat text-xl font-bold rotate-[-15deg] text-[#ff4757]">Backend!</div>
-            <div className="absolute bottom-1/4 right-[15%] font-caveat text-xl font-bold rotate-[15deg] text-[#18a0fb]">Frontend!</div>
+            {/* Backend */}
+            <div className="bg-white border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-5">
+              <div className="flex items-center gap-3 mb-3">
+                <Server className="w-6 h-6 text-[#ff4757]" strokeWidth={2.5} />
+                <span className="font-archivo text-xl font-black uppercase">Backend</span>
+              </div>
+              <div className="font-caveat text-lg text-[#ff4757] font-bold mb-3">¡El cerebro!</div>
+              <div className="flex flex-wrap gap-2">
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#3776AB]/10 border-2 border-black rounded-lg"><SiPython className="w-6 h-6 text-[#3776AB]" /><span className="font-archivo text-xs font-bold">PYTHON</span></div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#f89820]/10 border-2 border-black rounded-lg"><FaJava className="w-6 h-6 text-[#f89820]" /><span className="font-archivo text-xs font-bold">JAVA</span></div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#29c46a]/10 border-2 border-black rounded-lg"><SiNodedotjs className="w-6 h-6 text-[#29c46a]" /><span className="font-archivo text-xs font-bold">NODE.JS</span></div>
+              </div>
+            </div>
+
+            {/* Down arrow with label */}
+            <div className="flex flex-col items-center gap-1">
+              <ArrowMarker className="w-10 h-12 text-black rotate-90" wobbly delayOrder={2} />
+              <div className="bg-[#29c46a] border-2 border-black px-3 py-1 rounded-md font-caveat font-bold text-base shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-white">Queries / ORM</div>
+            </div>
+
+            {/* Database */}
+            <div className="bg-white border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-5">
+              <div className="flex items-center gap-3 mb-3">
+                <Database className="w-6 h-6 text-[#ffc700]" strokeWidth={2.5} />
+                <span className="font-archivo text-xl font-black uppercase">Base de Datos</span>
+              </div>
+              <div className="font-caveat text-lg text-[#ffc700] font-bold mb-3">¡Donde vive todo!</div>
+              <div className="flex flex-wrap gap-2">
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#336791]/10 border-2 border-black rounded-lg"><SiPostgresql className="w-6 h-6 text-[#336791]" /><span className="font-archivo text-xs font-bold">POSTGRES</span></div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#47A248]/10 border-2 border-black rounded-lg"><SiMongodb className="w-6 h-6 text-[#47A248]" /><span className="font-archivo text-xs font-bold">MONGODB</span></div>
+              </div>
+            </div>
+
+            {/* Mobile */}
+            <div className="bg-white border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-5">
+              <div className="flex items-center gap-3 mb-3">
+                <Smartphone className="w-6 h-6 text-[#ff5e93]" strokeWidth={2.5} />
+                <span className="font-archivo text-xl font-black uppercase">Mobile React Native</span>
+              </div>
+              <div className="font-caveat text-lg text-[#ff5e93] font-bold mb-3">¡En el bolsillo, también habla con el backend!</div>
+              <div className="flex flex-wrap gap-2">
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#18a0fb]/10 border-2 border-black rounded-lg"><SiReact className="w-6 h-6 text-[#18a0fb]" /><span className="font-archivo text-xs font-bold">REACT NATIVE</span></div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-black/5 border-2 border-black rounded-lg"><SiExpo className="w-6 h-6 text-black" /><span className="font-archivo text-xs font-bold">EXPO</span></div>
+              </div>
+            </div>
           </div>
         </section>
 
