@@ -16,20 +16,20 @@ const draw = {
   },
 };
 
-export const ArrowDoodle = (props: SVGProps<SVGSVGElement> & { delayOrder?: number }) => (
+export const ArrowMarker = (props: SVGProps<SVGSVGElement> & { delayOrder?: number, wobbly?: boolean }) => (
   <motion.svg
     width="100"
     height="100"
     viewBox="0 0 100 100"
     fill="none"
     stroke="currentColor"
-    strokeWidth="3"
+    strokeWidth="4"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}
   >
     <motion.path
-      d="M10,90 Q40,40 90,10 M70,10 L90,10 L90,30"
+      d={props.wobbly ? "M10,90 Q30,60 50,40 T90,10 M65,15 L90,10 L85,35" : "M10,90 Q40,40 90,10 M70,10 L90,10 L90,30"}
       variants={draw}
       custom={props.delayOrder || 0}
       initial="hidden"
@@ -39,43 +39,20 @@ export const ArrowDoodle = (props: SVGProps<SVGSVGElement> & { delayOrder?: numb
   </motion.svg>
 );
 
-export const StarDoodle = (props: SVGProps<SVGSVGElement> & { delayOrder?: number }) => (
-  <motion.svg
-    width="50"
-    height="50"
-    viewBox="0 0 50 50"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <motion.path
-      d="M25,2 L32,18 L48,20 L35,32 L38,48 L25,40 L12,48 L15,32 L2,20 L18,18 Z"
-      variants={draw}
-      custom={props.delayOrder || 0}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-    />
-  </motion.svg>
-);
-
-export const CircleDoodle = (props: SVGProps<SVGSVGElement> & { delayOrder?: number }) => (
+export const CircleMarker = (props: SVGProps<SVGSVGElement> & { delayOrder?: number }) => (
   <motion.svg
     width="100"
     height="100"
     viewBox="0 0 100 100"
     fill="none"
     stroke="currentColor"
-    strokeWidth="3"
+    strokeWidth="4"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}
   >
     <motion.path
-      d="M50,10 C80,12 90,40 85,70 C80,95 40,95 20,80 C5,65 10,25 35,15 C50,10 60,15 65,25"
+      d="M50,10 C75,12 90,30 85,60 C80,90 35,95 20,75 C5,55 15,20 40,12 C55,8 65,15 65,25"
       variants={draw}
       custom={props.delayOrder || 0}
       initial="hidden"
@@ -85,14 +62,14 @@ export const CircleDoodle = (props: SVGProps<SVGSVGElement> & { delayOrder?: num
   </motion.svg>
 );
 
-export const UnderlineDoodle = (props: SVGProps<SVGSVGElement> & { delayOrder?: number }) => (
+export const UnderlineMarker = (props: SVGProps<SVGSVGElement> & { delayOrder?: number }) => (
   <motion.svg
     width="200"
     height="20"
     viewBox="0 0 200 20"
     fill="none"
     stroke="currentColor"
-    strokeWidth="3"
+    strokeWidth="5"
     strokeLinecap="round"
     strokeLinejoin="round"
     preserveAspectRatio="none"
@@ -109,20 +86,20 @@ export const UnderlineDoodle = (props: SVGProps<SVGSVGElement> & { delayOrder?: 
   </motion.svg>
 );
 
-export const BulbDoodle = (props: SVGProps<SVGSVGElement> & { delayOrder?: number }) => (
+export const StarMarker = (props: SVGProps<SVGSVGElement> & { delayOrder?: number }) => (
   <motion.svg
-    width="60"
-    height="80"
-    viewBox="0 0 60 80"
+    width="50"
+    height="50"
+    viewBox="0 0 50 50"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2.5"
+    strokeWidth="4"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}
   >
     <motion.path
-      d="M30,10 C15,10 10,25 15,35 C20,45 22,50 22,60 L38,60 C38,50 40,45 45,35 C50,25 45,10 30,10 Z M22,65 L38,65 M25,70 L35,70 M10,20 L5,15 M50,20 L55,15 M30,5 L30,0"
+      d="M25,2 L32,18 L48,20 L35,32 L38,48 L25,40 L12,48 L15,32 L2,20 L18,18 Z"
       variants={draw}
       custom={props.delayOrder || 0}
       initial="hidden"
@@ -132,26 +109,18 @@ export const BulbDoodle = (props: SVGProps<SVGSVGElement> & { delayOrder?: numbe
   </motion.svg>
 );
 
-export const CoffeeStain = (props: SVGProps<SVGSVGElement>) => (
+export const RealMarkerGraphic = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width="150"
-    height="150"
-    viewBox="0 0 150 150"
+    width="120"
+    height="30"
+    viewBox="0 0 120 30"
     fill="none"
     {...props}
   >
-    <path
-      d="M75,10 C110,12 135,40 130,80 C125,120 85,135 50,125 C15,110 5,60 25,30 C45,5 60,8 75,10 Z"
-      fill="rgba(139, 69, 19, 0.08)"
-      stroke="rgba(139, 69, 19, 0.15)"
-      strokeWidth="2"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M75,25 C100,28 115,50 110,80 C105,110 75,120 45,110 C20,100 15,60 30,40 C45,20 60,22 75,25 Z"
-      fill="none"
-      stroke="rgba(139, 69, 19, 0.25)"
-      strokeWidth="1.5"
-    />
+    <path d="M10,15 L30,5 L110,5 C115,5 118,8 118,15 C118,22 115,25 110,25 L30,25 L10,15 Z" fill="#18a0fb" />
+    <path d="M30,5 L30,25" stroke="#fff" strokeWidth="2" opacity="0.3" />
+    <path d="M100,5 L100,25" stroke="#fff" strokeWidth="2" opacity="0.3" />
+    <path d="M5,12 L10,15 L5,18 Z" fill="#000" />
+    <path d="M35,10 L95,10" stroke="#fff" strokeWidth="2" opacity="0.5" strokeLinecap="round" />
   </svg>
 );
