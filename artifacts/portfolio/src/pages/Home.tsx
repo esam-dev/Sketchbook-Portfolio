@@ -3,7 +3,7 @@ import { ArrowMarker, StarMarker, CircleMarker, UnderlineMarker, RealMarkerGraph
 import { Github, Linkedin, Mail, Twitter, Code2, Terminal, Database, Server, Smartphone, Monitor } from "lucide-react";
 import { SiPython, SiJavascript, SiReact, SiNodedotjs, SiTailwindcss, SiPostgresql, SiTypescript, SiExpo, SiMongodb } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
-import portraitImg from "@/assets/images/portrait.png";
+import eliasPerfilImg from "@/assets/images/elias-perfil.png";
 import projectAppImg from "@/assets/images/project-app.png";
 import projectEcommerceImg from "@/assets/images/project-ecommerce.png";
 
@@ -14,17 +14,17 @@ export default function Home() {
   return (
     <div className="min-h-screen w-full overflow-hidden text-foreground selection:bg-[hsl(206_94%_53%/0.5)]">
       
-      <nav className="fixed top-0 left-0 right-0 z-50 p-6 pointer-events-none flex justify-between items-center">
+      <nav className="fixed top-0 left-0 right-0 z-50 p-3 sm:p-6 pointer-events-none flex justify-between items-center">
         <div className="pointer-events-auto">
-          <a href="#hero" className="font-archivo text-3xl font-black tracking-tighter hover:text-[#18a0fb] transition-colors">
+          <a href="#hero" className="font-archivo text-2xl sm:text-3xl font-black tracking-tighter hover:text-[#18a0fb] transition-colors">
             EO.
           </a>
         </div>
-        <ul className="flex flex-col sm:flex-row gap-4 sm:gap-8 font-archivo text-lg bg-background/90 sm:bg-transparent p-4 sm:p-0 rounded-xl sm:rounded-none border-4 border-foreground sm:border-none pointer-events-auto shadow-xl sm:shadow-none uppercase">
-          <li><a href="#about" className="hover:text-[#ffc700] hover:scale-110 inline-block transition-transform">Sobre mí</a></li>
-          <li><a href="#skills" className="hover:text-[#ff4757] hover:scale-110 inline-block transition-transform">Habilidades</a></li>
-          <li><a href="#projects" className="hover:text-[#29c46a] hover:scale-110 inline-block transition-transform">Proyectos</a></li>
-          <li><a href="#contact" className="hover:text-[#18a0fb] hover:scale-110 inline-block transition-transform">Contacto</a></li>
+        <ul className="flex flex-col sm:flex-row gap-1 sm:gap-8 font-archivo text-base sm:text-lg bg-background/90 sm:bg-transparent p-2 sm:p-0 rounded-xl sm:rounded-none border-2 sm:border-none pointer-events-auto shadow-xl sm:shadow-none uppercase w-40 sm:w-auto">
+          <li><a href="#about" className="hover:text-[#ffc700] hover:scale-105 inline-block transition-transform">Sobre mí</a></li>
+          <li><a href="#skills" className="hover:text-[#ff4757] hover:scale-105 inline-block transition-transform">Habilidades</a></li>
+          <li><a href="#projects" className="hover:text-[#29c46a] hover:scale-105 inline-block transition-transform">Proyectos</a></li>
+          <li><a href="#contact" className="hover:text-[#18a0fb] hover:scale-105 inline-block transition-transform">Contacto</a></li>
         </ul>
       </nav>
 
@@ -38,43 +38,59 @@ export default function Home() {
             transition={{ duration: 0.8, type: "spring" }}
             className="relative z-10 w-full"
           >
-            <div className="absolute top-10 left-[10%] hidden md:block rotate-[-15deg]">
-              <div className="font-caveat text-3xl text-[#ff4757] mb-2 font-bold">¡Hola! Soy</div>
-              <ArrowMarker className="w-20 h-20 text-[#ff4757] rotate-[120deg]" delayOrder={1} />
+            {/* Garabato rojo: '¡Hola! Soy' apunta a ELÍAS ORTIZ, 'Trabajos' apunta al botón */}
+            {/* ¡Hola! Soy -> ELÍAS ORTIZ */}
+            <div className="absolute top-[8px] left-1 xs:top-[12px] xs:left-2 sm:top-[20px] sm:left-[2%] rotate-[-15deg] z-20 flex flex-col items-center">
+              <div className="font-caveat text-base xs:text-lg sm:text-2xl md:text-3xl text-[#ff4757] mb-0 sm:mb-2 font-bold">¡Hola! Soy</div>
+              <ArrowMarker className="w-8 h-8 xs:w-10 xs:h-10 sm:w-16 sm:h-16 text-[#ff4757] rotate-[120deg] -mt-2 xs:-mt-2 sm:-mt-2" delayOrder={1} />
             </div>
 
-            <h1 className="text-7xl sm:text-9xl font-archivo font-black uppercase tracking-tight leading-none">
+            {/* Trabajos -> Botón 'Ver mis proyectos' (solo uno, bien posicionado) */}
+            <div className="absolute left-[10px] top-[185px] sm:left-[19%] sm:top-[285px] rotate-[-18deg] z-20 flex flex-col items-center">
+              <div className="font-caveat text-base xs:text-lg sm:text-2xl md:text-3xl text-[#ffc700] mb-0 font-bold">Trabajos</div>
+              <ArrowMarker className="w-8 h-8 xs:w-12 xs:h-12 sm:w-16 sm:h-16 text-[#ffc700] rotate-[-75deg] -mb-2" delayOrder={4} />
+            </div>
+
+            <h1 className="text-4xl xs:text-5xl sm:text-7xl md:text-9xl font-archivo font-black uppercase tracking-tight leading-none">
               ELÍAS ORTIZ
             </h1>
             
-            <div className="mt-4 relative inline-block">
-              <h2 className="text-3xl sm:text-5xl font-archivo font-bold text-transparent" style={{ WebkitTextStroke: "2px currentColor" }}>
+            <div className="mt-4 relative inline-block w-full max-w-xs sm:max-w-full">
+              <h2 className="text-xl xs:text-2xl sm:text-4xl md:text-5xl font-archivo font-bold text-transparent" style={{ WebkitTextStroke: "2px currentColor" }}>
                 DESARROLLADOR DE SOFTWARE
               </h2>
-              <UnderlineMarker className="absolute -bottom-4 left-0 w-full text-[#18a0fb]" delayOrder={2} />
+              <UnderlineMarker className="absolute -bottom-2 sm:-bottom-4 left-0 w-full text-[#18a0fb]" delayOrder={2} />
             </div>
 
-            <div className="absolute top-20 right-[10%] hidden md:block rotate-[10deg]">
-              <div className="font-caveat text-2xl text-[#29c46a] mb-2 font-bold whitespace-nowrap">Full-Stack Mágico</div>
-              <ArrowMarker className="w-16 h-16 text-[#29c46a] rotate-[60deg]" delayOrder={3} />
+            {/* Garabato verde ajustado para apuntar a 'ELÍAS ORTIZ' */}
+            <div className="absolute top-[50px] right-2 sm:top-[100px] sm:right-[7%] rotate-[15deg] z-20 flex flex-col items-center">
+              <div className="font-caveat text-sm xs:text-base sm:text-xl md:text-2xl text-[#29c46a] mb-0 sm:mb-2 font-bold whitespace-nowrap">Full-Stack Developer</div>
+              <ArrowMarker className="w-7 h-7 xs:w-10 xs:h-10 sm:w-14 sm:h-14 text-[#29c46a] rotate-[40deg] -mt-1" delayOrder={3} />
             </div>
 
-            <div className="absolute bottom-20 left-[20%] hidden md:block rotate-[-5deg]">
-              <ArrowMarker className="w-20 h-20 text-[#ffc700] rotate-[-45deg]" delayOrder={4} />
-              <div className="font-caveat text-3xl text-[#ffc700] mt-2 font-bold">Apasionado</div>
-            </div>
 
-            <div className="mt-20 flex flex-wrap justify-center gap-6 font-archivo text-xl uppercase">
-              <a href="#projects" className="px-8 py-4 bg-[#ffc700] text-black border-4 border-black hover:-translate-y-2 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all font-black">
+
+            <div className="mt-10 sm:mt-20 flex flex-wrap justify-center gap-3 sm:gap-6 font-archivo text-base sm:text-xl uppercase relative">
+              <a href="#projects" className="px-4 py-2 sm:px-8 sm:py-4 bg-[#ffc700] text-black border-2 sm:border-4 border-black hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all font-black relative z-10">
                 Ver mis proyectos
               </a>
-              <a href="#contact" className="px-8 py-4 bg-transparent border-4 border-black hover:bg-[#18a0fb] hover:text-white hover:-translate-y-2 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all font-black">
+              <a href="#contact" className="px-4 py-2 sm:px-8 sm:py-4 bg-transparent border-2 sm:border-4 border-black hover:bg-[#18a0fb] hover:text-white hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all font-black relative z-10">
                 Contactar
               </a>
+              {/* Flecha azul ajustada para apuntar a los botones en móvil */}
+              <svg className="block sm:hidden absolute left-1/2 top-[120px] -translate-x-1/2 w-44 h-20 z-0" viewBox="0 0 176 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 30 Q88 80 156 30" stroke="#18a0fb" strokeWidth="6" fill="none" markerEnd="url(#arrowhead-blue)" />
+                <defs>
+                  <marker id="arrowhead-blue" markerWidth="12" markerHeight="12" refX="6" refY="6" orient="auto">
+                    <path d="M 0 0 L 12 6 L 0 12 z" fill="#18a0fb" />
+                  </marker>
+                </defs>
+              </svg>
             </div>
             
-            <motion.div style={{ y: y1 }} className="absolute -bottom-10 right-[20%] rotate-[-20deg] z-50">
-              <RealMarkerGraphic className="w-48 h-auto drop-shadow-xl" />
+            {/* Marcador azul decorativo, reubicado para no tapar los botones */}
+            <motion.div style={{ y: y1 }} className="absolute -bottom-24 right-2 sm:-bottom-10 sm:right-[20%] rotate-[-10deg] z-30">
+              <RealMarkerGraphic className="w-32 h-auto drop-shadow-xl opacity-90" />
             </motion.div>
           </motion.div>
         </section>
@@ -89,8 +105,8 @@ export default function Home() {
               className="w-full md:w-1/2 relative"
             >
               <div className="relative rotate-[-3deg] p-4 bg-white marker-border shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
-                <img src={portraitImg} alt="Elías Ortiz" className="w-full h-auto grayscale contrast-125 border-2 border-black" />
-                <div className="absolute -bottom-6 -right-6 bg-[#ff5e93] text-black px-4 py-2 font-caveat text-3xl font-bold rotate-6 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <img src={eliasPerfilImg} alt="Elías Ortiz" className="w-full h-auto contrast-125 border-2 border-black" />
+                <div className="absolute -bottom-6 -right-6 bg-[#c9a616] text-black px-4 py-2 font-caveat text-3xl font-bold rotate-6 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                   ¡Yo! 🚀
                 </div>
               </div>
@@ -108,7 +124,7 @@ export default function Home() {
               </h2>
               <div className="space-y-6 font-patrick text-3xl leading-relaxed">
                 <p>
-                  Soy un desarrollador que convierte <span className="highlighter-cyan font-bold">caos en código</span>.
+                  Soy un desarrollador que busca crear <span className="highlighter-cyan font-bold">experiencias digitales con la mejor UI y funcionalidades factibles con código</span>.
                 </p>
                 <p>
                   Con sólida experiencia en <span className="highlighter-yellow font-bold">arquitectura de software</span> y un amor profundo por construir interfaces fluidas. Me enfoco en rendimiento y escalabilidad.
@@ -204,7 +220,7 @@ export default function Home() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3, type: "spring" }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-[340px]"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-[340px] mb-16"
             >
               <div className="bg-white border-4 border-black rounded-2xl shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] p-6">
                 <div className="flex items-center justify-center gap-3 mb-1">
@@ -483,9 +499,9 @@ export default function Home() {
                 <img src={projectEcommerceImg} alt="Proyecto E-Commerce" className="w-full h-auto grayscale group-hover:grayscale-0 transition-all duration-500 border-2 border-black" />
               </div>
               <div className="w-full md:w-1/2 relative">
-                <h3 className="text-4xl font-archivo font-black uppercase mb-4">Plataforma Logística</h3>
+                <h3 className="text-4xl font-archivo font-black uppercase mb-4">Plataforma de ecommerce - catlink</h3>
                 <p className="font-patrick text-2xl mb-6">
-                  Sistema de gestión de inventario de alto rendimiento. Procesamiento de miles de transacciones por segundo.
+                  Sistema de gestión de catalogo, administrar productos,  recibir pedidos. Todo en un solo lugar.
                 </p>
                 <div className="flex flex-wrap gap-3 mb-8 font-archivo text-sm font-bold uppercase">
                   <span className="bg-[#3776AB] text-white px-3 py-1 border-2 border-black">Python</span>
@@ -608,7 +624,7 @@ export default function Home() {
       </main>
 
       <footer className="py-10 bg-black text-white text-center font-archivo font-bold uppercase mt-20">
-        <p className="text-xl">Diseñado por Elías Ortiz © {new Date().getFullYear()}</p>
+        <p className="text-xl">Desarrollado por Navixsoft © {new Date().getFullYear()}</p>
         <p className="opacity-50 text-sm mt-2">Pizarra limpia. Código limpio.</p>
       </footer>
     </div>
