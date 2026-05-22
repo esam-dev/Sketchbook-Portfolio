@@ -192,7 +192,7 @@
     pointer-events: none;
     z-index: -1;
     background:
-      radial-gradient(circle at top center, hsl(0 0% 100% / 0.75), transparent 38%),
+      radial-gradient(circle at top center, hsla(0, 43%, 44%, 0.75), transparent 38%),
       linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)));
   }
 
