@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowMarker, StarMarker, CircleMarker, UnderlineMarker, RealMarkerGraphic } from "@/components/Doodles";
-import { Github, Linkedin, Mail, Twitter, Code2, Terminal, Database, Server, Smartphone, Monitor } from "lucide-react";
+import { Github, Linkedin, Mail, Twitter, Code2, Terminal, Database, Server, Smartphone, Monitor, ExternalLink } from "lucide-react";
 import { SiPython, SiJavascript, SiReact, SiNodedotjs, SiTailwindcss, SiPostgresql, SiTypescript, SiExpo, SiMongodb } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
 import eliasPerfilImg from "@/assets/images/elias-perfil.png";
 import projectAppImg from "@/assets/images/project-app.png";
 import projectEcommerceImg from "@/assets/images/project-ecommerce.png";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default function Home() {
   const [lang, setLang] = useState("en");
@@ -37,9 +38,13 @@ export default function Home() {
       project1Title: "Plataforma de ecommerce - Next.js Commerce",
       project1Desc: "Tienda online moderna con catálogo de productos, carrito de compras y checkout impulsado por Shopify.",
       project1Btn: "Ver código",
+      project1SiteBtn: "Ver sitio",
       project2Title: "Finanz",
       project2Desc: "Plataforma de servicios financieros con panel de control, autenticación y gestión de finanzas personales.",
       project2Btn: "Ver código",
+      project3Title: "Sitio web - Navixsoft",
+      project3Desc: "Sitio corporativo de una empresa de desarrollo de software. Desarrollo completo: diseño, frontend, backend e infraestructura.",
+      project3SiteBtn: "Ver sitio",
       // Experiencia
       experience: "EXPERIENCIA",
       exp: [
@@ -47,7 +52,7 @@ export default function Home() {
           year: "2025 - Presente",
           role: "Mid Software Engineer (Ingeniero de Software Intermedio)",
           company: "Navixsoft",
-          desc: "Leading backend development with Python, Node.js and interfaces with React. Cloud: AWS, GCP, Railway, Docker. (Liderando desarrollo backend con Python, Node.js e interfaces con React. Cloud: AWS, GCP, Railway, Docker.)"
+          desc: "Desarrollo backend y frontend con Python, Node.js y React. Infraestructura en AWS, GCP y Railway."
         },
         {
           year: "2025 - 2026",
@@ -74,6 +79,12 @@ export default function Home() {
       // Footer
       footerDev: "Desarrollado por Navixsoft ",
       footerSlogan: "Pizarra limpia. Código limpio.",
+      footerContactBtn: "Hablemos",
+      footerNavTitle: "Navegación",
+      footerNavExp: "Experiencia",
+      footerProjectsTitle: "Proyectos",
+      footerMoreGithub: "Ver más en GitHub",
+      footerFollowTitle: "Sígueme",
       // Otros labels
       frontend: "Frontend",
       mobile: "Mobile",
@@ -115,9 +126,13 @@ export default function Home() {
       project1Title: "E-commerce platform - Next.js Commerce",
       project1Desc: "Modern online store with product catalog, shopping cart, and Shopify-powered checkout.",
       project1Btn: "View code",
+      project1SiteBtn: "View site",
       project2Title: "Finanz",
       project2Desc: "Financial services platform with dashboard, authentication, and personal finance management.",
       project2Btn: "View code",
+      project3Title: "Website - Navixsoft",
+      project3Desc: "Corporate site for a software development company. Full development: design, frontend, backend and infrastructure.",
+      project3SiteBtn: "View site",
       // Experience
       experience: "EXPERIENCE",
       exp: [
@@ -125,7 +140,7 @@ export default function Home() {
           year: "2025 - Present",
           role: "Mid Software Engineer",
           company: "Navixsoft",
-          desc: "Leading backend development with Python ,  Node.js and interfaces with React ."
+          desc: "Backend and frontend development with Python, Node.js and React. Infrastructure on AWS, GCP and Railway."
         },
         {
           year: "2025 - 2026",
@@ -152,6 +167,12 @@ export default function Home() {
       // Footer
       footerDev: "Developed by Navixsoft ",
       footerSlogan: "Clean board. Clean code.",
+      footerContactBtn: "Let's talk",
+      footerNavTitle: "Navigation",
+      footerNavExp: "Experience",
+      footerProjectsTitle: "Projects",
+      footerMoreGithub: "See more on GitHub",
+      footerFollowTitle: "Follow me",
       // Other labels
       frontend: "Frontend",
       mobile: "Mobile",
@@ -174,7 +195,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen w-full overflow-hidden text-foreground selection:bg-[hsl(206_94%_53%/0.5)]">
+    <div className="home-shell min-h-screen w-full overflow-hidden text-foreground selection:bg-[hsl(206_94%_53%/0.5)]">
       
       <nav className="fixed top-0 left-0 right-0 z-50 p-3 sm:p-6 pointer-events-none flex justify-between items-center">
         <div className="pointer-events-auto flex items-center gap-2">
@@ -182,20 +203,22 @@ export default function Home() {
             EO.
           </a>
         </div>
-        <ul className="flex flex-col sm:flex-row gap-1 sm:gap-8 font-archivo text-base sm:text-lg bg-background/90 sm:bg-transparent p-2 sm:p-0 rounded-xl sm:rounded-none border-2 sm:border-none pointer-events-auto shadow-xl sm:shadow-none uppercase w-40 sm:w-auto">
+        <ul className="flex flex-col sm:flex-row gap-1 sm:gap-8 font-archivo text-base sm:text-lg bg-background/90 sm:bg-transparent p-2 sm:p-0 rounded-xl sm:rounded-none border border-border sm:border-none pointer-events-auto shadow-xl sm:shadow-none uppercase w-40 sm:w-auto backdrop-blur">
           <li><a href="#about" className="hover:text-[#ffc700] hover:scale-105 inline-block transition-transform">{t[lang].nav[0]}</a></li>
           <li><a href="#skills" className="hover:text-[#ff4757] hover:scale-105 inline-block transition-transform">{t[lang].nav[1]}</a></li>
           <li><a href="#projects" className="hover:text-[#29c46a] hover:scale-105 inline-block transition-transform">{t[lang].nav[2]}</a></li>
           <li><a href="#contact" className="hover:text-[#18a0fb] hover:scale-105 inline-block transition-transform">{t[lang].nav[3]}</a></li>
         </ul>
-        {/* Botón de idioma */}
-        <button
-          className="pointer-events-auto ml-2 px-3 py-1 rounded-full border-2 border-black font-bold font-archivo text-xs sm:text-base bg-white/80 hover:bg-[#18a0fb] hover:text-white transition-colors shadow-md"
-          onClick={() => setLang(lang === "es" ? "en" : "es")}
-          aria-label="Cambiar idioma"
-        >
-          {lang === "es" ? "EN" : "ES"}
-        </button>
+        <div className="pointer-events-auto ml-2 flex items-center gap-2">
+          <button
+            className="px-3 py-1 rounded-full border border-border font-bold font-archivo text-xs sm:text-base bg-background/80 hover:bg-[#18a0fb] hover:text-white transition-colors shadow-md backdrop-blur"
+            onClick={() => setLang(lang === "es" ? "en" : "es")}
+            aria-label="Cambiar idioma"
+          >
+            {lang === "es" ? "EN" : "ES"}
+          </button>
+          <ModeToggle />
+        </div>
       </nav>
 
       <main className="max-w-6xl mx-auto px-6 py-24 relative z-10">
@@ -272,7 +295,7 @@ export default function Home() {
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="w-full md:w-1/2 relative"
+              className="relative mx-auto w-full max-w-xs sm:max-w-sm md:mx-0 md:w-[42%] md:max-w-md"
             >
               <div className="relative rotate-[-3deg] p-4 bg-white marker-border shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
                 <img src={eliasPerfilImg} alt="Elías Ortiz" className="w-full h-auto contrast-125 border-2 border-black" />
@@ -690,9 +713,24 @@ export default function Home() {
                   <span className="bg-white text-black px-3 py-1 border-2 border-black">Shopify</span>
                   <span className="bg-[#3178C6] text-white px-3 py-1 border-2 border-black">TypeScript</span>
                 </div>
-                <a href="https://nextjs-commerce-three-sooty-63.vercel.app/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-archivo text-xl font-black uppercase bg-[#18a0fb] text-white px-6 py-3 border-4 border-black hover:bg-white hover:text-black transition-colors">
-                  {t[lang].project1Btn} <Github className="w-6 h-6" />
-                </a>
+                <div className="flex flex-wrap items-center gap-3">
+                  <a
+                    href="https://github.com/esam-dev/catlink"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 font-archivo text-xl font-black uppercase bg-[#18a0fb] text-white px-6 py-3 border-4 border-black hover:bg-white hover:text-black transition-colors"
+                  >
+                    {t[lang].project1Btn} <Github className="w-6 h-6" />
+                  </a>
+                  <a
+                    href="https://nextjs-commerce-three-sooty-63.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 font-archivo text-xl font-black uppercase bg-[#ffc700] text-black px-6 py-3 border-4 border-black hover:bg-[#29c46a] transition-colors"
+                  >
+                    {t[lang].project1SiteBtn} <ExternalLink className="w-6 h-6" />
+                  </a>
+                </div>
                 <ArrowMarker className="absolute -left-16 top-1/2 hidden md:block w-20 h-20 text-black rotate-[180deg]" delayOrder={1} />
               </div>
             </motion.div>
@@ -721,6 +759,41 @@ export default function Home() {
                 <a href="https://finanz-services.web.app/auth" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-archivo text-xl font-black uppercase bg-[#ff5e93] text-black px-6 py-3 border-4 border-black hover:bg-black hover:text-white transition-colors">
                   {t[lang].project2Btn} <Github className="w-6 h-6" />
                 </a>
+              </div>
+            </motion.div>
+
+            {/* Project 3 - Navixsoft */}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="flex flex-col md:flex-row gap-12 items-center"
+            >
+              <div className="w-full md:w-1/2 p-2 bg-white border-4 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] relative group">
+                <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#18a0fb] rounded-full border-4 border-black z-10 flex items-center justify-center font-archivo font-black text-xl text-white">3</div>
+                <div className="w-full aspect-video bg-black flex items-center justify-center border-2 border-black group-hover:bg-[#18a0fb] transition-colors duration-500">
+                  <span className="font-archivo font-black text-4xl sm:text-5xl text-white tracking-tighter select-none">NAVIXSOFT.</span>
+                </div>
+              </div>
+              <div className="w-full md:w-1/2 relative">
+                <h3 className="text-4xl font-archivo font-black uppercase mb-4">{t[lang].project3Title}</h3>
+                <p className="font-patrick text-2xl mb-6">
+                  {t[lang].project3Desc}
+                </p>
+                <div className="flex flex-wrap gap-3 mb-8 font-archivo text-sm font-bold uppercase">
+                  <span className="bg-[#00d8ff] text-black px-3 py-1 border-2 border-black">React</span>
+                  <span className="bg-[#3178c6] text-white px-3 py-1 border-2 border-black">TypeScript</span>
+                  <span className="bg-[#38bdf8] text-black px-3 py-1 border-2 border-black">Tailwind</span>
+                </div>
+                <a
+                  href="https://navixsoft.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 font-archivo text-xl font-black uppercase bg-[#ffc700] text-black px-6 py-3 border-4 border-black hover:bg-[#29c46a] transition-colors"
+                >
+                  {t[lang].project3SiteBtn} <ExternalLink className="w-6 h-6" />
+                </a>
+                <ArrowMarker className="absolute -left-16 top-1/2 hidden md:block w-20 h-20 text-black rotate-[180deg]" delayOrder={3} />
               </div>
             </motion.div>
           </div>
@@ -792,19 +865,112 @@ export default function Home() {
             </form>
 
             <div className="mt-12 pt-8 border-t-4 border-black flex justify-center gap-8">
-              <a href="#" className="p-3 bg-white border-4 border-black hover:bg-[#18a0fb] hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><Github className="w-8 h-8" /></a>
-              <a href="#" className="p-3 bg-white border-4 border-black hover:bg-[#18a0fb] hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><Linkedin className="w-8 h-8" /></a>
-              <a href="#" className="p-3 bg-white border-4 border-black hover:bg-[#18a0fb] hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><Twitter className="w-8 h-8" /></a>
-              <a href="#" className="p-3 bg-white border-4 border-black hover:bg-[#18a0fb] hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><Mail className="w-8 h-8" /></a>
+              <a href="https://github.com/esam-dev" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="p-3 bg-white border-4 border-black hover:bg-[#18a0fb] hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><Github className="w-8 h-8" /></a>
+              <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="p-3 bg-white border-4 border-black hover:bg-[#18a0fb] hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><Linkedin className="w-8 h-8" /></a>
+              <a href="https://instagram.com/eliassamu_" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="p-3 bg-white border-4 border-black hover:bg-[#18a0fb] hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+              <a href="mailto:emails.eliasortiz@gmail.com" aria-label="Email" className="p-3 bg-white border-4 border-black hover:bg-[#18a0fb] hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><Mail className="w-8 h-8" /></a>
             </div>
           </div>
         </section>
 
       </main>
 
-      <footer className="py-10 bg-black text-white text-center font-archivo font-bold uppercase mt-20">
-        <p className="text-xl">{t[lang].footerDev}© {new Date().getFullYear()}</p>
-        <p className="opacity-50 text-sm mt-2">{t[lang].footerSlogan}</p>
+      <footer className="mt-20 border-t-4 border-border bg-background text-foreground">
+        {/* Main footer content */}
+        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+
+          {/* Brand column */}
+          <div className="flex flex-col gap-4">
+            <a href="#hero" className="font-archivo font-black text-3xl tracking-tighter hover:text-[#18a0fb] transition-colors w-fit">
+              EO.
+            </a>
+            <p className="font-patrick text-xl text-muted-foreground leading-snug">
+              Software Developer.<br />Full-Stack · UI · Backend.
+            </p>
+            <a
+              href="#contact"
+              className="inline-flex items-center justify-center font-archivo font-black uppercase text-sm px-5 py-3 bg-[#18a0fb] text-white border-4 border-border hover:bg-foreground hover:text-background transition-colors w-fit"
+            >
+              {t[lang as keyof typeof t].footerContactBtn}
+            </a>
+          </div>
+
+          {/* Nav */}
+          <div className="flex flex-col gap-4">
+            <h4 className="font-archivo font-black uppercase text-sm tracking-widest border-b-2 border-border pb-2">{t[lang as keyof typeof t].footerNavTitle}</h4>
+            <ul className="flex flex-col gap-3 font-patrick text-xl text-muted-foreground">
+              <li><a href="#about" className="hover:text-foreground transition-colors">{t[lang as keyof typeof t].nav[0]}</a></li>
+              <li><a href="#skills" className="hover:text-foreground transition-colors">{t[lang as keyof typeof t].nav[1]}</a></li>
+              <li><a href="#projects" className="hover:text-foreground transition-colors">{t[lang as keyof typeof t].nav[2]}</a></li>
+              <li><a href="#experience" className="hover:text-foreground transition-colors">{t[lang as keyof typeof t].footerNavExp}</a></li>
+              <li><a href="#contact" className="hover:text-foreground transition-colors">{t[lang as keyof typeof t].nav[3]}</a></li>
+            </ul>
+          </div>
+
+          {/* Projects */}
+          <div className="flex flex-col gap-4">
+            <h4 className="font-archivo font-black uppercase text-sm tracking-widest border-b-2 border-border pb-2">{t[lang as keyof typeof t].footerProjectsTitle}</h4>
+            <ul className="flex flex-col gap-3 font-patrick text-xl text-muted-foreground">
+              <li><a href="/catlink" className="hover:text-foreground transition-colors">Catlink</a></li>
+              <li><a href="https://navixsoft.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Navixsoft</a></li>
+              <li><a href="https://github.com/esam-dev" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">{t[lang as keyof typeof t].footerMoreGithub}</a></li>
+            </ul>
+          </div>
+
+          {/* Follow */}
+          <div className="flex flex-col gap-4">
+            <h4 className="font-archivo font-black uppercase text-sm tracking-widest border-b-2 border-border pb-2">{t[lang as keyof typeof t].footerFollowTitle}</h4>
+            <div className="flex gap-3">
+              <a
+                href="https://github.com/esam-dev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-xl border-2 border-border hover:bg-foreground hover:text-background transition-colors"
+                aria-label="GitHub esam-dev"
+              >
+                <Github className="w-5 h-5" />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-xl border-2 border-border hover:bg-foreground hover:text-background transition-colors"
+                aria-label="LinkedIn Elias Ortiz"
+              >
+                <Linkedin className="w-5 h-5" />
+              </a>
+              <a
+                href="https://instagram.com/eliassamu_"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-xl border-2 border-border hover:bg-foreground hover:text-background transition-colors"
+                aria-label="Instagram eliassamu_"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+              <a
+                href="mailto:emails.eliasortiz@gmail.com"
+                className="p-2.5 rounded-xl border-2 border-border hover:bg-foreground hover:text-background transition-colors"
+                aria-label="Email"
+              >
+                <Mail className="w-5 h-5" />
+              </a>
+            </div>
+            <p className="font-caveat text-lg text-muted-foreground">
+              @eliassamu_ · esam-dev
+            </p>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="border-t border-border">
+          <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row justify-between items-center gap-3 font-archivo text-sm text-muted-foreground">
+            <span>© {new Date().getFullYear()} Elías Ortiz.</span>
+            <span className="font-caveat text-base">{t[lang as keyof typeof t].footerSlogan}</span>
+          </div>
+        </div>
       </footer>
     </div>
   );
