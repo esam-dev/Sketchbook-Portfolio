@@ -34,11 +34,11 @@ export default function Home() {
       skillsDesc: "(Cómo construyo y conecto las cosas)",
       // Proyectos
       projects: "PROYECTOS",
-      project1Title: "Plataforma de ecommerce - catlink",
-      project1Desc: "Sistema de gestión de catálogo, administrar productos, recibir pedidos. Todo en un solo lugar.",
+      project1Title: "Plataforma de ecommerce - Next.js Commerce",
+      project1Desc: "Tienda online moderna con catálogo de productos, carrito de compras y checkout impulsado por Shopify.",
       project1Btn: "Ver código",
-      project2Title: "Dashboard Analítico",
-      project2Desc: "Aplicación interactiva para visualización de datos en tiempo real.",
+      project2Title: "Finanz",
+      project2Desc: "Plataforma de servicios financieros con panel de control, autenticación y gestión de finanzas personales.",
       project2Btn: "Ver código",
       // Experiencia
       experience: "EXPERIENCIA",
@@ -112,11 +112,11 @@ export default function Home() {
       skillsDesc: "(How I build and connect things)",
       // Projects
       projects: "PROJECTS",
-      project1Title: "E-commerce platform - catlink",
-      project1Desc: "Catalog management system, manage products, receive orders. All in one place.",
+      project1Title: "E-commerce platform - Next.js Commerce",
+      project1Desc: "Modern online store with product catalog, shopping cart, and Shopify-powered checkout.",
       project1Btn: "View code",
-      project2Title: "Analytics Dashboard",
-      project2Desc: "Interactive app for real-time data visualization.",
+      project2Title: "Finanz",
+      project2Desc: "Financial services platform with dashboard, authentication, and personal finance management.",
       project2Btn: "View code",
       // Experience
       experience: "EXPERIENCE",
@@ -686,11 +686,11 @@ export default function Home() {
                   {t[lang].project1Desc}
                 </p>
                 <div className="flex flex-wrap gap-3 mb-8 font-archivo text-sm font-bold uppercase">
-                  <span className="bg-[#3776AB] text-white px-3 py-1 border-2 border-black">Python</span>
-                  <span className="bg-[#f89820] text-black px-3 py-1 border-2 border-black">Java</span>
-                  <span className="bg-white text-black px-3 py-1 border-2 border-black">PostgreSQL</span>
+                  <span className="bg-black text-white px-3 py-1 border-2 border-black">Next.js</span>
+                  <span className="bg-white text-black px-3 py-1 border-2 border-black">Shopify</span>
+                  <span className="bg-[#3178C6] text-white px-3 py-1 border-2 border-black">TypeScript</span>
                 </div>
-                <a href="#" className="inline-flex items-center gap-2 font-archivo text-xl font-black uppercase bg-[#18a0fb] text-white px-6 py-3 border-4 border-black hover:bg-white hover:text-black transition-colors">
+                <a href="https://nextjs-commerce-three-sooty-63.vercel.app/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-archivo text-xl font-black uppercase bg-[#18a0fb] text-white px-6 py-3 border-4 border-black hover:bg-white hover:text-black transition-colors">
                   {t[lang].project1Btn} <Github className="w-6 h-6" />
                 </a>
                 <ArrowMarker className="absolute -left-16 top-1/2 hidden md:block w-20 h-20 text-black rotate-[180deg]" delayOrder={1} />
@@ -714,10 +714,11 @@ export default function Home() {
                   {t[lang].project2Desc}
                 </p>
                 <div className="flex flex-wrap gap-3 mb-8 font-archivo text-sm font-bold uppercase">
-                  <span className="bg-[#F0DB4F] text-black px-3 py-1 border-2 border-black">JavaScript</span>
                   <span className="bg-[#00d8ff] text-black px-3 py-1 border-2 border-black">React</span>
+                  <span className="bg-[#FFCA28] text-black px-3 py-1 border-2 border-black">Firebase</span>
+                  <span className="bg-[#3178C6] text-white px-3 py-1 border-2 border-black">TypeScript</span>
                 </div>
-                <a href="#" className="inline-flex items-center gap-2 font-archivo text-xl font-black uppercase bg-[#ff5e93] text-black px-6 py-3 border-4 border-black hover:bg-black hover:text-white transition-colors">
+                <a href="https://finanz-services.web.app/auth" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-archivo text-xl font-black uppercase bg-[#ff5e93] text-black px-6 py-3 border-4 border-black hover:bg-black hover:text-white transition-colors">
                   {t[lang].project2Btn} <Github className="w-6 h-6" />
                 </a>
               </div>
