@@ -36,14 +36,18 @@ export default async function handler(req, res) {
       headers: { Authorization: `Bearer ${formsToken}` },
     });
 
+    const text = await response.text();
+    console.log("Forms Hub status:", response.status);
+    console.log("Forms Hub raw response:", text.substring(0, 500));
+
     if (response.ok) {
-      const data = await response.json();
+      const data = JSON.parse(text);
       res.json(data);
     } else {
-      const text = await response.text().catch(() => "");
-      res.status(response.status).json({ error: "Upstream error", detail: text });
+      res.status(response.status).json({ error: "Upstream error", detail: text.substring(0, 500) });
     }
   } catch (err) {
+    console.error("Fetch error:", err);
     res.status(502).json({ error: "Failed to reach forms service" });
   }
 }
