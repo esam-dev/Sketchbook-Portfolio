@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowMarker, StarMarker, CircleMarker, UnderlineMarker, RealMarkerGraphic } from "@/components/Doodles";
 import { Github, Linkedin, Mail, Twitter, Code2, Terminal, Database, Server, Smartphone, Monitor, ExternalLink } from "lucide-react";
@@ -13,6 +13,44 @@ export default function Home() {
   const [lang, setLang] = useState("en");
   const { scrollYProgress } = useScroll();
   const y1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
+
+  const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
+  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      const res = await fetch("https://forms-hub-backend-production.up.railway.app/api/v1/submissions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "fhk_549f79b1a328393cf16e0770093b4529eb1c9a143d4acc78406b7b16a91c0f3d"
+        },
+        body: JSON.stringify({
+          formName: "contacto",
+          payload: formData
+        })
+      });
+
+      if (res.ok) {
+        setStatus("success");
+        setFormData({ name: "", phone: "", message: "" });
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   // Textos bilingües
   const t = {
@@ -72,10 +110,14 @@ export default function Home() {
       contactReady: "¿Listo para empezar? ",
       contactLetsTalk: "Hablemos.",
       contactName: "Nombre",
+      contactPhone: "Teléfono",
       contactMessage: "Mensaje",
       contactNamePlaceholder: "Tu Nombre",
+      contactPhonePlaceholder: "Tu Teléfono",
       contactMsgPlaceholder: "¡Hola Elías!...",
       contactBtn: "ENVIAR MENSAJE",
+      contactSuccess: "¡Mensaje enviado con éxito! Gracias por contactarme.",
+      contactError: "Error al enviar el mensaje. Intenta de nuevo.",
       // Footer
       footerDev: "Desarrollado por Navixsoft ",
       footerSlogan: "Pizarra limpia. Código limpio.",
@@ -160,10 +202,14 @@ export default function Home() {
       contactReady: "Ready to start? ",
       contactLetsTalk: "Let's talk.",
       contactName: "Name",
+      contactPhone: "Phone",
       contactMessage: "Message",
       contactNamePlaceholder: "Your Name",
+      contactPhonePlaceholder: "Your Phone",
       contactMsgPlaceholder: "Hi Elias!...",
       contactBtn: "SEND MESSAGE",
+      contactSuccess: "Message sent successfully! Thanks for reaching out.",
+      contactError: "Error sending message. Please try again.",
       // Footer
       footerDev: "Developed by Navixsoft ",
       footerSlogan: "Clean board. Clean code.",
@@ -843,26 +889,61 @@ export default function Home() {
               {t[lang].contactReady} <span className="highlighter-yellow">{t[lang].contactLetsTalk}</span>
             </p>
             
-            <form className="space-y-6 font-archivo text-xl font-bold uppercase" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-6 font-archivo text-xl font-bold uppercase" onSubmit={handleSubmit}>
               <div>
                 <label className="block mb-2">{t[lang].contactName}</label>
-                <input 
-                  type="text" 
-                  className="w-full bg-background border-4 border-black p-3 focus:outline-none focus:ring-4 focus:ring-[#18a0fb] transition-all" 
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full bg-background border-4 border-black p-3 focus:outline-none focus:ring-4 focus:ring-[#18a0fb] transition-all"
                   placeholder={t[lang].contactNamePlaceholder}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block mb-2">{t[lang].contactPhone}</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full bg-background border-4 border-black p-3 focus:outline-none focus:ring-4 focus:ring-[#18a0fb] transition-all"
+                  placeholder={t[lang].contactPhonePlaceholder}
+                  required
                 />
               </div>
               <div>
                 <label className="block mb-2">{t[lang].contactMessage}</label>
-                <textarea 
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   className="w-full bg-background border-4 border-black p-3 focus:outline-none focus:ring-4 focus:ring-[#18a0fb] transition-all resize-none h-40"
                   placeholder={t[lang].contactMsgPlaceholder}
+                  required
                 ></textarea>
               </div>
-              <button className="w-full py-4 bg-[#29c46a] text-black border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:bg-[#18a0fb] hover:text-white hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-black text-2xl">
-                {t[lang].contactBtn}
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full py-4 bg-[#29c46a] text-black border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:bg-[#18a0fb] hover:text-white hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-black text-2xl disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {submitting ? "SENDING..." : t[lang].contactBtn}
               </button>
             </form>
+
+            {status === "success" && (
+              <div className="mt-6 p-4 bg-[#29c46a]/20 border-4 border-[#29c46a] font-patrick text-2xl text-center">
+                {t[lang].contactSuccess}
+              </div>
+            )}
+            {status === "error" && (
+              <div className="mt-6 p-4 bg-red-100 border-4 border-red-500 font-patrick text-2xl text-center">
+                {t[lang].contactError}
+              </div>
+            )}
 
             <div className="mt-12 pt-8 border-t-4 border-black flex justify-center gap-8">
               <a href="https://github.com/esam-dev" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="p-3 bg-white border-4 border-black hover:bg-[#18a0fb] hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><Github className="w-8 h-8" /></a>
