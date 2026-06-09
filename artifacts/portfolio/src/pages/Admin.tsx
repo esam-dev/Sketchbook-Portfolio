@@ -61,7 +61,7 @@ export default function Admin() {
       });
       if (!res.ok) {
         const msg = await res.json().catch(() => ({}));
-        throw new Error(msg.error || "Error fetching submissions");
+        throw new Error(msg.error || "Error al obtener mensajes");
       }
       const data = await res.json();
       console.log("Submissions raw data:", data);
@@ -99,7 +99,7 @@ export default function Admin() {
       });
       if (!res.ok) {
         const msg = await res.json().catch(() => ({}));
-        throw new Error(msg.error || "Wrong password");
+        throw new Error(msg.error || "Contraseña incorrecta");
       }
       const data = await res.json();
       console.log("Submissions raw data:", data);
@@ -147,7 +147,7 @@ export default function Admin() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
+            placeholder="Contraseña"
             className="w-full border-4 border-black p-3 text-xl font-archivo font-bold uppercase mb-4 focus:outline-none focus:ring-4 focus:ring-[#18a0fb]"
             autoFocus
           />
@@ -161,7 +161,7 @@ export default function Admin() {
             disabled={!password || loading}
             className="w-full py-3 bg-[#29c46a] text-black border-4 border-black font-archivo font-black text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#18a0fb] hover:text-white transition-all disabled:opacity-50"
           >
-            {loading ? "LOADING..." : "ENTER"}
+            {loading ? "CARGANDO..." : "ENTRAR"}
           </button>
         </form>
       </div>
@@ -243,7 +243,7 @@ export default function Admin() {
           })}
           {loading && (
             <p className="p-4 text-center font-archivo text-gray-400">
-              Loading...
+              Cargando...
             </p>
           )}
         </div>
