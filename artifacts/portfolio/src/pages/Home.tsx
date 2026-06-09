@@ -26,16 +26,11 @@ export default function Home() {
     setSubmitting(true);
 
     try {
-      const res = await fetch("https://forms-hub-backend-production.up.railway.app/api/v1/submissions", {
+      const apiBase = import.meta.env["VITE_API_URL"] ?? "";
+      const res = await fetch(`${apiBase}/api/contact`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": "fhk_549f79b1a328393cf16e0770093b4529eb1c9a143d4acc78406b7b16a91c0f3d"
-        },
-        body: JSON.stringify({
-          formName: "contacto",
-          payload: formData
-        })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
       if (res.ok) {
@@ -43,11 +38,11 @@ export default function Home() {
         setFormData({ name: "", phone: "", message: "" });
       } else {
         const text = await res.text().catch(() => "");
-        console.error("Forms API error:", res.status, text);
+        console.error("Contact API error:", res.status, text);
         setStatus("error");
       }
     } catch (err) {
-      console.error("Forms API network error:", err);
+      console.error("Contact API network error:", err);
       setStatus("error");
     } finally {
       setSubmitting(false);
