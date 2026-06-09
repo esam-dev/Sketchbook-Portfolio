@@ -64,7 +64,17 @@ export default function Admin() {
         throw new Error(msg.error || "Error fetching submissions");
       }
       const data = await res.json();
-      const list = Array.isArray(data) ? data : data.submissions || [];
+      console.log("Submissions raw data:", data);
+      const raw = Array.isArray(data) ? data : data.submissions || data.data || data.rows || [];
+      const list = raw.map((item: any) => ({
+        id: item.id || item._id,
+        payload: {
+          name: item.payload?.name || item.name || "",
+          phone: item.payload?.phone || item.phone || "",
+          message: item.payload?.message || item.message || "",
+        },
+        createdAt: item.createdAt || item.created_at || item.date || "",
+      }));
       setSubmissions(
         list.sort(
           (a: Submission, b: Submission) =>
@@ -72,6 +82,7 @@ export default function Admin() {
         )
       );
     } catch (err: any) {
+      console.error("Parse error:", err);
       setError(err.message);
     } finally {
       setLoading(false);
