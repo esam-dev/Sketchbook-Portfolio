@@ -7,6 +7,7 @@ import {
   differenceInDays,
 } from "date-fns";
 import { es } from "date-fns/locale";
+import NotificationBell from "@/components/admin/notification-bell";
 
 type Submission = {
   id: string;
@@ -52,6 +53,49 @@ export default function Admin() {
     localStorage.setItem("admin_read", JSON.stringify([...readIds]));
   }, [readIds]);
 
+  useEffect(() => {
+    const token = localStorage.getItem("admin_token");
+    if (token) {
+      setLoggedIn(true);
+      setPassword(token);
+      fetchSubmissions(token);
+    }
+  }, []);
+
+  async function fetchSubmissions(token: string) {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/submissions", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const raw = Array.isArray(data)
+          ? data
+          : data.submissions || data.data || data.rows || [];
+        const list = raw.map((item: any) => ({
+          id: item.id || item._id,
+          payload: {
+            name: item.payload?.name || item.name || "",
+            phone: item.payload?.phone || item.phone || "",
+            message: item.payload?.message || item.message || "",
+          },
+          createdAt: item.createdAt || item.created_at || item.date || "",
+        }));
+        setSubmissions(
+          list.sort(
+            (a: Submission, b: Submission) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )
+        );
+      }
+    } catch {
+      // ignore
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -69,6 +113,8 @@ export default function Admin() {
         throw new Error(msg.error || "Contraseña incorrecta");
       }
 
+      localStorage.setItem("admin_token", password);
+
       const res = await fetch("/api/submissions", {
         headers: { Authorization: `Bearer ${password}` },
       });
@@ -79,8 +125,9 @@ export default function Admin() {
       }
 
       const data = await res.json();
-      console.log("Submissions raw data:", data);
-      const raw = Array.isArray(data) ? data : data.submissions || data.data || data.rows || [];
+      const raw = Array.isArray(data)
+        ? data
+        : data.submissions || data.data || data.rows || [];
       const list = raw.map((item: any) => ({
         id: item.id || item._id,
         payload: {
@@ -112,6 +159,7 @@ export default function Admin() {
   }
 
   function logout() {
+    localStorage.removeItem("admin_token");
     setLoggedIn(false);
     setSelected(null);
     setPassword("");
@@ -157,12 +205,15 @@ export default function Admin() {
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b-4 border-black bg-white px-4 py-3 flex items-center justify-between shadow-[0_4px_0px_0px_rgba(0,0,0,1)]">
         <h1 className="text-2xl font-archivo font-black uppercase">Mensajes</h1>
-        <button
-          onClick={logout}
-          className="font-archivo font-bold uppercase text-sm px-4 py-2 border-2 border-black hover:bg-red-500 hover:text-white transition-all"
-        >
-          Salir
-        </button>
+        <div className="flex items-center gap-3">
+          <NotificationBell />
+          <button
+            onClick={logout}
+            className="font-archivo font-bold uppercase text-sm px-4 py-2 border-2 border-black hover:bg-red-500 hover:text-white transition-all"
+          >
+            Salir
+          </button>
+        </div>
       </header>
 
       <div className="flex flex-1 overflow-hidden">
