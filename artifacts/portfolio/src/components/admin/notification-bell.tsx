@@ -18,7 +18,7 @@ function timeAgo(dateStr: string) {
 }
 
 export default function NotificationBell() {
-  const { notifications, unreadCount, loading, markAsRead, markAllAsRead } =
+  const { notifications, unreadCount, loading, error, markAsRead, markAllAsRead } =
     useNotifications();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -84,7 +84,13 @@ export default function NotificationBell() {
               </div>
             )}
 
-            {!loading && recent.length === 0 && (
+            {!loading && error && (
+              <div className="p-6 text-center font-archivo text-sm text-red-500">
+                {error}
+              </div>
+            )}
+
+            {!loading && !error && recent.length === 0 && (
               <div className="p-6 text-center font-patrick text-gray-400">
                 No tienes notificaciones
               </div>

@@ -34,10 +34,13 @@ export function useNotifications() {
         return;
       }
       if (res.status === 401) {
-        updateState({ error: "Sesi\u00f3n expirada" });
+        updateState({ error: "Sesión expirada" });
+      } else {
+        const body = await res.json().catch(() => ({}));
+        updateState({ error: body.error || `Error ${res.status}` });
       }
     } catch {
-      updateState({ error: "Error de conexi\u00f3n" });
+      updateState({ error: "Error de conexión" });
     }
   }, [updateState]);
 
