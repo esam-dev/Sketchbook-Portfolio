@@ -43,9 +43,12 @@ export default function Home() {
         setStatus("success");
         setFormData({ name: "", phone: "", message: "" });
       } else {
+        const text = await res.text().catch(() => "");
+        console.error("Forms API error:", res.status, text);
         setStatus("error");
       }
-    } catch {
+    } catch (err) {
+      console.error("Forms API network error:", err);
       setStatus("error");
     } finally {
       setSubmitting(false);
