@@ -89,10 +89,43 @@ export default function Admin() {
     }
   }
 
-  function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    fetchSubmissions();
-    setLoggedIn(true);
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/submissions", {
+        headers: { Authorization: `Bearer ${password}` },
+      });
+      if (!res.ok) {
+        const msg = await res.json().catch(() => ({}));
+        throw new Error(msg.error || "Wrong password");
+      }
+      const data = await res.json();
+      console.log("Submissions raw data:", data);
+      const raw = Array.isArray(data) ? data : data.submissions || data.data || data.rows || [];
+      const list = raw.map((item: any) => ({
+        id: item.id || item._id,
+        payload: {
+          name: item.payload?.name || item.name || "",
+          phone: item.payload?.phone || item.phone || "",
+          message: item.payload?.message || item.message || "",
+        },
+        createdAt: item.createdAt || item.created_at || item.date || "",
+      }));
+      setSubmissions(
+        list.sort(
+          (a: Submission, b: Submission) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )
+      );
+      setLoggedIn(true);
+    } catch (err: any) {
+      console.error("Login error:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   function select(sub: Submission) {
