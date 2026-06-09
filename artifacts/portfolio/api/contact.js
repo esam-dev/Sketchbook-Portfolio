@@ -1,6 +1,6 @@
 const FORMS_HUB_URL = "https://forms-hub-backend-production.up.railway.app/api/v1/submissions";
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed" });
     return;
