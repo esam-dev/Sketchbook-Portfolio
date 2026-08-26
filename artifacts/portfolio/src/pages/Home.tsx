@@ -662,18 +662,18 @@ export default function Home() {
       {/* Desktop area */}
       <div className="absolute left-0 right-0 overflow-auto" style={{ top: "28px", bottom: "28px" }}>
         {/* Desktop icons */}
-        <div className="absolute top-4 left-4 flex flex-col gap-1 z-[50] sm:flex-col max-sm:flex-row max-sm:flex-wrap max-sm:gap-2">
+        <div className="absolute top-3 left-3 flex flex-col gap-0.5 z-[50] sm:flex-col max-sm:flex-row max-sm:flex-wrap max-sm:gap-1">
           {windowConfigsData.map((win) => (
             <button
               key={win.id}
-              className={`flex flex-col items-center gap-1 w-[76px] p-1 rounded cursor-default select-none ${
+              className={`flex flex-col items-center gap-0.5 w-[60px] p-0.5 rounded cursor-default select-none ${
                 activeWindow === win.id ? "bg-[#3366aa]/40" : "hover:bg-white/10"
               }`}
               onClick={() => openWindow(win.id)}
             >
-              <div className="w-[48px] h-[48px] flex items-center justify-center">{win.desktopIcon}</div>
+              <div className="w-[36px] h-[36px] flex items-center justify-center" style={{ transform: "scale(0.75)", transformOrigin: "center" }}>{win.desktopIcon}</div>
               <span
-                className={`text-[11px] text-center leading-tight px-1 max-w-full truncate ${
+                className={`text-[10px] text-center leading-tight px-0.5 max-w-full truncate ${
                   activeWindow === win.id ? "bg-[#3366aa] text-white" : "text-white"
                 }`}
                 style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.8)" }}
