@@ -572,7 +572,7 @@ export default function Home() {
 
   const windowConfigsData: WindowConfig[] = windowConfigs.map((w) => ({
     ...w,
-    desktopIcon: desktopIcons[w.id],
+    desktopIcon: desktopIcons[w.id] ?? w.desktopIcon,
   }));
 
   return (
