@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Github, Linkedin, Mail, Monitor, Smartphone, Server, Database, ExternalLink, Globe, Terminal } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Github, Linkedin, Mail, Monitor, Smartphone, Server, Database, ExternalLink, Globe, Terminal, Clock, Calculator, FileText } from "lucide-react";
 import { SiPython, SiJavascript, SiReact, SiNodedotjs, SiTailwindcss, SiPostgresql, SiTypescript, SiExpo, SiMongodb } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
 import eliasPerfilImg from "@/assets/images/elias-perfil.png";
@@ -7,7 +7,11 @@ import projectAppImg from "@/assets/images/project-app.png";
 import projectEcommerceImg from "@/assets/images/project-ecommerce.png";
 import { WindowConfig } from "@/components/FedoraDesktop";
 import BluecurveWindow from "@/components/BluecurveWindow";
+import BottomDock from "@/components/BottomDock";
 import TerminalContent from "@/components/TerminalContent";
+import ClockApp from "@/components/ClockApp";
+import CalculatorApp from "@/components/CalculatorApp";
+import TextEditorApp from "@/components/TextEditorApp";
 
 type Lang = "es" | "en";
 
@@ -15,8 +19,21 @@ export default function Home() {
   const [lang, setLang] = useState<Lang>("es");
   const [openWindows, setOpenWindows] = useState<string[]>(["about", "contact", "terminal"]);
   const [activeWindow, setActiveWindow] = useState<string | null>("terminal");
+  const [appsMenuOpen, setAppsMenuOpen] = useState(false);
+  const appsMenuRef = useRef<HTMLDivElement>(null);
 
   const toggleLang = () => setLang(lang === "es" ? "en" : "es");
+
+  useEffect(() => {
+    if (!appsMenuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (appsMenuRef.current && !appsMenuRef.current.contains(e.target as Node)) {
+        setAppsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [appsMenuOpen]);
 
   const openWindow = (id: string) => {
     setOpenWindows((prev) => (prev.includes(id) ? prev : [...prev, id]));
@@ -205,6 +222,27 @@ export default function Home() {
       icon: <Terminal className="w-[14px] h-[14px] text-white" />,
       desktopIcon: <svg viewBox="0 0 48 48" className="w-[48px] h-[48px]"><rect x="4" y="4" width="40" height="40" rx="3" fill="#1a1a2e" stroke="#404040" strokeWidth="1.5"/><rect x="4" y="4" width="40" height="6" fill="#3c6fa0"/><polyline points="10,18 16,24 10,30" fill="none" stroke="#00ff00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/><line x1="18" y1="30" x2="32" y2="30" stroke="#00ff00" strokeWidth="2" strokeLinecap="round"/><rect x="10" y="34" width="6" height="1.5" fill="#00ff00" opacity="0.7"/></svg>,
       desktopLabel: "Terminal",
+    },
+    {
+      id: "clock",
+      title: "Clock",
+      icon: <Clock className="w-[14px] h-[14px] text-white" />,
+      desktopIcon: <svg viewBox="0 0 48 48" className="w-[48px] h-[48px]"><circle cx="24" cy="24" r="20" fill="white" stroke="#808080" strokeWidth="1.5"/><circle cx="24" cy="24" r="18" fill="white" stroke="#d0d0d0" strokeWidth="0.5"/>{[12,1,2,3,4,5,6,7,8,9,10,11].map((n,i)=>{const a=(i*30*Math.PI)/180;return <line key={n} x1={24+14*Math.sin(a)} y1={24-14*Math.cos(a)} x2={24+17*Math.sin(a)} y2={24-17*Math.cos(a)} stroke="#333" strokeWidth="1.5"/>;})}<line x1="24" y1="24" x2="24" y2="13" stroke="#333" strokeWidth="2" strokeLinecap="round"/><line x1="24" y1="24" x2="33" y2="24" stroke="#333" strokeWidth="1.5" strokeLinecap="round"/><circle cx="24" cy="24" r="1.5" fill="#cc0000"/></svg>,
+      desktopLabel: "Clock",
+    },
+    {
+      id: "calculator",
+      title: "Calculator",
+      icon: <Calculator className="w-[14px] h-[14px] text-white" />,
+      desktopIcon: <svg viewBox="0 0 48 48" className="w-[48px] h-[48px]"><rect x="8" y="4" width="32" height="40" rx="3" fill="#ececec" stroke="#808080" strokeWidth="1.5"/><rect x="11" y="7" width="26" height="10" rx="1" fill="white" stroke="#808080" strokeWidth="0.8"/><text x="33" y="15" textAnchor="end" fontSize="9" fontFamily="monospace" fill="#333">0.</text><rect x="11" y="20" width="5" height="4" rx="0.5" fill="white" stroke="#aaa" strokeWidth="0.5"/><rect x="18" y="20" width="5" height="4" rx="0.5" fill="white" stroke="#aaa" strokeWidth="0.5"/><rect x="25" y="20" width="5" height="4" rx="0.5" fill="white" stroke="#aaa" strokeWidth="0.5"/><rect x="32" y="20" width="5" height="4" rx="0.5" fill="#3366aa" stroke="#2a5580" strokeWidth="0.5"/><rect x="11" y="26" width="5" height="4" rx="0.5" fill="white" stroke="#aaa" strokeWidth="0.5"/><rect x="18" y="26" width="5" height="4" rx="0.5" fill="white" stroke="#aaa" strokeWidth="0.5"/><rect x="25" y="26" width="5" height="4" rx="0.5" fill="white" stroke="#aaa" strokeWidth="0.5"/><rect x="32" y="26" width="5" height="4" rx="0.5" fill="white" stroke="#aaa" strokeWidth="0.5"/><rect x="11" y="32" width="5" height="4" rx="0.5" fill="white" stroke="#aaa" strokeWidth="0.5"/><rect x="18" y="32" width="5" height="4" rx="0.5" fill="white" stroke="#aaa" strokeWidth="0.5"/><rect x="25" y="32" width="5" height="4" rx="0.5" fill="white" stroke="#aaa" strokeWidth="0.5"/><rect x="32" y="32" width="5" height="4" rx="0.5" fill="#3366aa" stroke="#2a5580" strokeWidth="0.5"/><rect x="11" y="38" width="12" height="4" rx="0.5" fill="white" stroke="#aaa" strokeWidth="0.5"/><rect x="25" y="38" width="5" height="4" rx="0.5" fill="white" stroke="#aaa" strokeWidth="0.5"/><rect x="32" y="38" width="5" height="4" rx="0.5" fill="#3366aa" stroke="#2a5580" strokeWidth="0.5"/></svg>,
+      desktopLabel: "Calculator",
+    },
+    {
+      id: "texteditor",
+      title: "gedit - Text Editor",
+      icon: <FileText className="w-[14px] h-[14px] text-white" />,
+      desktopIcon: <svg viewBox="0 0 48 48" className="w-[48px] h-[48px]"><rect x="8" y="4" width="32" height="40" rx="2" fill="white" stroke="#808080" strokeWidth="1.5"/><rect x="8" y="4" width="32" height="6" fill="#3c6fa0"/><line x1="12" y1="16" x2="36" y2="16" stroke="#ccc" strokeWidth="1"/><line x1="12" y1="21" x2="36" y2="21" stroke="#ccc" strokeWidth="1"/><line x1="12" y1="26" x2="30" y2="26" stroke="#ccc" strokeWidth="1"/><line x1="12" y1="31" x2="34" y2="31" stroke="#ccc" strokeWidth="1"/><line x1="12" y1="36" x2="24" y2="36" stroke="#ccc" strokeWidth="1"/></svg>,
+      desktopLabel: "Text Editor",
     },
   ];
 
@@ -518,6 +556,9 @@ export default function Home() {
     ),
 
     terminal: <TerminalContent />,
+    clock: <ClockApp />,
+    calculator: <CalculatorApp />,
+    texteditor: <TextEditorApp />,
   };
 
   // Desktop icon SVGs for the panel
@@ -550,11 +591,40 @@ export default function Home() {
             </svg>
           </div>
           <div className="w-px h-[18px] bg-white/20" />
-          {["Applications", "Places", "System"].map((menu) => (
-            <button key={menu} className="h-[28px] px-3 hover:bg-white/10 font-semibold text-[12px]">
-              {menu}
+          {/* Applications menu */}
+          <div className="relative" ref={appsMenuRef}>
+            <button
+              className="h-[28px] px-3 hover:bg-white/10 font-semibold text-[12px]"
+              onClick={() => setAppsMenuOpen((p) => !p)}
+            >
+              Applications
             </button>
-          ))}
+            {appsMenuOpen && (
+              <div className="absolute top-full left-0 mt-0 min-w-[180px] bg-[#ececec] border border-t-white border-l-white border-b-[#808080] border-r-[#808080] shadow-md z-[2000]">
+                {[
+                  { id: "terminal", label: "Terminal", icon: <Terminal className="w-[13px] h-[13px] text-[#333]" /> },
+                  { id: "clock", label: "Clock", icon: <Clock className="w-[13px] h-[13px] text-[#333]" /> },
+                  { id: "calculator", label: "Calculator", icon: <Calculator className="w-[13px] h-[13px] text-[#333]" /> },
+                  { id: "texteditor", label: "Text Editor", icon: <FileText className="w-[13px] h-[13px] text-[#333]" /> },
+                ].map((app) => (
+                  <button
+                    key={app.id}
+                    className="w-full flex items-center gap-2 px-3 py-[5px] text-[12px] text-[#333] hover:bg-[#3366aa] hover:text-white text-left cursor-default"
+                    onClick={() => { openWindow(app.id); setAppsMenuOpen(false); }}
+                  >
+                    {app.icon}
+                    <span>{app.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <button className="h-[28px] px-3 hover:bg-white/10 font-semibold text-[12px]">
+            Places
+          </button>
+          <button className="h-[28px] px-3 hover:bg-white/10 font-semibold text-[12px]">
+            System
+          </button>
         </div>
 
         {/* Center: title */}
@@ -612,10 +682,30 @@ export default function Home() {
             isOpen={openWindows.includes(win.id)}
             onClose={() => closeWindow(win.id)}
             onMinimize={() => setActiveWindow(null)}
-            defaultWidth={win.id === "terminal" ? 650 : win.id === "skills" || win.id === "projects" ? 800 : 650}
-            defaultHeight={win.id === "terminal" ? 420 : win.id === "projects" ? 580 : 500}
-            defaultPosition={win.id === "terminal" ? { x: 150, y: 80 } : { x: 100 + windowConfigs.indexOf(win) * 30, y: 30 + windowConfigs.indexOf(win) * 20 }}
-            showMenuBar={win.id !== "terminal"}
+            defaultWidth={
+              win.id === "terminal" ? 650
+              : win.id === "clock" ? 300
+              : win.id === "calculator" ? 260
+              : win.id === "texteditor" ? 550
+              : win.id === "skills" || win.id === "projects" ? 800
+              : 650
+            }
+            defaultHeight={
+              win.id === "terminal" ? 420
+              : win.id === "clock" ? 340
+              : win.id === "calculator" ? 380
+              : win.id === "texteditor" ? 420
+              : win.id === "projects" ? 580
+              : 500
+            }
+            defaultPosition={
+              win.id === "terminal" ? { x: 150, y: 80 }
+              : win.id === "clock" ? { x: 300, y: 100 }
+              : win.id === "calculator" ? { x: 500, y: 120 }
+              : win.id === "texteditor" ? { x: 180, y: 60 }
+              : { x: 100 + windowConfigs.indexOf(win) * 30, y: 30 + windowConfigs.indexOf(win) * 20 }
+            }
+            showMenuBar={!["terminal", "clock", "calculator"].includes(win.id)}
           >
             {windowContent[win.id]}
           </BluecurveWindow>
@@ -623,41 +713,16 @@ export default function Home() {
       </div>
 
       {/* Bottom Dock */}
-      <div
-        className="panel-gradient h-[28px] flex items-center px-1 fixed bottom-0 left-0 right-0 z-[1000] select-none"
-        style={{ boxShadow: "0 -1px 2px rgba(0,0,0,0.3)" }}
-      >
-        <button
-          className="h-[22px] px-2 mx-1 flex items-center justify-center bg-[#d4d0c8] border border-t-white border-l-white border-b-[#404040] border-r-[#404040] hover:brightness-105 active:border-t-[#404040] active:border-l-[#404040] active:border-b-white active:border-r-white"
-          onClick={showDesktop}
-          title="Show Desktop"
-        >
-          <svg viewBox="0 0 16 16" className="w-[12px] h-[12px]">
-            <rect x="1" y="1" width="14" height="10" fill="none" stroke="#333" strokeWidth="1.5" rx="1" />
-            <rect x="5" y="12" width="6" height="2" fill="#333" />
-          </svg>
-        </button>
-        <div className="w-px h-[18px] bg-white/20 mx-1" />
-        <div className="flex items-center gap-[2px] flex-1">
-          {openWindows.map((id) => {
-            const win = windowConfigs.find((w) => w.id === id);
-            return (
-              <button
-                key={id}
-                className={`h-[22px] px-3 flex items-center gap-1.5 text-[11px] text-white border max-w-[160px] truncate ${
-                  activeWindow === id
-                    ? "bg-white/20 border-t-[#404040] border-l-[#404040] border-b-white border-r-white"
-                    : "bg-white/5 border-t-white border-l-white border-b-[#404040] border-r-[#404040] hover:bg-white/10"
-                }`}
-                onClick={() => selectWindow(id)}
-              >
-                {win?.icon}
-                <span className="truncate">{win?.desktopLabel}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      <BottomDock
+        openWindows={openWindows.map((id) => {
+          const win = windowConfigs.find((w) => w.id === id);
+          return { id, title: win?.title || "", icon: win?.desktopLabel || "" };
+        })}
+        activeWindow={activeWindow}
+        onSelectWindow={selectWindow}
+        onShowDesktop={showDesktop}
+        onOpenApp={openWindow}
+      />
 
       {/* Footer bar at very bottom with slogan */}
       <div className="fixed bottom-[28px] left-0 right-0 h-0 z-[999]" />

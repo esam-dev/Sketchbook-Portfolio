@@ -115,6 +115,7 @@ export default function FedoraDesktop({
         activeWindow={activeWindow}
         onSelectWindow={selectWindow}
         onShowDesktop={showDesktop}
+        onOpenApp={openWindow}
       />
     </div>
   );

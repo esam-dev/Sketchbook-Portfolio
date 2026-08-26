@@ -1,33 +1,91 @@
+import { useState, useRef, useEffect } from "react";
+import { Clock, Calculator, FileText, Terminal, Monitor } from "lucide-react";
+
 interface BottomDockProps {
   openWindows: { id: string; title: string; icon: string }[];
   activeWindow: string | null;
   onSelectWindow: (id: string) => void;
   onShowDesktop: () => void;
+  onOpenApp: (id: string) => void;
 }
+
+const APPS = [
+  { id: "terminal", label: "Terminal", icon: <Terminal className="w-[13px] h-[13px]" /> },
+  { id: "clock", label: "Clock", icon: <Clock className="w-[13px] h-[13px]" /> },
+  { id: "calculator", label: "Calculator", icon: <Calculator className="w-[13px] h-[13px]" /> },
+  { id: "texteditor", label: "Text Editor", icon: <FileText className="w-[13px] h-[13px]" /> },
+];
 
 export default function BottomDock({
   openWindows,
   activeWindow,
   onSelectWindow,
   onShowDesktop,
+  onOpenApp,
 }: BottomDockProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [menuOpen]);
+
+  const handleDesktopClick = () => {
+    setMenuOpen((prev) => !prev);
+  };
+
+  const handleOpen = (id: string) => {
+    onOpenApp(id);
+    setMenuOpen(false);
+  };
+
   return (
     <div
       className="panel-gradient h-[28px] flex items-center px-1 fixed bottom-0 left-0 right-0 z-[1000] select-none"
       style={{ boxShadow: "0 -1px 2px rgba(0,0,0,0.3)" }}
     >
-      {/* Show Desktop button */}
-      <button
-        className="h-[22px] px-2 mx-1 flex items-center justify-center bg-[#d4d0c8] border border-t-white border-l-white border-b-[#404040] border-r-[#404040] hover:brightness-105 active:border-t-[#404040] active:border-l-[#404040] active:border-b-white active:border-r-white"
-        onClick={onShowDesktop}
-        title="Show Desktop"
-      >
-        <svg viewBox="0 0 16 16" className="w-[12px] h-[12px]">
-          <rect x="1" y="1" width="14" height="10" fill="none" stroke="#333" strokeWidth="1.5" rx="1" />
-          <rect x="5" y="12" width="6" height="2" fill="#333" />
-          <line x1="3" y1="13" x2="13" y2="13" stroke="#333" strokeWidth="1" />
-        </svg>
-      </button>
+      {/* Show Desktop / Applications button */}
+      <div className="relative" ref={menuRef}>
+        <button
+          className="h-[22px] px-2 mx-1 flex items-center justify-center gap-1 bg-[#d4d0c8] border border-t-white border-l-white border-b-[#404040] border-r-[#404040] hover:brightness-105 active:border-t-[#404040] active:border-l-[#404040] active:border-b-white active:border-r-white"
+          onClick={handleDesktopClick}
+          title="Applications"
+        >
+          <Monitor className="w-[12px] h-[12px] text-[#333]" />
+          <span className="text-[10px] text-[#333] font-medium">Desktop</span>
+        </button>
+
+        {/* Context menu */}
+        {menuOpen && (
+          <div className="absolute bottom-full left-0 mb-1 min-w-[180px] bg-[#ececec] border border-t-white border-l-white border-b-[#808080] border-r-[#808080] shadow-md z-[2000]">
+            {APPS.map((app) => (
+              <button
+                key={app.id}
+                className="w-full flex items-center gap-2 px-3 py-[5px] text-[12px] text-[#333] hover:bg-[#3366aa] hover:text-white text-left cursor-default"
+                onClick={() => handleOpen(app.id)}
+              >
+                {app.icon}
+                <span>{app.label}</span>
+              </button>
+            ))}
+            <div className="h-px bg-[#808080] mx-1 my-[2px]" />
+            <button
+              className="w-full flex items-center gap-2 px-3 py-[5px] text-[12px] text-[#333] hover:bg-[#3366aa] hover:text-white text-left cursor-default"
+              onClick={() => { onShowDesktop(); setMenuOpen(false); }}
+            >
+              <Monitor className="w-[13px] h-[13px]" />
+              <span>Show Desktop</span>
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* Divider */}
       <div className="w-px h-[18px] bg-white/20 mx-1" />
