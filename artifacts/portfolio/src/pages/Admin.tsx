@@ -1,30 +1,19 @@
 import { useState, useEffect } from "react";
-import {
-  format,
-  isToday,
-  isYesterday,
-  parseISO,
-  differenceInDays,
-} from "date-fns";
+import { format, isToday, isYesterday, parseISO, differenceInDays } from "date-fns";
 import { es } from "date-fns/locale";
 import NotificationBell from "@/components/admin/notification-bell";
 
 type Submission = {
   id: string;
-  payload: {
-    name: string;
-    phone: string;
-    message: string;
-  };
+  payload: { name: string; phone: string; message: string };
   createdAt: string;
 };
 
 function formatDate(dateStr: string) {
   const date = parseISO(dateStr);
   if (isToday(date)) return format(date, "HH:mm");
-  if (isYesterday(date)) return "Ayer";
-  if (differenceInDays(new Date(), date) < 7)
-    return format(date, "EEEE", { locale: es });
+  if (isYesterday(date)) return "Yesterday";
+  if (differenceInDays(new Date(), date) < 7) return format(date, "EEEE");
   return format(date, "d/M/yy");
 }
 
@@ -40,7 +29,6 @@ export default function Admin() {
   const [selected, setSelected] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const [readIds, setReadIds] = useState<Set<string>>(() => {
     try {
       return new Set(JSON.parse(localStorage.getItem("admin_read") || "[]"));
@@ -70,9 +58,7 @@ export default function Admin() {
       });
       if (res.ok) {
         const data = await res.json();
-        const raw = Array.isArray(data)
-          ? data
-          : data.submissions || data.data || data.rows || [];
+        const raw = Array.isArray(data) ? data : data.submissions || data.data || data.rows || [];
         const list = raw.map((item: any) => ({
           id: item.id || item._id,
           payload: {
@@ -82,81 +68,41 @@ export default function Admin() {
           },
           createdAt: item.createdAt || item.created_at || item.date || "",
         }));
-        setSubmissions(
-          list.sort(
-            (a: Submission, b: Submission) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          )
-        );
+        setSubmissions(list.sort((a: Submission, b: Submission) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
       }
-    } catch {
-      // ignore
-    } finally {
-      setLoading(false);
-    }
+    } catch { /* ignore */ } finally { setLoading(false); }
   }
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
-
     try {
       const loginRes = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
-
       if (!loginRes.ok) {
         const msg = await loginRes.json().catch(() => ({}));
-        throw new Error(msg.error || "Contraseña incorrecta");
+        throw new Error(msg.error || "Wrong password");
       }
-
       localStorage.setItem("admin_token", password);
-
-      const res = await fetch("/api/submissions", {
-        headers: { Authorization: `Bearer ${password}` },
-      });
-
-      if (!res.ok) {
-        const msg = await res.json().catch(() => ({}));
-        throw new Error(msg.error || "Error al obtener mensajes");
-      }
-
+      const res = await fetch("/api/submissions", { headers: { Authorization: `Bearer ${password}` } });
+      if (!res.ok) throw new Error("Error fetching messages");
       const data = await res.json();
-      const raw = Array.isArray(data)
-        ? data
-        : data.submissions || data.data || data.rows || [];
+      const raw = Array.isArray(data) ? data : data.submissions || data.data || data.rows || [];
       const list = raw.map((item: any) => ({
         id: item.id || item._id,
-        payload: {
-          name: item.payload?.name || item.name || "",
-          phone: item.payload?.phone || item.phone || "",
-          message: item.payload?.message || item.message || "",
-        },
+        payload: { name: item.payload?.name || item.name || "", phone: item.payload?.phone || item.phone || "", message: item.payload?.message || item.message || "" },
         createdAt: item.createdAt || item.created_at || item.date || "",
       }));
-      setSubmissions(
-        list.sort(
-          (a: Submission, b: Submission) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        )
-      );
-
+      setSubmissions(list.sort((a: Submission, b: Submission) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
       setLoggedIn(true);
-    } catch (err: any) {
-      console.error("Login error:", err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    } catch (err: any) { setError(err.message); } finally { setLoading(false); }
   }
 
-  function select(sub: Submission) {
-    setSelected(sub);
-    setReadIds((prev) => new Set(prev).add(sub.id));
-  }
+  function select(sub: Submission) { setSelected(sub); setReadIds((prev) => new Set(prev).add(sub.id)); }
 
   function logout() {
     localStorage.removeItem("admin_token");
@@ -168,190 +114,101 @@ export default function Admin() {
 
   if (!loggedIn) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <form
-          onSubmit={handleLogin}
-          className="w-full max-w-sm border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
-        >
-          <h1 className="text-3xl font-archivo font-black uppercase mb-6 text-center">
-            Admin
-          </h1>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Contraseña"
-            className="w-full border-4 border-black p-3 text-xl font-archivo font-bold uppercase mb-4 focus:outline-none focus:ring-4 focus:ring-[#18a0fb]"
-            autoFocus
-          />
-          {error && (
-            <p className="text-red-600 font-archivo font-bold mb-4">
-              {error}
-            </p>
-          )}
-          <button
-            type="submit"
-            disabled={!password || loading}
-            className="w-full py-3 bg-[#29c46a] text-black border-4 border-black font-archivo font-black text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#18a0fb] hover:text-white transition-all disabled:opacity-50"
-          >
-            {loading ? "CARGANDO..." : "ENTRAR"}
-          </button>
+      <div className="w-screen h-screen overflow-hidden relative desktop-gradient flex items-center justify-center">
+        <div className="panel-gradient h-[28px] flex items-center px-3 text-[12px] text-white fixed top-0 left-0 right-0 z-[1000]" style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
+          <span className="font-semibold">Admin Login</span>
+        </div>
+        <form onSubmit={handleLogin} className="bg-[#d4d0c8] border border-[#404040] shadow-[1px_1px_0px_#000] w-[350px]" style={{ animation: "window-open 0.15s ease-out" }}>
+          <div className="titlebar-gradient flex items-center h-[26px] px-[3px]">
+            <div className="flex-1 text-[12px] font-semibold text-white px-1 leading-[26px]">Admin Login</div>
+          </div>
+          <div className="p-6 bg-white m-[3px] mt-0 bevel-sunken">
+            <h1 className="text-[18px] font-bold text-[#333] mb-4 text-center" style={{ fontFamily: "var(--font-display)" }}>ADMIN</h1>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="w-full px-2 py-1.5 text-[12px] bg-white bevel-sunken focus:outline-none mb-3"
+              autoFocus
+            />
+            {error && <p className="text-[12px] text-[#cc0000] font-semibold mb-3">{error}</p>}
+            <button type="submit" disabled={!password || loading} className="btn-bluecurve w-full py-2 font-bold text-[13px] disabled:opacity-50">
+              {loading ? "LOADING..." : "ENTER"}
+            </button>
+          </div>
         </form>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b-4 border-black bg-white px-4 py-3 flex items-center justify-between shadow-[0_4px_0px_0px_rgba(0,0,0,1)]">
-        <h1 className="text-2xl font-archivo font-black uppercase">Mensajes</h1>
-        <div className="flex items-center gap-3">
+    <div className="w-screen h-screen overflow-hidden relative desktop-gradient flex flex-col">
+      {/* Top panel */}
+      <div className="panel-gradient h-[28px] flex items-center px-3 text-[12px] text-white shrink-0" style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
+        <span className="font-semibold">Admin - Messages</span>
+        <div className="flex-1" />
+        <div className="flex items-center gap-2">
           <NotificationBell />
-          <button
-            onClick={logout}
-            className="font-archivo font-bold uppercase text-sm px-4 py-2 border-2 border-black hover:bg-red-500 hover:text-white transition-all"
-          >
-            Salir
+          <button onClick={logout} className="h-[20px] px-3 bg-[#d4d0c8] border border-t-white border-l-white border-b-[#404040] border-r-[#404040] text-black text-[11px] font-semibold hover:brightness-105">
+            Logout
           </button>
         </div>
-      </header>
+      </div>
 
+      {/* Content */}
       <div className="flex flex-1 overflow-hidden">
-        <div className="w-full sm:w-80 md:w-96 border-r-4 border-black overflow-y-auto bg-white">
-          {submissions.length === 0 && !loading && (
-            <p className="p-6 text-center font-patrick text-xl text-gray-400">
-              No hay mensajes aún
-            </p>
-          )}
+        {/* Sidebar list */}
+        <div className="w-full sm:w-80 bg-[#ececec] border-r border-[#808080] overflow-y-auto bluecurve-scrollbar">
+          {submissions.length === 0 && !loading && <p className="p-6 text-center text-[12px] text-[#888]">No messages yet</p>}
           {submissions.map((sub) => {
             const unread = !readIds.has(sub.id);
             return (
-              <button
-                key={sub.id}
-                onClick={() => select(sub)}
-                className={`w-full text-left px-4 py-3 border-b-2 border-black hover:bg-gray-50 transition-all ${
-                  selected?.id === sub.id ? "bg-[#18a0fb]/10" : ""
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-archivo font-black text-white text-sm flex-shrink-0 ${
-                      unread ? "bg-[#29c46a]" : "bg-gray-400"
-                    }`}
-                  >
+              <button key={sub.id} onClick={() => select(sub)} className={`w-full text-left px-3 py-2.5 border-b border-[#d0d0d0] hover:bg-[#e0e0e0] ${selected?.id === sub.id ? "bg-[#3366aa]/15" : ""}`}>
+                <div className="flex items-start gap-2">
+                  <div className={`w-8 h-8 rounded flex items-center justify-center text-[11px] font-bold text-white shrink-0 ${unread ? "bg-[#3366aa]" : "bg-[#888]"}`}>
                     {sub.payload.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-baseline">
-                      <span
-                        className={`font-archivo font-bold truncate ${
-                          unread ? "text-black" : "text-gray-600"
-                        }`}
-                      >
-                        {sub.payload.name}
-                      </span>
-                      <span className="text-xs font-archivo text-gray-400 flex-shrink-0 ml-2">
-                        {formatDate(sub.createdAt)}
-                      </span>
+                      <span className={`text-[12px] truncate ${unread ? "font-bold" : ""}`}>{sub.payload.name}</span>
+                      <span className="text-[10px] text-[#888] ml-2 shrink-0">{formatDate(sub.createdAt)}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {unread && (
-                        <span className="w-2 h-2 rounded-full bg-[#29c46a] flex-shrink-0" />
-                      )}
-                      <p
-                        className={`text-sm truncate ${
-                          unread ? "font-bold text-black" : "text-gray-500"
-                        }`}
-                      >
-                        {sub.payload.message}
-                      </p>
-                    </div>
+                    <p className={`text-[11px] truncate ${unread ? "font-semibold" : "text-[#666]"}`}>{sub.payload.message}</p>
                   </div>
                 </div>
               </button>
             );
           })}
-          {loading && (
-            <p className="p-4 text-center font-archivo text-gray-400">
-              Cargando...
-            </p>
-          )}
+          {loading && <p className="p-4 text-center text-[12px] text-[#888]">Loading...</p>}
         </div>
 
-        <div className="hidden sm:flex flex-1 flex-col bg-[#e5ddd5]">
+        {/* Detail pane */}
+        <div className="hidden sm:flex flex-1 flex-col bg-[#ececec]">
           {selected ? (
-            <div className="flex-1 overflow-y-auto p-6">
-              <div className="max-w-xl mx-auto">
-                <div className="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                  <div className="flex items-center gap-4 mb-4 pb-4 border-b-2 border-black">
-                    <div className="w-14 h-14 rounded-full bg-[#29c46a] flex items-center justify-center font-archivo font-black text-white text-xl">
-                      {selected.payload.name.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-archivo font-black">
-                        {selected.payload.name}
-                      </h2>
-                      <a
-                        href={`tel:${selected.payload.phone}`}
-                        className="text-sm font-archivo text-[#18a0fb] hover:underline"
-                      >
-                        {selected.payload.phone}
-                      </a>
-                    </div>
+            <div className="flex-1 overflow-y-auto p-4 bluecurve-scrollbar">
+              <div className="bg-white bevel-sunken p-4 max-w-xl mx-auto">
+                <div className="flex items-center gap-3 mb-3 pb-3 border-b border-[#d0d0d0]">
+                  <div className="w-10 h-10 bg-[#3366aa] flex items-center justify-center text-[14px] font-bold text-white shrink-0">
+                    {selected.payload.name.charAt(0).toUpperCase()}
                   </div>
-                  <div className="bg-gray-50 border-2 border-black p-4 mb-4">
-                    <p className="font-patrick text-xl leading-relaxed whitespace-pre-wrap">
-                      {selected.payload.message}
-                    </p>
+                  <div>
+                    <h2 className="text-[14px] font-bold">{selected.payload.name}</h2>
+                    <a href={`tel:${selected.payload.phone}`} className="text-[11px] text-[#3366aa] hover:underline">{selected.payload.phone}</a>
                   </div>
-                  <p className="text-xs font-archivo text-gray-400 text-right">
-                    {formatDetailDate(selected.createdAt)}
-                  </p>
                 </div>
+                <div className="bg-[#f8f8f8] bevel-sunken p-3 mb-3">
+                  <p className="text-[12px] leading-relaxed whitespace-pre-wrap">{selected.payload.message}</p>
+                </div>
+                <p className="text-[10px] text-[#888] text-right">{formatDetailDate(selected.createdAt)}</p>
               </div>
             </div>
           ) : (
             <div className="flex-1 flex items-center justify-center">
-              <p className="font-patrick text-2xl text-gray-400">
-                Selecciona un mensaje
-              </p>
+              <p className="text-[14px] text-[#888]">Select a message</p>
             </div>
           )}
         </div>
-
-        {selected && (
-          <div className="sm:hidden fixed inset-0 z-50 bg-[#e5ddd5] flex flex-col">
-            <header className="border-b-4 border-black bg-white px-3 py-2 flex items-center gap-3 shadow-[0_4px_0px_0px_rgba(0,0,0,1)]">
-              <button
-                onClick={() => setSelected(null)}
-                className="font-archivo font-black text-lg"
-              >
-                ←
-              </button>
-              <div className="w-8 h-8 rounded-full bg-[#29c46a] flex items-center justify-center font-archivo font-black text-white text-xs">
-                {selected.payload.name.charAt(0).toUpperCase()}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-archivo font-black truncate">
-                  {selected.payload.name}
-                </p>
-                <p className="text-xs font-archivo text-gray-400">
-                  {selected.payload.phone}
-                </p>
-              </div>
-            </header>
-            <div className="flex-1 overflow-y-auto p-4">
-              <div className="bg-white border-2 border-black p-4 max-w-xs ml-auto">
-                <p className="font-patrick text-lg whitespace-pre-wrap">
-                  {selected.payload.message}
-                </p>
-                <p className="text-xs font-archivo text-gray-400 text-right mt-2">
-                  {formatDate(selected.createdAt)}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
