@@ -1,4 +1,4 @@
-import { useState, useRef, ReactNode } from "react";
+import { useState, useRef, useEffect, useCallback, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Square } from "lucide-react";
 
@@ -19,6 +19,10 @@ interface BluecurveWindowProps {
   className?: string;
 }
 
+function clamp(val: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, val));
+}
+
 export default function BluecurveWindow({
   title,
   icon,
@@ -36,9 +40,29 @@ export default function BluecurveWindow({
   className = "",
 }: BluecurveWindowProps) {
   const [isMaximized, setIsMaximized] = useState(false);
-  const [position, setPosition] = useState(defaultPosition);
   const [size, setSize] = useState({ width: defaultWidth, height: defaultHeight });
-  const constraintsRef = useRef(null);
+  const [position, setPosition] = useState(defaultPosition);
+
+  const clampToViewport = useCallback(() => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const dockPad = 56;
+    const maxW = Math.min(vw - 16, vw);
+    const maxH = Math.min(vh - dockPad, vh);
+    const w = Math.min(size.width, maxW);
+    const h = Math.min(size.height, maxH);
+    const x = clamp(position.x, 0, Math.max(0, vw - w - 8));
+    const y = clamp(position.y, 0, Math.max(0, vh - h - dockPad));
+    setSize({ width: w, height: h });
+    setPosition({ x, y });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    clampToViewport();
+    window.addEventListener("resize", clampToViewport);
+    return () => window.removeEventListener("resize", clampToViewport);
+  }, [clampToViewport]);
 
   const handleMaximize = () => {
     if (isMaximized) {
@@ -151,7 +175,7 @@ export default function BluecurveWindow({
 
             {/* Status bar */}
             <div className="h-[20px] bg-[#ececec] border-t border-t-white flex items-center px-2 text-[11px] text-[#333] shrink-0">
-              <div className="flex-1 bevel-flat px-2 py-[1px]">{title}</div>
+              <div className="flex-1 bevel-flat px-2 py-[1px] truncate">{title}</div>
             </div>
           </div>
 

@@ -619,16 +619,16 @@ export default function Home() {
               </div>
             )}
           </div>
-          <button className="h-[28px] px-3 hover:bg-white/10 font-semibold text-[12px]">
+          <button className="h-[28px] px-3 hover:bg-white/10 font-semibold text-[12px] max-sm:hidden">
             Places
           </button>
-          <button className="h-[28px] px-3 hover:bg-white/10 font-semibold text-[12px]">
+          <button className="h-[28px] px-3 hover:bg-white/10 font-semibold text-[12px] max-sm:hidden">
             System
           </button>
         </div>
 
         {/* Center: title */}
-        <div className="flex-1 flex justify-center">
+        <div className="flex-1 flex justify-center max-sm:hidden">
           <span className="text-[12px] text-white/80 truncate max-w-[400px]">
             {activeWindow ? windowConfigs.find((w) => w.id === activeWindow)?.title || "" : "Fedora Core 1 Desktop"}
           </span>
@@ -649,9 +649,9 @@ export default function Home() {
       </div>
 
       {/* Desktop area */}
-      <div className="absolute left-0 right-0 overflow-hidden" style={{ top: "28px", bottom: "28px" }}>
+      <div className="absolute left-0 right-0 overflow-auto" style={{ top: "28px", bottom: "28px" }}>
         {/* Desktop icons */}
-        <div className="absolute top-4 left-4 flex flex-col gap-1 z-[50]">
+        <div className="absolute top-4 left-4 flex flex-col gap-1 z-[50] sm:flex-col max-sm:flex-row max-sm:flex-wrap max-sm:gap-2">
           {windowConfigsData.map((win) => (
             <button
               key={win.id}
@@ -683,27 +683,27 @@ export default function Home() {
             onClose={() => closeWindow(win.id)}
             onMinimize={() => setActiveWindow(null)}
             defaultWidth={
-              win.id === "terminal" ? 650
-              : win.id === "clock" ? 300
-              : win.id === "calculator" ? 260
-              : win.id === "texteditor" ? 550
-              : win.id === "skills" || win.id === "projects" ? 800
-              : 650
+              win.id === "terminal" ? Math.min(650, window.innerWidth - 40)
+              : win.id === "clock" ? Math.min(300, window.innerWidth - 40)
+              : win.id === "calculator" ? Math.min(260, window.innerWidth - 40)
+              : win.id === "texteditor" ? Math.min(550, window.innerWidth - 40)
+              : win.id === "skills" || win.id === "projects" ? Math.min(800, window.innerWidth - 40)
+              : Math.min(650, window.innerWidth - 40)
             }
             defaultHeight={
-              win.id === "terminal" ? 420
-              : win.id === "clock" ? 340
-              : win.id === "calculator" ? 380
-              : win.id === "texteditor" ? 420
-              : win.id === "projects" ? 580
-              : 500
+              win.id === "terminal" ? Math.min(420, window.innerHeight - 80)
+              : win.id === "clock" ? Math.min(340, window.innerHeight - 80)
+              : win.id === "calculator" ? Math.min(380, window.innerHeight - 80)
+              : win.id === "texteditor" ? Math.min(420, window.innerHeight - 80)
+              : win.id === "projects" ? Math.min(580, window.innerHeight - 80)
+              : Math.min(500, window.innerHeight - 80)
             }
             defaultPosition={
-              win.id === "terminal" ? { x: 150, y: 80 }
-              : win.id === "clock" ? { x: 300, y: 100 }
-              : win.id === "calculator" ? { x: 500, y: 120 }
-              : win.id === "texteditor" ? { x: 180, y: 60 }
-              : { x: 100 + windowConfigs.indexOf(win) * 30, y: 30 + windowConfigs.indexOf(win) * 20 }
+              win.id === "terminal" ? { x: Math.min(150, window.innerWidth - 700), y: Math.min(80, window.innerHeight - 500) }
+              : win.id === "clock" ? { x: Math.min(300, window.innerWidth - 350), y: Math.min(100, window.innerHeight - 400) }
+              : win.id === "calculator" ? { x: Math.min(500, window.innerWidth - 310), y: Math.min(120, window.innerHeight - 430) }
+              : win.id === "texteditor" ? { x: Math.min(180, window.innerWidth - 600), y: Math.min(60, window.innerHeight - 470) }
+              : { x: Math.min(100 + windowConfigs.indexOf(win) * 30, window.innerWidth - 700), y: Math.min(30 + windowConfigs.indexOf(win) * 20, window.innerHeight - 560) }
             }
             showMenuBar={!["terminal", "clock", "calculator"].includes(win.id)}
           >

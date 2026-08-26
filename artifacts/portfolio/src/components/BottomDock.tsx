@@ -95,7 +95,7 @@ export default function BottomDock({
         {openWindows.map((win) => (
           <button
             key={win.id}
-            className={`h-[22px] px-3 flex items-center gap-2 text-[11px] text-white border max-w-[160px] truncate ${
+            className={`h-[22px] px-3 max-sm:px-1.5 flex items-center gap-2 text-[11px] text-white border max-w-[160px] max-sm:max-w-[100px] truncate ${
               activeWindow === win.id
                 ? "bg-white/20 border-t-[#404040] border-l-[#404040] border-b-white border-r-white"
                 : "bg-white/5 border-t-white border-l-white border-b-[#404040] border-r-[#404040] hover:bg-white/10"
