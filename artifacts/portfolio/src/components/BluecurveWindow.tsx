@@ -15,6 +15,7 @@ interface BluecurveWindowProps {
   minWidth?: number;
   minHeight?: number;
   resizable?: boolean;
+  showMenuBar?: boolean;
   className?: string;
 }
 
@@ -31,6 +32,7 @@ export default function BluecurveWindow({
   minWidth = 300,
   minHeight = 200,
   resizable = true,
+  showMenuBar = true,
   className = "",
 }: BluecurveWindowProps) {
   const [isMaximized, setIsMaximized] = useState(false);
@@ -133,12 +135,14 @@ export default function BluecurveWindow({
             </div>
 
             {/* Menu bar (optional slot) */}
-            <div className="bg-[#ececec] border-b border-b-[#808080] h-[22px] flex items-center px-2 text-[11px]">
-              <span className="px-2 hover:bg-[#3366aa] hover:text-white cursor-default">File</span>
-              <span className="px-2 hover:bg-[#3366aa] hover:text-white cursor-default">Edit</span>
-              <span className="px-2 hover:bg-[#3366aa] hover:text-white cursor-default">View</span>
-              <span className="px-2 hover:bg-[#3366aa] hover:text-white cursor-default">Help</span>
-            </div>
+            {showMenuBar && (
+              <div className="bg-[#ececec] border-b border-b-[#808080] h-[22px] flex items-center px-2 text-[11px]">
+                <span className="px-2 hover:bg-[#3366aa] hover:text-white cursor-default">File</span>
+                <span className="px-2 hover:bg-[#3366aa] hover:text-white cursor-default">Edit</span>
+                <span className="px-2 hover:bg-[#3366aa] hover:text-white cursor-default">View</span>
+                <span className="px-2 hover:bg-[#3366aa] hover:text-white cursor-default">Help</span>
+              </div>
+            )}
 
             {/* Window content area with sunken border */}
             <div className="flex-1 m-[3px] mt-0 bg-white bevel-sunken overflow-auto bluecurve-scrollbar">
