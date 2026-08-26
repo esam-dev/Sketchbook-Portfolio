@@ -21,6 +21,8 @@ export default function Home() {
   const [activeWindow, setActiveWindow] = useState<string | null>("terminal");
   const [appsMenuOpen, setAppsMenuOpen] = useState(false);
   const appsMenuRef = useRef<HTMLDivElement>(null);
+  const zCounter = useRef(100);
+  const zMap = useRef<Record<string, number>>({ about: 100, contact: 101, terminal: 102 });
 
   const toggleLang = () => setLang(lang === "es" ? "en" : "es");
 
@@ -35,9 +37,15 @@ export default function Home() {
     return () => document.removeEventListener("mousedown", handler);
   }, [appsMenuOpen]);
 
+  const bringToFront = (id: string) => {
+    zCounter.current += 1;
+    zMap.current[id] = zCounter.current;
+  };
+
   const openWindow = (id: string) => {
     setOpenWindows((prev) => (prev.includes(id) ? prev : [...prev, id]));
     setActiveWindow(id);
+    bringToFront(id);
   };
 
   const closeWindow = (id: string) => {
@@ -45,7 +53,10 @@ export default function Home() {
     setActiveWindow((prev) => (prev === id ? null : prev));
   };
 
-  const selectWindow = (id: string) => setActiveWindow(id);
+  const selectWindow = (id: string) => {
+    setActiveWindow(id);
+    bringToFront(id);
+  };
   const showDesktop = () => setActiveWindow(null);
 
   const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
@@ -682,6 +693,8 @@ export default function Home() {
             isOpen={openWindows.includes(win.id)}
             onClose={() => closeWindow(win.id)}
             onMinimize={() => setActiveWindow(null)}
+            zIndex={zMap.current[win.id] ?? 100}
+            onFocus={() => { setActiveWindow(win.id); bringToFront(win.id); }}
             defaultWidth={
               win.id === "terminal" ? Math.min(650, window.innerWidth - 40)
               : win.id === "clock" ? Math.min(300, window.innerWidth - 40)

@@ -9,6 +9,7 @@ interface BluecurveWindowProps {
   isOpen: boolean;
   onClose: () => void;
   onMinimize?: () => void;
+  onFocus?: () => void;
   defaultWidth?: number;
   defaultHeight?: number;
   defaultPosition?: { x: number; y: number };
@@ -16,6 +17,7 @@ interface BluecurveWindowProps {
   minHeight?: number;
   resizable?: boolean;
   showMenuBar?: boolean;
+  zIndex?: number;
   className?: string;
 }
 
@@ -30,6 +32,7 @@ export default function BluecurveWindow({
   isOpen,
   onClose,
   onMinimize,
+  onFocus,
   defaultWidth = 700,
   defaultHeight = 500,
   defaultPosition = { x: 80, y: 40 },
@@ -37,6 +40,7 @@ export default function BluecurveWindow({
   minHeight = 200,
   resizable = true,
   showMenuBar = true,
+  zIndex = 100,
   className = "",
 }: BluecurveWindowProps) {
   const [isMaximized, setIsMaximized] = useState(false);
@@ -98,8 +102,9 @@ export default function BluecurveWindow({
             top: isMaximized ? 0 : position.y,
             width: isMaximized ? "100%" : size.width,
             height: isMaximized ? "calc(100vh - 56px)" : size.height,
-            zIndex: 100,
+            zIndex,
           }}
+          onMouseDown={onFocus}
           className={`flex flex-col select-none ${className}`}
         >
           {/* Window outer bevel */}
