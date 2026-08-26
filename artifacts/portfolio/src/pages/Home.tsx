@@ -7,13 +7,14 @@ import projectAppImg from "@/assets/images/project-app.png";
 import projectEcommerceImg from "@/assets/images/project-ecommerce.png";
 import { WindowConfig } from "@/components/FedoraDesktop";
 import BluecurveWindow from "@/components/BluecurveWindow";
+import TerminalContent from "@/components/TerminalContent";
 
 type Lang = "es" | "en";
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>("es");
-  const [openWindows, setOpenWindows] = useState<string[]>(["about", "contact"]);
-  const [activeWindow, setActiveWindow] = useState<string | null>("about");
+  const [openWindows, setOpenWindows] = useState<string[]>(["about", "contact", "terminal"]);
+  const [activeWindow, setActiveWindow] = useState<string | null>("terminal");
 
   const toggleLang = () => setLang(lang === "es" ? "en" : "es");
 
@@ -197,6 +198,13 @@ export default function Home() {
       icon: <Mail className="w-[14px] h-[14px] text-white" />,
       desktopIcon: <svg viewBox="0 0 48 48" className="w-[48px] h-[48px]"><rect x="4" y="10" width="40" height="28" rx="2" fill="#ececec" stroke="#808080" strokeWidth="1.5"/><path d="M4 12 L24 28 L44 12" fill="none" stroke="#3366aa" strokeWidth="2"/><rect x="4" y="10" width="40" height="28" rx="2" fill="none" stroke="#808080" strokeWidth="1.5"/></svg>,
       desktopLabel: "Contact",
+    },
+    {
+      id: "terminal",
+      title: "Terminal - elias@fedora",
+      icon: <Terminal className="w-[14px] h-[14px] text-white" />,
+      desktopIcon: <svg viewBox="0 0 48 48" className="w-[48px] h-[48px]"><rect x="4" y="4" width="40" height="40" rx="3" fill="#1a1a2e" stroke="#404040" strokeWidth="1.5"/><rect x="4" y="4" width="40" height="6" fill="#3c6fa0"/><polyline points="10,18 16,24 10,30" fill="none" stroke="#00ff00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/><line x1="18" y1="30" x2="32" y2="30" stroke="#00ff00" strokeWidth="2" strokeLinecap="round"/><rect x="10" y="34" width="6" height="1.5" fill="#00ff00" opacity="0.7"/></svg>,
+      desktopLabel: "Terminal",
     },
   ];
 
@@ -508,6 +516,8 @@ export default function Home() {
         </div>
       </div>
     ),
+
+    terminal: <TerminalContent />,
   };
 
   // Desktop icon SVGs for the panel
@@ -602,9 +612,10 @@ export default function Home() {
             isOpen={openWindows.includes(win.id)}
             onClose={() => closeWindow(win.id)}
             onMinimize={() => setActiveWindow(null)}
-            defaultWidth={win.id === "skills" || win.id === "projects" ? 800 : 650}
-            defaultHeight={win.id === "projects" ? 580 : 500}
-            defaultPosition={{ x: 100 + windowConfigs.indexOf(win) * 30, y: 30 + windowConfigs.indexOf(win) * 20 }}
+            defaultWidth={win.id === "terminal" ? 650 : win.id === "skills" || win.id === "projects" ? 800 : 650}
+            defaultHeight={win.id === "terminal" ? 420 : win.id === "projects" ? 580 : 500}
+            defaultPosition={win.id === "terminal" ? { x: 150, y: 80 } : { x: 100 + windowConfigs.indexOf(win) * 30, y: 30 + windowConfigs.indexOf(win) * 20 }}
+            showMenuBar={win.id !== "terminal"}
           >
             {windowContent[win.id]}
           </BluecurveWindow>
