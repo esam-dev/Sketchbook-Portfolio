@@ -3,17 +3,17 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "preinstall": "sh -c 'rm -f package-lock.json yarn.lock; ua=\"${npm_config_user_agent:-}\"; ep=\"${npm_execpath:-}\"; case \"$ua $ep\" in *pnpm/*|*pnpm.mjs*|*pnpm.cjs*) ;; *) echo \"Use pnpm instead\" >&2; exit 1 ;; esac'",
+    "preinstall": "node -e \"const ua=process.env.npm_config_user_agent||''; const ep=process.env.npm_execpath||''; if(!/pnpm/.test(ua)&&!/pnpm/.test(ep)){console.error('Use pnpm instead');process.exit(1)}\"",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
   },
   "private": true,
   "devDependencies": {
-    "@esbuild/darwin-x64": "^0.27.3",
-    "@rollup/rollup-darwin-x64": "^4.60.4",
-    "@tailwindcss/oxide-darwin-x64": "^4.3.0",
-    "lightningcss-darwin-x64": "^1.32.0",
+    "@esbuild/win32-x64": "^0.27.3",
+    "@rollup/rollup-win32-x64-msvc": "^4.60.4",
+    "@tailwindcss/oxide-win32-x64-msvc": "^4.3.0",
+    "lightningcss-win32-x64-msvc": "^1.32.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2"
   },
