@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Analytics } from "@vercel/analytics/react";
+import { Code2 } from "lucide-react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -50,7 +51,11 @@ function App() {
 function LoadingScreen() {
   return (
     <div className="portfolio-loader" role="status" aria-label="Loading portfolio">
-      <span className="portfolio-loader-name">Cargando...</span>
+      <div className="portfolio-loader-card">
+        <Code2 size={17} />
+        <strong>Cargando...</strong>
+        <span className="portfolio-loader-arrow">↗</span>
+      </div>
       <span className="portfolio-loader-line" />
     </div>
   );

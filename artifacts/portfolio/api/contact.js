@@ -16,9 +16,9 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { name, phone, message } = req.body;
-  if (!name || !phone || !message) {
-    res.status(400).json({ error: "name, phone and message are required" });
+  const { name, email, phone, message } = req.body;
+  if (!name || !email || !phone || !message) {
+    res.status(400).json({ error: "name, email, phone and message are required" });
     return;
   }
 
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         formName: "contacto",
-        payload: { name, phone, message },
+        payload: { name, email, phone, message },
       }),
     });
 
