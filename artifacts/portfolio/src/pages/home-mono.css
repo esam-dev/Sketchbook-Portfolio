@@ -119,3 +119,6 @@ html .portfolio-diagram-core, html.dark .portfolio-diagram-core {
 }
 html .portfolio-diagram-core strong, html .portfolio-diagram-core svg { color: var(--portfolio-surface) !important; }
 html .portfolio-diagram-core small { color: color-mix(in srgb, var(--portfolio-surface) 65%, transparent) !important; }
+/* Cuadrícula del stack: líneas por celda para que las vacías queden en blanco */
+.portfolio-stack-grid { gap: 0; background: var(--portfolio-surface); }
+.portfolio-stack-grid li { box-shadow: 1px 0 0 var(--portfolio-line), 0 1px 0 var(--portfolio-line); }

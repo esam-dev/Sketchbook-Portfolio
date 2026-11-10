@@ -83,6 +83,9 @@ import {
   SiWordpress,
   SiXd,
   SiKubernetes,
+  SiDjango,
+  SiFastapi,
+  SiOpenjdk,
   SiStorybook,
 } from "react-icons/si";
 import { VscCode } from "react-icons/vsc";
@@ -216,6 +219,9 @@ const technologies = [
   { label: "Next.js", icon: <SiNextdotjs />, color: "#000000", darkColor: "#FFFFFF" },
   { label: "Node.js", icon: <SiNodedotjs />, color: "#339933", darkColor: "#5DBB63" },
   { label: "Python", icon: <SiPython />, color: "#3776AB", darkColor: "#4B8BBE" },
+  { label: "Django", icon: <SiDjango />, color: "#092E20", darkColor: "#44B78B" },
+  { label: "FastAPI", icon: <SiFastapi />, color: "#009688", darkColor: "#05C3A7" },
+  { label: "Java", icon: <SiOpenjdk />, color: "#E76F00", darkColor: "#F89820" },
   { label: "PostgreSQL", icon: <SiPostgresql />, color: "#4169E1", darkColor: "#5B86E5" },
   { label: "Docker", icon: <SiDocker />, color: "#2496ED", darkColor: "#2496ED" },
   { label: "Git", icon: <SiGit />, color: "#F05032", darkColor: "#F05032" },
