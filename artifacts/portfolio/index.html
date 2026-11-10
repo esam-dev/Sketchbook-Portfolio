@@ -12,8 +12,40 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+      #splash { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; background: #0a0a0a; color: #fafafa; font-family: Inter, system-ui, sans-serif; transition: opacity .45s ease, visibility .45s ease; }
+      #splash.light { background: #ffffff; color: #0a0a0a; }
+      #splash.is-hidden { opacity: 0; visibility: hidden; }
+      #splash .splash-logo { width: 72px; height: 72px; animation: splash-in .7s cubic-bezier(.2,.8,.2,1) both; }
+      #splash .splash-from { position: absolute; bottom: 44px; left: 0; right: 0; display: grid; gap: 4px; text-align: center; animation: splash-fade .9s .25s ease both; }
+      #splash .splash-from small { color: #8a8a8a; font-size: 13px; letter-spacing: .02em; }
+      #splash .splash-from strong { font-size: 17px; font-weight: 600; letter-spacing: -.02em; }
+      @keyframes splash-in { from { opacity: 0; transform: scale(.86); } to { opacity: 1; transform: none; } }
+      @keyframes splash-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+      @media (prefers-reduced-motion: reduce) { #splash, #splash * { animation: none !important; transition: none !important; } }
+    </style>
   </head>
   <body>
+    <div id="splash" aria-hidden="true">
+      <svg class="splash-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+      <div class="splash-from"><small>from</small><strong>Elías Ortiz</strong></div>
+    </div>
+    <script>
+      (function () {
+        var el = document.getElementById("splash");
+        var t = null;
+        try { t = localStorage.getItem("theme"); } catch (e) {}
+        var light = t === "light" || (t === "system" && window.matchMedia("(prefers-color-scheme: light)").matches);
+        if (light) el.classList.add("light");
+        var start = Date.now();
+        window.addEventListener("load", function () {
+          setTimeout(function () {
+            el.classList.add("is-hidden");
+            setTimeout(function () { el.remove(); }, 500);
+          }, Math.max(0, 1100 - (Date.now() - start)));
+        });
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
