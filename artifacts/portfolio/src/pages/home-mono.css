@@ -1,0 +1,124 @@
+/* Tema blanco y negro (estilo minimal editorial) */
+html .portfolio-page {
+  --portfolio-ink: #0a0a0a;
+  --portfolio-muted: #6b6b6b;
+  --portfolio-line: #e8e8e8;
+  --portfolio-surface: #ffffff;
+  --portfolio-blue: #0a0a0a;
+  background: #ffffff;
+  color: #0a0a0a;
+  font-family: "Inter", system-ui, sans-serif;
+  font-feature-settings: "cv11", "ss01";
+}
+html.dark .portfolio-page {
+  --portfolio-ink: #fafafa;
+  --portfolio-muted: #a1a1a1;
+  --portfolio-line: #262626;
+  --portfolio-surface: #111111;
+  --portfolio-blue: #fafafa;
+  background: #0a0a0a;
+  color: #fafafa;
+}
+.dark body:has(.portfolio-page) { background: #0a0a0a; }
+
+/* Tipografía: títulos con peso medio y espaciado ajustado */
+.portfolio-page h1, .portfolio-page h2, .portfolio-page h3 { color: var(--portfolio-ink) !important; font-weight: 600 !important; letter-spacing: -0.035em !important; }
+.portfolio-hero h1 { font-weight: 600 !important; letter-spacing: -0.045em !important; line-height: 1.05; }
+.portfolio-page p { color: var(--portfolio-muted); line-height: 1.65; }
+.portfolio-intro { color: var(--portfolio-muted) !important; }
+
+/* Superficies neutras */
+.portfolio-nav, .dark .portfolio-nav { background: color-mix(in srgb, var(--portfolio-surface) 88%, transparent) !important; }
+.portfolio-project-card, .portfolio-form-card, .portfolio-workspace, .portfolio-profile-pill, .portfolio-profile-drop,
+.dark .portfolio-project-card, .dark .portfolio-form-card, .dark .portfolio-workspace, .dark .portfolio-profile-pill, .dark .portfolio-profile-drop {
+  border-color: var(--portfolio-line) !important; background: var(--portfolio-surface) !important; box-shadow: none !important;
+}
+.dark .portfolio-workspace-row, .portfolio-workspace-row { border: 0; background: color-mix(in srgb, var(--portfolio-ink) 4%, transparent) !important; }
+.dark .portfolio-stack { background: none !important; }
+
+/* Botones: negro sólido / blanco en oscuro */
+.portfolio-page .portfolio-cta, .portfolio-contact-button, .portfolio-form-card button,
+.dark .portfolio-page .portfolio-cta, .dark .portfolio-contact-button, .dark .portfolio-form-card button {
+  border-color: var(--portfolio-ink) !important; background: var(--portfolio-ink) !important; color: var(--portfolio-surface) !important; box-shadow: none !important;
+}
+.portfolio-contact-button a, .dark .portfolio-contact-button a { color: inherit !important; }
+
+/* Etiquetas tipo píldora gris (como "Step 1") */
+.portfolio-tags > *, .dark .portfolio-tags > *, .portfolio-stack-list .badge, .dark .portfolio-stack-list .badge {
+  border: 0 !important; border-radius: 999px !important; padding: 4px 11px !important;
+  background: color-mix(in srgb, var(--portfolio-ink) 6%, transparent) !important; color: var(--portfolio-ink) !important; font-size: 12.5px; font-weight: 500;
+}
+
+/* Acentos: todo en tinta */
+.portfolio-links a.is-active, .dark .portfolio-links a.is-active { background: color-mix(in srgb, var(--portfolio-ink) 7%, transparent) !important; color: var(--portfolio-ink) !important; }
+.portfolio-links a.is-active::after { background: var(--portfolio-ink) !important; }
+.portfolio-hero-signal, .dark .portfolio-hero-signal { color: var(--portfolio-ink) !important; border-color: var(--portfolio-line) !important; }
+.portfolio-hero-icons span, .dark .portfolio-hero-icons span { color: var(--portfolio-ink) !important; opacity: .18 !important; }
+.portfolio-page [class*="eyebrow"], .portfolio-page [class*="kicker"], .portfolio-project-content > span:first-child { color: var(--portfolio-muted) !important; }
+.portfolio-page a:hover { color: var(--portfolio-ink); }
+.portfolio-page ::selection { background: var(--portfolio-ink); color: var(--portfolio-surface); }
+
+/* Portada neutra */
+.portfolio-hero, .dark .portfolio-hero {
+  background-color: transparent !important;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--portfolio-ink) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--portfolio-ink) 5%, transparent) 1px, transparent 1px) !important;
+  background-size: 56px 56px !important;
+}
+.portfolio-hero-signal::before, .portfolio-hero-signal::after,
+.dark .portfolio-hero-signal::before, .dark .portfolio-hero-signal::after { border-color: color-mix(in srgb, var(--portfolio-ink) 25%, transparent) !important; box-shadow: none !important; background: none !important; }
+.portfolio-hero-signal, .dark .portfolio-hero-signal { background: var(--portfolio-surface) !important; box-shadow: none !important; }
+.portfolio-feature-visual, .dark .portfolio-feature-visual { background-color: color-mix(in srgb, var(--portfolio-ink) 2%, var(--portfolio-surface)) !important; }
+.portfolio-hero-signal svg, .portfolio-hero-signal * { color: var(--portfolio-ink) !important; stroke: currentColor; opacity: 1 !important; } .portfolio-hero-signal { opacity: 1 !important; border: 1px solid var(--portfolio-line) !important; }
+.portfolio-project-content p:first-child, .portfolio-project-content > div:first-child p:first-child, .dark .portfolio-project-content p:first-child { color: var(--portfolio-muted) !important; font-weight: 500; letter-spacing: 0; text-transform: none; }
+
+/* Stack estilo startup */
+.portfolio-stack, .dark .portfolio-stack { background: none !important; }
+.portfolio-stack-head { max-width: 640px; margin: 0 auto 48px; text-align: center; }
+.portfolio-stack-eyebrow { display: inline-block; margin-bottom: 16px; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--portfolio-ink) 6%, transparent); color: var(--portfolio-ink); font-size: 12.5px; font-weight: 500; }
+.portfolio-stack-head h2 { margin: 0; font-size: clamp(32px, 4.4vw, 48px) !important; line-height: 1.1; }
+.portfolio-stack-head p { margin: 14px auto 0; font-size: 16px; }
+.portfolio-stack-grid { display: grid; grid-template-columns: repeat(6, 1fr); max-width: 1100px; margin: 0 auto; padding: 0; overflow: hidden; border: 1px solid var(--portfolio-line); border-radius: 16px; list-style: none; gap: 1px; background: var(--portfolio-line); }
+.portfolio-stack-grid li { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 112px; padding: 18px 10px; background: var(--portfolio-surface); color: var(--portfolio-muted); font-size: 13.5px; font-weight: 500; transition: background .2s, color .2s; }
+.portfolio-stack-grid .portfolio-stack-icon { display: grid; place-items: center; color: var(--portfolio-ink); opacity: .7; filter: grayscale(1); transition: filter .2s, opacity .2s, color .2s, transform .2s; }
+.portfolio-stack-grid .portfolio-stack-icon svg { width: 28px; height: 28px; }
+.portfolio-stack-grid li:hover { background: color-mix(in srgb, var(--portfolio-ink) 3%, var(--portfolio-surface)); color: var(--portfolio-ink); }
+.portfolio-stack-grid li:hover .portfolio-stack-icon { color: var(--stack-color); opacity: 1; filter: none; transform: translateY(-2px); }
+.dark .portfolio-stack-grid li:hover .portfolio-stack-icon { color: var(--stack-color-dark, var(--stack-color)); }
+@media (max-width: 850px) { .portfolio-stack-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 580px) { .portfolio-stack-grid { grid-template-columns: repeat(3, 1fr); } .portfolio-stack-grid li { min-height: 92px; font-size: 12px; } .portfolio-stack-grid .portfolio-stack-icon svg { width: 24px; height: 24px; } }
+
+/* Pie con el mismo fondo */
+.portfolio-footer, .dark .portfolio-footer { border-color: var(--portfolio-line) !important; background: var(--portfolio-surface) !important; }
+html.dark .portfolio-page .portfolio-footer { background: #0a0a0a !important; }
+html.dark .portfolio-hero-icons span { opacity: .42 !important; } @media (max-width: 850px) { html.dark .portfolio-hero-icons span { opacity: .3 !important; } }
+
+/* Ícono central: solo el cuadro, más grande y visible en ambos modos */
+html .portfolio-hero-signal { display: grid !important; place-items: center; width: 84px !important; height: 84px !important; margin: 0 auto 28px; border: 1px solid color-mix(in srgb, var(--portfolio-ink) 22%, transparent) !important; border-radius: 22px !important; background: var(--portfolio-surface) !important; transform: none !important; animation: none !important; }
+html .portfolio-hero-signal::before, html .portfolio-hero-signal::after { display: none !important; content: none !important; }
+html .portfolio-hero-signal svg { width: 36px !important; height: 36px !important; stroke-width: 2; transform: none !important; }
+
+/* Ícono central sin borde, como protagonista */
+html .portfolio-hero-signal { width: auto !important; height: auto !important; border: 0 !important; background: none !important; box-shadow: none !important; }
+html .portfolio-hero-signal svg { width: 64px !important; height: 64px !important; stroke-width: 1.75; }
+
+/* Diagrama conectado */
+.portfolio-delivery-flow { position: relative; }
+.portfolio-diagram-links { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.portfolio-diagram-links line { stroke: color-mix(in srgb, var(--portfolio-ink) 28%, transparent); stroke-width: 1.5; stroke-dasharray: 5 6; animation: flow-dash 1.4s linear infinite; }
+.portfolio-diagram-links circle { fill: var(--portfolio-ink); opacity: .5; }
+@keyframes flow-dash { to { stroke-dashoffset: -22; } }
+@media (prefers-reduced-motion: reduce) { .portfolio-diagram-links line { animation: none; } }
+.portfolio-diagram-node, .portfolio-diagram-core { z-index: 1; }
+html .portfolio-diagram-node, html.dark .portfolio-diagram-node, html .portfolio-diagram-node--launch, html.dark .portfolio-diagram-node--launch {
+  border-color: var(--portfolio-line) !important; background: var(--portfolio-surface) !important; box-shadow: 0 6px 18px rgba(0,0,0,.06) !important; color: var(--portfolio-ink) !important;
+}
+html .portfolio-diagram-core, html.dark .portfolio-diagram-core {
+  border-color: var(--portfolio-ink) !important; background: var(--portfolio-ink) !important; color: var(--portfolio-surface) !important; box-shadow: 0 14px 34px rgba(0,0,0,.18) !important;
+}
+html .portfolio-diagram-core strong, html .portfolio-diagram-core svg { color: var(--portfolio-surface) !important; }
+html .portfolio-diagram-core small { color: color-mix(in srgb, var(--portfolio-surface) 65%, transparent) !important; }
+/* Cuadrícula del stack: líneas por celda para que las vacías queden en blanco */
+.portfolio-stack-grid { gap: 0; background: var(--portfolio-surface); }
+.portfolio-stack-grid li { box-shadow: 1px 0 0 var(--portfolio-line), 0 1px 0 var(--portfolio-line); }

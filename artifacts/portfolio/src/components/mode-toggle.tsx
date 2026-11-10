@@ -18,7 +18,7 @@ export function ModeToggle() {
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full border border-border bg-background/80 text-foreground shadow-sm backdrop-blur hover:bg-muted"
+          className="mode-toggle-button rounded-full border border-border bg-background/80 text-foreground shadow-sm backdrop-blur hover:bg-muted"
           aria-label="Change theme"
         >
           <Sun className="h-4 w-4 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />

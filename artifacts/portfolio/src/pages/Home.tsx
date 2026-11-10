@@ -1,47 +1,279 @@
-import { useState } from "react";
-import { Github, Linkedin, Mail, ArrowUpRight, ArrowRight } from "lucide-react";
-import { SiPython, SiReact, SiNodedotjs, SiTailwindcss, SiPostgresql, SiTypescript, SiExpo, SiMongodb } from "react-icons/si";
-import { FaJava } from "react-icons/fa";
-import eliasPerfilImg from "@/assets/images/elias-perfil.png";
-import projectAppImg from "@/assets/images/project-app.png";
-import projectEcommerceImg from "@/assets/images/project-ecommerce.png";
+import { Fragment, useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  ArrowUp,
+  Braces,
+  Bug,
+  Layers,
+  Package,
+  Server,
+  Smartphone,
+  Workflow,
+  Cloud,
+  Cpu,
+  Database,
+  GitBranch,
+  Terminal,
+  Briefcase,
+  LayoutGrid,
+  UserRound,
+  ArrowUpRight,
+  Check,
+  Code2,
+  Github,
+  Linkedin,
+  Mail,
+  Menu,
+  PanelsTopLeft,
+  Rocket,
+  Search,
+  Send,
+  ServerCog,
+  ShoppingBag,
+  TestTube2,
+  WalletCards,
+  X,
+  Globe2,
+} from "lucide-react";
+import {
+  SiAdobelightroom,
+  SiAdobe,
+  SiAtlassian,
+  SiBitbucket,
+  SiCraft,
+  SiDiscord,
+  SiDocker,
+  SiFigma,
+  SiFramer,
+  SiFirebase,
+  SiGit,
+  SiGitlab,
+  SiGithub,
+  SiGraphql,
+  SiHtml5,
+  SiInvision,
+  SiJira,
+  SiLinear,
+  SiLinkedin,
+  SiMongodb,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiNotion,
+  SiNetlify,
+  SiPostgresql,
+  SiPrisma,
+  SiPython,
+  SiReact,
+  SiRedis,
+  SiRender,
+  SiSass,
+  SiShopify,
+  SiSketch,
+  SiSlack,
+  SiStrapi,
+  SiSupabase,
+  SiTailwindcss,
+  SiTelegram,
+  SiTestrail,
+  SiTrello,
+  SiTypescript,
+  SiVercel,
+  SiVite,
+  SiVisualstudiocode,
+  SiWebpack,
+  SiWordpress,
+  SiXd,
+  SiKubernetes,
+  SiDjango,
+  SiFastapi,
+  SiOpenjdk,
+  SiStorybook,
+} from "react-icons/si";
+import { VscCode } from "react-icons/vsc";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ModeToggle } from "@/components/mode-toggle";
+import profileImage from "@/assets/images/elias-perfil.png";
+import "./home-features.css";
+import "./home-projects.css";
+import "./home-native.css";
+import "./home-social.css";
+import "./home-mono.css";
 
 type Lang = "es" | "en";
 
-const SECTIONS = [
-  { id: "about", key: "navAbout" },
-  { id: "skills", key: "navSkills" },
-  { id: "projects", key: "navProjects" },
-  { id: "contact", key: "navContact" },
-] as const;
+const copy = {
+  es: {
+    nav: ["Sobre mí", "Proyectos", "Experiencia"],
+    title: "Creo experiencias digitales que conectan con las personas.",
+    intro: "Soy Elías Ortiz, Software Developer. Diseño y desarrollo experiencias web claras, rápidas y listas para crecer.",
+    projects: "Ver proyectos",
+    contact: "Hablemos",
+    selected: "Proyectos seleccionados",
+    selectedIntro: "Productos reales donde conecté interfaz, lógica e infraestructura para resolver problemas concretos.",
+    aboutLabel: "Una forma de trabajar",
+    aboutTitle: "De la intención a una experiencia que funciona.",
+    about: "Me gusta reducir la complejidad: escuchar el problema, definir lo esencial y construir una solución útil, mantenible y cuidadosa en cada detalle.",
+    experience: "Experiencia",
+    contactTitle: "¿Tienes una idea en mente?",
+    contactIntro: "Cuéntame qué estás construyendo. Me encantaría conocer el reto y pensar una buena forma de resolverlo.",
+    name: "Nombre",
+    email: "Email",
+    message: "Mensaje",
+    send: "Enviar mensaje",
+    sending: "Enviando...",
+    success: "Mensaje enviado. Gracias por escribirme.",
+    error: "No se pudo enviar el mensaje. Inténtalo de nuevo.",
+    footer: "Diseñado y desarrollado por Elías Ortiz.",
+    footerTagline: "Desarrollo productos web claros, rápidos y pensados para las personas que los usan.",
+    footerHeads: ["Navegación", "Contacto"],
+    backToTop: "Volver arriba",
+    preview: "Vista previa",
+    mailSubject: "Consulta de proyecto",
+    mailBody: "Hola Elías,\n\nQuiero hablar contigo sobre un proyecto.\n\nIdea: \nPlazo estimado: \nPresupuesto aproximado: \n\n¡Saludos!",
+  },
+  en: {
+    nav: ["About", "Projects", "Experience"],
+    title: "I create digital experiences that connect with people.",
+    intro: "I'm Elías Ortiz, a Software Developer. I design and build clear, fast web experiences made to grow.",
+    projects: "View projects",
+    contact: "Let's talk",
+    selected: "Selected work",
+    selectedIntro: "Real products where I connected interface, logic, and infrastructure to solve meaningful problems.",
+    aboutLabel: "How I work",
+    aboutTitle: "From intention to an experience that works.",
+    about: "I like reducing complexity: listening to the problem, defining what matters, and building a useful, maintainable solution with care in every detail.",
+    experience: "Experience",
+    contactTitle: "Have an idea in mind?",
+    contactIntro: "Tell me what you're building. I'd love to learn about the challenge and find a thoughtful way to solve it.",
+    name: "Name",
+    email: "Email",
+    message: "Message",
+    send: "Send message",
+    sending: "Sending...",
+    success: "Message sent. Thanks for getting in touch.",
+    error: "Could not send the message. Please try again.",
+    footer: "Designed and developed by Elías Ortiz.",
+    footerTagline: "I build clear, fast web products designed for the people who use them.",
+    footerHeads: ["Navigation", "Contact"],
+    backToTop: "Back to top",
+    preview: "Preview",
+    mailSubject: "Project inquiry",
+    mailBody: "Hi Elías,\n\nI'd like to talk with you about a project.\n\nIdea: \nEstimated timeline: \nApproximate budget: \n\nBest regards!",
+  },
+};
+
+const projects = [
+  {
+    name: "Finanz",
+    kind: "Personal finance",
+    description: "Aplicación para visualizar gastos, ordenar finanzas y tomar mejores decisiones.",
+    href: "https://finanz-services.web.app/auth",
+    stack: ["React", "Firebase", "TypeScript"],
+    tone: "blue",
+  },
+  {
+    name: "Catlink",
+    kind: "Multi-store commerce",
+    description: "Una experiencia de e-commerce para descubrir marcas y comprar con facilidad.",
+    href: "https://www.catlink.app/",
+    stack: ["React", "TypeScript", "Retail"],
+    tone: "violet",
+  },
+  {
+    name: "Navixsoft",
+    kind: "Digital presence",
+    description: "Presencia digital corporativa para comunicar servicios tecnológicos con claridad.",
+    href: "https://navixsoft.com",
+    stack: ["React", "Cloud", "Infrastructure"],
+    tone: "orange",
+  },
+];
+
+const experience = [
+  {
+    period: "2025 — present",
+    role: "Mid Software Engineer",
+    company: "Navixsoft",
+    description: "Construyendo productos de frontend, backend e infraestructura cloud.",
+  },
+  {
+    period: "2025 — 2026",
+    role: "Software Developer",
+    company: "Botcamp Roshka",
+    description: "Creación de interfaces y APIs para productos utilizados por equipos reales.",
+  },
+  {
+    period: "2023 — 2024",
+    role: "Junior Developer",
+    company: "StartUp Factory",
+    description: "Mantenimiento de sistemas y primeros desarrollos web.",
+  },
+];
+
+const technologies = [
+  { label: "React", icon: <SiReact />, color: "#61DAFB", darkColor: "#61DAFB" },
+  { label: "TypeScript", icon: <SiTypescript />, color: "#3178C6", darkColor: "#3178C6" },
+  { label: "Next.js", icon: <SiNextdotjs />, color: "#000000", darkColor: "#FFFFFF" },
+  { label: "Node.js", icon: <SiNodedotjs />, color: "#339933", darkColor: "#5DBB63" },
+  { label: "Python", icon: <SiPython />, color: "#3776AB", darkColor: "#4B8BBE" },
+  { label: "Django", icon: <SiDjango />, color: "#092E20", darkColor: "#44B78B" },
+  { label: "FastAPI", icon: <SiFastapi />, color: "#009688", darkColor: "#05C3A7" },
+  { label: "Java", icon: <SiOpenjdk />, color: "#E76F00", darkColor: "#F89820" },
+  { label: "PostgreSQL", icon: <SiPostgresql />, color: "#4169E1", darkColor: "#5B86E5" },
+  { label: "Docker", icon: <SiDocker />, color: "#2496ED", darkColor: "#2496ED" },
+  { label: "Git", icon: <SiGit />, color: "#F05032", darkColor: "#F05032" },
+  { label: "GitHub", icon: <SiGithub />, color: "#181717", darkColor: "#FFFFFF" },
+  { label: "HTML5", icon: <SiHtml5 />, color: "#E34C26", darkColor: "#E34C26" },
+  { label: "Tailwind", icon: <SiTailwindcss />, color: "#06B6D4", darkColor: "#22D3EE" },
+  { label: "Vite", icon: <SiVite />, color: "#6533B3", darkColor: "#9B5DE5" },
+  { label: "Sass", icon: <SiSass />, color: "#CC6699", darkColor: "#FF6BD6" },
+  { label: "Figma", icon: <SiFigma />, color: "#F24E1E", darkColor: "#F24E1E" },
+  { label: "Framer", icon: <SiFramer />, color: "#0055FF", darkColor: "#4D99FF" },
+  { label: "VS Code", icon: <VscCode />, color: "#007ACC", darkColor: "#1A7431" },
+  { label: "GraphQL", icon: <SiGraphql />, color: "#E535AB", darkColor: "#E535AB" },
+  { label: "MongoDB", icon: <SiMongodb />, color: "#47A735", darkColor: "#5DD96D" },
+  { label: "Redis", icon: <SiRedis />, color: "#DC382D", darkColor: "#FF4433" },
+  { label: "Kubernetes", icon: <SiKubernetes />, color: "#326CE5", darkColor: "#4D9BFF" },
+  { label: "Webpack", icon: <SiWebpack />, color: "#31C6BE", darkColor: "#5EEAD4" },
+  { label: "Storybook", icon: <SiStorybook />, color: "#FF4785", darkColor: "#FF6B9D" },
+];
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>("es");
-  const toggleLang = () => setLang(lang === "es" ? "en" : "es");
-
-  const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
-  const [submitting, setSubmitting] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submitting, setSubmitting] = useState(false);
+  const t = copy[lang];
+  const mailto = `mailto:emails.eliasortiz@gmail.com?subject=${encodeURIComponent(t.mailSubject)}&body=${encodeURIComponent(t.mailBody)}`;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  useEffect(() => {
+    const saved = window.localStorage.getItem("portfolio-language");
+    if (saved === "es" || saved === "en") setLang(saved);
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    window.localStorage.setItem("portfolio-language", lang);
+  }, [lang]);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     setSubmitting(true);
+    setStatus("idle");
+
     try {
-      const res = await fetch("/api/contact", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      if (res.ok) {
-        setStatus("success");
-        setFormData({ name: "", phone: "", message: "" });
-      } else {
-        setStatus("error");
-      }
+
+      if (!response.ok) throw new Error("Contact request failed");
+      setFormData({ name: "", email: "", message: "" });
+      setStatus("success");
     } catch {
       setStatus("error");
     } finally {
@@ -49,511 +281,382 @@ export default function Home() {
     }
   };
 
-  const t = {
-    es: {
-      navAbout: "Sobre mí",
-      navSkills: "Habilidades",
-      navProjects: "Proyectos",
-      navContact: "Contacto",
-      heroHola: "¡Hola! Soy Elías Ortiz",
-      heroRol: "Desarrollador de software",
-      heroTagline: "Construyo experiencias digitales limpias, rápidas y escalables — del backend a la interfaz.",
-      heroCta: "Hablemos",
-      heroCtaSecondary: "GitHub",
-      about: "Sobre mí",
-      about1: "Soy un desarrollador de software y aficionado de la tecnología que busca crear ",
-      about1b: "experiencias digitales con la mejor UI y funcionalidades factibles con código",
-      about2: "Con buena experiencia en ",
-      about2b: "arquitectura de software",
-      about2c: " y un amor profundo por construir soluciones. Me enfoco en rendimiento y escalabilidad.",
-      about3: "Aficionado a los diagramas de arquitectura de software, el aroma del café y el código optimizado.",
-      skills: "Habilidades",
-      skillsDesc: "Cómo construyo y conecto las cosas",
-      frontend: "Frontend",
-      mobile: "Mobile",
-      backend: "Backend",
-      database: "Base de Datos",
-      projects: "Proyectos",
-      projectsDesc: "Trabajo seleccionado",
-      project1Title: "E-commerce Platform — Next.js Commerce",
-      project1Desc: "Tienda online moderna con catálogo de productos, carrito de compras y checkout impulsado por Shopify.",
-      project1Btn: "Ver código",
-      project1SiteBtn: "Ver sitio",
-      project2Title: "Finanz",
-      project2Desc: "Plataforma de servicios financieros con panel de control, autenticación y gestión de finanzas personales.",
-      project2Btn: "Ver código",
-      project3Title: "Sitio web — Navixsoft",
-      project3Desc: "Sitio corporativo de una empresa de desarrollo de software. Desarrollo completo: diseño, frontend, backend e infraestructura.",
-      project3SiteBtn: "Ver sitio",
-      experience: "Experiencia",
-      exp: [
-        { year: "2025 — Presente", role: "Mid Software Engineer", company: "Navixsoft", desc: "Desarrollo backend y frontend con Python, Node.js y React. Infraestructura en AWS, GCP y Railway." },
-        { year: "2025 — 2026", role: "Full-Stack Developer", company: "Botcamp Roshka", desc: "Desarrollo de UI con React y APIs en Java." },
-        { year: "2023 — 2024", role: "Junior Developer", company: "StartUp Factory", desc: "Mantenimiento de sistemas legacy e inicios en desarrollo web." },
-      ],
-      contact: "Contacto",
-      contactReady: "¿Listo para empezar?",
-      contactLetsTalk: "Hablemos.",
-      contactDesc: "Cuéntame sobre tu proyecto o idea. Respondo rápido.",
-      contactName: "Nombre",
-      contactPhone: "Teléfono",
-      contactMessage: "Mensaje",
-      contactNamePlaceholder: "Tu nombre",
-      contactPhonePlaceholder: "Tu teléfono",
-      contactMsgPlaceholder: "¡Hola Elías!...",
-      contactBtn: "Enviar mensaje",
-      contactSuccess: "Mensaje enviado con éxito.",
-      contactError: "Error al enviar. Intenta de nuevo.",
-      footerSlogan: "Pizarra limpia. Código limpio.",
-      footerRights: "Todos los derechos reservados.",
-    },
-    en: {
-      navAbout: "About",
-      navSkills: "Skills",
-      navProjects: "Projects",
-      navContact: "Contact",
-      heroHola: "Hi! I'm Elías Ortiz",
-      heroRol: "Software developer",
-      heroTagline: "I build clean, fast and scalable digital experiences — from backend to interface.",
-      heroCta: "Let's talk",
-      heroCtaSecondary: "GitHub",
-      about: "About me",
-      about1: "I'm a software developer and technology enthusiast who seeks to create ",
-      about1b: "digital experiences with the best UI and feasible features in code",
-      about2: "With solid experience in ",
-      about2b: "software architecture",
-      about2c: " and a deep love for building solutions. I focus on performance and scalability.",
-      about3: "Fond of software architecture diagrams, the aroma of coffee, and optimized code.",
-      skills: "Skills",
-      skillsDesc: "How I build and connect things",
-      frontend: "Frontend",
-      mobile: "Mobile",
-      backend: "Backend",
-      database: "Database",
-      projects: "Projects",
-      projectsDesc: "Selected work",
-      project1Title: "E-commerce Platform — Next.js Commerce",
-      project1Desc: "Modern online store with product catalog, shopping cart, and Shopify-powered checkout.",
-      project1Btn: "View code",
-      project1SiteBtn: "View site",
-      project2Title: "Finanz",
-      project2Desc: "Financial services platform with dashboard, authentication, and personal finance management.",
-      project2Btn: "View code",
-      project3Title: "Website — Navixsoft",
-      project3Desc: "Corporate site for a software development company. Full development: design, frontend, backend and infrastructure.",
-      project3SiteBtn: "View site",
-      experience: "Experience",
-      exp: [
-        { year: "2025 — Present", role: "Mid Software Engineer", company: "Navixsoft", desc: "Backend and frontend development with Python, Node.js and React. Infrastructure on AWS, GCP and Railway." },
-        { year: "2025 — 2026", role: "Full-Stack Developer", company: "Botcamp Roshka", desc: "UI development with React and APIs in Java." },
-        { year: "2023 — 2024", role: "Junior Developer", company: "StartUp Factory", desc: "Legacy system maintenance and web development beginnings." },
-      ],
-      contact: "Contact",
-      contactReady: "Ready to start?",
-      contactLetsTalk: "Let's talk.",
-      contactDesc: "Tell me about your project or idea. I reply fast.",
-      contactName: "Name",
-      contactPhone: "Phone",
-      contactMessage: "Message",
-      contactNamePlaceholder: "Your name",
-      contactPhonePlaceholder: "Your phone",
-      contactMsgPlaceholder: "Hi Elias!...",
-      contactBtn: "Send message",
-      contactSuccess: "Message sent successfully.",
-      contactError: "Error sending. Please try again.",
-      footerSlogan: "Clean board. Clean code.",
-      footerRights: "All rights reserved.",
-    },
-  };
-
-  const skillGroups = [
-    {
-      title: t[lang].frontend,
-      items: [
-        { icon: <SiReact className="w-5 h-5 text-[#61DAFB]" />, label: "React" },
-        { icon: <SiTypescript className="w-5 h-5 text-[#3178C6]" />, label: "TypeScript" },
-        { icon: <SiTailwindcss className="w-5 h-5 text-[#06B6D4]" />, label: "Tailwind" },
-        { icon: <SiNodedotjs className="w-5 h-5 text-[#339933]" />, label: "Node.js" },
-      ],
-    },
-    {
-      title: t[lang].mobile,
-      items: [
-        { icon: <SiReact className="w-5 h-5 text-[#61DAFB]" />, label: "React Native" },
-        { icon: <SiExpo className="w-5 h-5 text-foreground" />, label: "Expo" },
-      ],
-    },
-    {
-      title: t[lang].backend,
-      items: [
-        { icon: <SiPython className="w-5 h-5 text-[#3776AB]" />, label: "Python" },
-        { icon: <FaJava className="w-5 h-5 text-[#f89820]" />, label: "Java" },
-        { icon: <SiNodedotjs className="w-5 h-5 text-[#339933]" />, label: "Node.js" },
-      ],
-    },
-    {
-      title: t[lang].database,
-      items: [
-        { icon: <SiPostgresql className="w-5 h-5 text-[#336791]" />, label: "PostgreSQL" },
-        { icon: <SiMongodb className="w-5 h-5 text-[#47A248]" />, label: "MongoDB" },
-      ],
-    },
-  ];
-
-  const projects = [
-    {
-      title: t[lang].project1Title,
-      desc: t[lang].project1Desc,
-      tags: ["Next.js", "Shopify", "TypeScript"],
-      image: <img src={projectEcommerceImg} alt={t[lang].project1Title} className="w-full h-full object-cover" />,
-      links: [
-        { href: "https://github.com/esam-dev/catlink", label: t[lang].project1Btn },
-        { href: "https://nextjs-commerce-three-sooty-63.vercel.app/", label: t[lang].project1SiteBtn },
-      ],
-    },
-    {
-      title: t[lang].project2Title,
-      desc: t[lang].project2Desc,
-      tags: ["React", "Firebase", "TypeScript"],
-      image: <img src={projectAppImg} alt={t[lang].project2Title} className="w-full h-full object-cover" />,
-      links: [{ href: "https://finanz-services.web.app/auth", label: t[lang].project2Btn }],
-    },
-    {
-      title: t[lang].project3Title,
-      desc: t[lang].project3Desc,
-      tags: ["React", "TypeScript", "Tailwind"],
-      image: (
-        <div className="w-full h-full bg-[#0c0c14] flex items-center justify-center">
-          <span className="text-white text-xl font-semibold tracking-tight">NAVIXSOFT.</span>
-        </div>
-      ),
-      links: [{ href: "https://navixsoft.com", label: t[lang].project3SiteBtn }],
-    },
-  ];
+  const [active, setActive] = useState("");
+  const [profileOpen, setProfileOpen] = useState(false);
+  const flowRef = useRef<HTMLDivElement>(null);
+  const [flowLinks, setFlowLinks] = useState<{ x1: number; y1: number; x2: number; y2: number }[]>([]);
+  useEffect(() => {
+    const flow = flowRef.current;
+    if (!flow) return;
+    const measure = () => {
+      const box = flow.getBoundingClientRect();
+      const core = flow.querySelector(".portfolio-diagram-core")?.getBoundingClientRect();
+      if (!core) return;
+      const cx = core.left + core.width / 2 - box.left;
+      const cy = core.top + core.height / 2 - box.top;
+      setFlowLinks(
+        Array.from(flow.querySelectorAll(".portfolio-diagram-node")).map((node) => {
+          const r = node.getBoundingClientRect();
+          return { x1: cx, y1: cy, x2: r.left + r.width / 2 - box.left, y2: r.top + r.height / 2 - box.top };
+        }),
+      );
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(flow);
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => entry.isIntersecting && setActive(entry.target.id)),
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    ["top", "about", "projects", "experience", "contact"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Navbar */}
-      <header className="fixed top-0 inset-x-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
-        <nav className="max-w-6xl mx-auto flex items-center justify-between h-16 px-6">
-          <a href="#top" className="font-semibold tracking-tight text-[15px]">
-            elias<span className="text-muted-foreground">.ortiz</span>
-          </a>
-          <div className="hidden md:flex items-center gap-8">
-            {SECTIONS.map((s) => (
-              <a
-                key={s.id}
-                href={`#${s.id}`}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {t[lang][s.key]}
-              </a>
-            ))}
-          </div>
-          <button
-            onClick={toggleLang}
-            className="text-xs font-medium tracking-wide text-muted-foreground hover:text-foreground border border-border rounded-full px-3 py-1.5 transition-colors"
+    <main className="portfolio-page">
+      <header className="portfolio-nav">
+        <div className={profileOpen ? "portfolio-profile-pill is-open" : "portfolio-profile-pill"}>
+          <a
+            className="portfolio-brand"
+            href="#top"
+            aria-expanded={profileOpen}
+            onClick={(event) => {
+              setMenuOpen(false);
+              if (window.matchMedia("(max-width: 1100px)").matches) {
+                event.preventDefault();
+                setProfileOpen(!profileOpen);
+              }
+            }}
           >
-            {lang === "es" ? "ES" : "EN"}
-          </button>
+            <span className="portfolio-avatar"><img src={profileImage} alt="" /></span>
+            <span className="portfolio-brand-text"><strong>Elías Ortiz</strong><small>@esam-dev · Software Developer</small></span>
+          </a>
+          <span className="portfolio-pill-social">
+            <a href="https://github.com/esam-dev" target="_blank" rel="noreferrer" aria-label="GitHub"><Github /></a>
+            <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin /></a>
+            <a href={mailto} aria-label="Email"><Mail /></a>
+          </span>
+        </div>
+
+        {profileOpen && (
+          <div className="portfolio-profile-drop">
+            <img src={profileImage} alt="" />
+            <span className="portfolio-brand-text"><strong>Elías Ortiz</strong><small>@esam-dev · Software Developer</small></span>
+            <span className="portfolio-pill-social">
+              <a href="https://github.com/esam-dev" target="_blank" rel="noreferrer" aria-label="GitHub"><Github /></a>
+              <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin /></a>
+              <a href={mailto} aria-label="Email"><Mail /></a>
+            </span>
+          </div>
+        )}
+
+        <nav className={menuOpen ? "portfolio-links is-open" : "portfolio-links"} aria-label="Primary navigation">
+          <a href="#about" className={active === "about" ? "is-active" : undefined} onClick={() => setMenuOpen(false)}><UserRound aria-hidden="true" />{t.nav[0]}</a>
+          <a href="#projects" className={active === "projects" ? "is-active" : undefined} onClick={() => setMenuOpen(false)}><LayoutGrid aria-hidden="true" />{t.nav[1]}</a>
+          <a href="#experience" className={active === "experience" ? "is-active" : undefined} onClick={() => setMenuOpen(false)}><Briefcase aria-hidden="true" />{t.nav[2]}</a>
+          <a className="portfolio-mobile-contact" href="#contact" onClick={() => setMenuOpen(false)}>{t.contact}</a>
         </nav>
+
+        <div className="portfolio-nav-actions">
+          <button className="portfolio-language" type="button" onClick={() => setLang(lang === "es" ? "en" : "es")} aria-label="Change language">
+            {lang.toUpperCase()}
+          </button>
+          <ModeToggle />
+          <Button asChild className="portfolio-contact-button">
+            <a href="#contact">{t.contact}<ArrowUpRight /></a>
+          </Button>
+          <button className="portfolio-menu" type="button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+            {menuOpen ? <X /> : <Menu />}
+          </button>
+        </div>
       </header>
 
-      <main id="top" className="pt-16">
-        {/* Hero */}
-        <section className="relative overflow-hidden hero-gradient">
-          <div className="absolute inset-0 grid-texture" aria-hidden="true" />
-          <div className="relative max-w-6xl mx-auto px-6 py-28 md:py-40">
-            <p className="eyebrow animate-fade-up mb-6">
-              {t[lang].heroRol} · Full-Stack
-            </p>
-            <h1 className="animate-fade-up animation-delay-100 max-w-4xl text-5xl md:text-7xl font-bold tracking-[-0.04em] leading-[1.05]">
-              {t[lang].heroHola}
-              <span className="block mt-2 bg-gradient-to-r from-[hsl(221_83%_45%)] via-[hsl(245_70%_55%)] to-[hsl(271_60%_55%)] bg-clip-text text-transparent">
-                {t[lang].heroRol}
-              </span>
-            </h1>
-            <p className="animate-fade-up animation-delay-200 mt-8 max-w-xl text-lg text-muted-foreground leading-relaxed">
-              {t[lang].heroTagline}
-            </p>
-            <div className="animate-fade-up animation-delay-300 mt-10 flex flex-wrap items-center gap-4">
-              <a href="#contact" className="btn-primary">
-                {t[lang].heroCta} <ArrowRight className="w-4 h-4" />
-              </a>
-              <a
-                href="https://github.com/esam-dev"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-ghost"
-              >
-                <Github className="w-4 h-4" /> {t[lang].heroCtaSecondary}
-              </a>
-            </div>
+      <section className="portfolio-hero" id="top">
+        <div className="portfolio-hero-signal" aria-hidden="true"><Code2 /></div>
+        <div className="portfolio-hero-icons" aria-hidden="true">
+          <span style={{ top: "10%", left: "6%" }}><Terminal /></span>
+          <span style={{ top: "24%", left: "22%" }}><Braces /></span>
+          <span style={{ top: "48%", left: "4%" }}><Database /></span>
+          <span style={{ top: "70%", left: "17%" }}><GitBranch /></span>
+          <span style={{ top: "86%", left: "5%" }}><Layers /></span>
+          <span style={{ top: "90%", left: "30%" }}><Bug /></span>
+          <span style={{ top: "9%", right: "7%" }}><Cpu /></span>
+          <span style={{ top: "26%", right: "21%" }}><Server /></span>
+          <span style={{ top: "47%", right: "5%" }}><Cloud /></span>
+          <span style={{ top: "68%", right: "18%" }}><Smartphone /></span>
+          <span style={{ top: "86%", right: "6%" }}><Package /></span>
+          <span style={{ top: "91%", right: "31%" }}><Workflow /></span>
+        </div>
+        <div className="portfolio-hero-copy">
+          <h1>{t.title}</h1>
+          <p className="portfolio-intro">{t.intro}</p>
+          <div className="portfolio-actions">
+            <Button asChild size="lg">
+              <a href="#projects" className="portfolio-cta">{t.projects}<ArrowUpRight /></a>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <a href="#contact">{t.contact}</a>
+            </Button>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* About */}
-        <section id="about" className="scroll-mt-20 max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <p className="eyebrow mb-3">01 — {t[lang].about}</p>
-          <div className="grid md:grid-cols-[minmax(0,320px)_1fr] gap-12 md:gap-16 items-start">
-            <div className="animate-fade-up">
-              <img
-                src={eliasPerfilImg}
-                alt="Elías Ortiz"
-                className="w-full aspect-square object-cover rounded-xl border border-border shadow-[0_24px_48px_-24px_rgb(0_0_0/0.15)]"
-              />
-            </div>
-            <div className="animate-fade-up animation-delay-100 space-y-5 text-lg leading-relaxed text-muted-foreground">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
-                {t[lang].heroHola}
-              </h2>
-              <p>
-                {t[lang].about1}
-                <strong className="text-foreground font-semibold">{t[lang].about1b}</strong>.
-              </p>
-              <p>
-                {t[lang].about2}
-                <strong className="text-foreground font-semibold">{t[lang].about2b}</strong>
-                {t[lang].about2c}
-              </p>
-              <p>{t[lang].about3}</p>
-              <div className="flex flex-wrap gap-3 pt-4">
-                <a href="https://github.com/esam-dev" target="_blank" rel="noopener noreferrer" className="btn-ghost">
-                  <Github className="w-4 h-4" /> GitHub
-                </a>
-                <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noopener noreferrer" className="btn-ghost">
-                  <Linkedin className="w-4 h-4" /> LinkedIn
-                </a>
-                <a href="mailto:emails.eliasortiz@gmail.com" className="btn-ghost">
-                  <Mail className="w-4 h-4" /> Email
-                </a>
-              </div>
-            </div>
+      <section className="portfolio-section portfolio-about" id="about">
+        <div className="portfolio-feature">
+          <div className="portfolio-feature-copy">
+            <h2>{t.aboutTitle}</h2>
+            <p>{t.about}</p>
           </div>
-        </section>
-
-        {/* Skills */}
-        <section id="skills" className="scroll-mt-20 section-gradient border-y border-border/60">
-          <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
-            <p className="eyebrow mb-3">02 — {t[lang].skills}</p>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">
-              {t[lang].skills}
-            </h2>
-            <p className="text-muted-foreground mb-12">{t[lang].skillsDesc}</p>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {skillGroups.map((group) => (
-                <div
-                  key={group.title}
-                  className="card-minimal p-6 transition-shadow hover:shadow-[0_16px_40px_-16px_rgb(0_0_0/0.1)]"
-                >
-                  <h3 className="text-sm font-semibold mb-5 tracking-tight">{group.title}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {group.items.map((tech) => (
-                      <span
-                        key={tech.label}
-                        className="inline-flex items-center gap-2 text-[13px] font-medium px-3 py-1.5 rounded-full border border-border bg-background"
-                      >
-                        {tech.icon} {tech.label}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="portfolio-feature-visual portfolio-feature-visual--projects" aria-label="Project dashboard preview">
+            <Card className="portfolio-workspace">
+              <CardHeader>
+                <span className="portfolio-workspace-icon"><img src={profileImage} alt="Elías Ortiz" /></span>
+                <strong>Elías Ortiz</strong>
+                <small>Portfolio workspace</small>
+              </CardHeader>
+              <CardContent>
+                <div className="portfolio-workspace-labels"><span>Producto</span><span>Estado</span></div>
+                <div className="portfolio-workspace-row"><i className="portfolio-product-icon portfolio-product-icon--blue"><WalletCards /></i><b>Finanz</b><span>Live</span></div>
+                <div className="portfolio-workspace-row"><i className="portfolio-product-icon portfolio-product-icon--violet"><ShoppingBag /></i><b>Catlink</b><span>Live</span></div>
+                <div className="portfolio-workspace-row"><i className="portfolio-product-icon portfolio-product-icon--orange"><Globe2 /></i><b>Navixsoft</b><span>Live</span></div>
+              </CardContent>
+            </Card>
           </div>
-        </section>
-
-        {/* Projects */}
-        <section id="projects" className="scroll-mt-20 max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <p className="eyebrow mb-3">03 — {t[lang].projects}</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">
-            {t[lang].projects}
-          </h2>
-          <p className="text-muted-foreground mb-12">{t[lang].projectsDesc}</p>
-          <div className="grid gap-6 lg:grid-cols-3">
-            {projects.map((project) => (
-              <article
-                key={project.title}
-                className="card-minimal group overflow-hidden flex flex-col transition-all hover:-translate-y-1 hover:shadow-[0_24px_48px_-20px_rgb(0_0_0/0.18)]"
-              >
-                <div className="aspect-[4/3] overflow-hidden border-b border-border">
-                  {project.image}
-                </div>
-                <div className="flex-1 p-6 flex flex-col">
-                  <h3 className="text-lg font-semibold tracking-tight leading-snug mb-2">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-1">
-                    {project.desc}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs font-medium text-muted-foreground px-2.5 py-1 rounded-full border border-border"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex flex-wrap gap-x-5 gap-y-2">
-                    {project.links.map((link) => (
-                      <a
-                        key={link.label}
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-sm font-medium text-foreground underline-offset-4 hover:underline"
-                      >
-                        {link.label} <ArrowUpRight className="w-3.5 h-3.5" />
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            ))}
+        </div>
+        <div className="portfolio-feature portfolio-feature--reverse">
+          <div className="portfolio-feature-copy">
+            <h2>De una idea a un producto que genera valor.</h2>
+            <p>Un proyecto sólido no empieza escribiendo código. Primero alineamos objetivos y usuarios, luego diseñamos la solución, construimos con calidad y mejoramos con datos reales.</p>
           </div>
-        </section>
-
-        {/* Experience */}
-        <section className="section-gradient border-y border-border/60">
-          <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
-            <p className="eyebrow mb-3">04 — {t[lang].experience}</p>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-12">
-              {t[lang].experience}
-            </h2>
-            <div className="relative max-w-2xl">
-              <div className="absolute left-[5px] top-2 bottom-2 w-px bg-border" aria-hidden="true" />
-              <div className="space-y-12">
-                {t[lang].exp.map((exp, i) => (
-                  <div key={i} className="relative pl-8">
-                    <span
-                      className="absolute left-0 top-2 w-[11px] h-[11px] rounded-full border-2 border-background bg-foreground"
-                      aria-hidden="true"
-                    />
-                    <p className="font-mono text-xs text-muted-foreground tracking-wide mb-1.5">
-                      {exp.year}
-                    </p>
-                    <h3 className="text-lg font-semibold tracking-tight">
-                      {exp.role}
-                      <span className="text-muted-foreground font-normal"> · {exp.company}</span>
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mt-2 max-w-xl">
-                      {exp.desc}
-                    </p>
-                  </div>
+          <div className="portfolio-feature-visual portfolio-feature-visual--delivery" aria-label="Development workflow preview">
+            <div className="portfolio-delivery-flow" ref={flowRef}>
+              <svg className="portfolio-diagram-links" aria-hidden="true">
+                {flowLinks.map((link, index) => (
+                  <g key={index}>
+                    <line x1={link.x1} y1={link.y1} x2={link.x2} y2={link.y2} />
+                    <circle cx={link.x2} cy={link.y2} r="3.5" />
+                  </g>
                 ))}
-              </div>
+              </svg>
+              <article className="portfolio-diagram-node portfolio-diagram-node--research"><Search /><span>Brief<br />& usuarios</span></article>
+              <article className="portfolio-diagram-node portfolio-diagram-node--ux"><PanelsTopLeft /><span>UX / UI<br />Arquitectura</span></article>
+              <article className="portfolio-diagram-core"><Code2 /><strong>Producto</strong><small>Web app</small></article>
+              <article className="portfolio-diagram-node portfolio-diagram-node--frontend"><Code2 /><span>Frontend<br />Interfaz</span></article>
+              <article className="portfolio-diagram-node portfolio-diagram-node--backend"><ServerCog /><span>Backend<br />API & datos</span></article>
+              <article className="portfolio-diagram-node portfolio-diagram-node--launch"><Rocket /><span>QA · Deploy<br />Feedback</span></article>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Contact */}
-        <section id="contact" className="scroll-mt-20 max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <p className="eyebrow mb-3">05 — {t[lang].contact}</p>
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-            {t[lang].contactReady}{" "}
-            <span className="bg-gradient-to-r from-[hsl(221_83%_45%)] to-[hsl(271_60%_55%)] bg-clip-text text-transparent">
-              {t[lang].contactLetsTalk}
-            </span>
-          </h2>
-          <p className="text-muted-foreground mb-12">{t[lang].contactDesc}</p>
-          <div className="grid md:grid-cols-[1fr_minmax(0,440px)] gap-12">
-            <form className="space-y-5 order-2 md:order-1" onSubmit={handleSubmit}>
-              <div>
-                <label className="block text-sm font-medium mb-2" htmlFor="name">
-                  {t[lang].contactName}
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="input-minimal"
-                  placeholder={t[lang].contactNamePlaceholder}
-                  required
-                />
+      <section className="portfolio-section" id="projects">
+        <div className="portfolio-section-heading">
+          <h2>{t.selected}</h2>
+        </div>
+        <p className="portfolio-section-intro">{t.selectedIntro}</p>
+        <div className="portfolio-project-grid">
+          {projects.map((project, index) => (
+            <Card className={`portfolio-project-card portfolio-project-card--${project.tone}`} key={project.name}>
+              <CardHeader className="portfolio-project-preview">
+                <LivePreview url={project.href} label={project.name} previewLabel={t.preview} />
+              </CardHeader>
+              <CardContent className="portfolio-project-content">
+                <div>
+                  <p>{project.kind}</p>
+                  <h3>{project.name}</h3>
+                  <span>{project.description}</span>
+                </div>
+                <a href={project.href} target="_blank" rel="noreferrer" aria-label={`Open ${project.name}`}>
+                  <ArrowUpRight />
+                </a>
+              </CardContent>
+              <div className="portfolio-tags">
+                {project.stack.map((tag) => <Badge variant="outline" key={tag}>{tag}</Badge>)}
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-2" htmlFor="phone">
-                  {t[lang].contactPhone}
-                </label>
-                <input
-                  id="phone"
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="input-minimal"
-                  placeholder={t[lang].contactPhonePlaceholder}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2" htmlFor="message">
-                  {t[lang].contactMessage}
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="input-minimal resize-none h-32"
-                  placeholder={t[lang].contactMsgPlaceholder}
-                  required
-                />
-              </div>
-              <button type="submit" disabled={submitting} className="btn-primary w-full sm:w-auto">
-                {submitting ? "..." : t[lang].contactBtn}
-              </button>
-              {status === "success" && (
-                <p className="text-sm text-green-600 font-medium">{t[lang].contactSuccess}</p>
-              )}
-              {status === "error" && (
-                <p className="text-sm text-destructive font-medium">{t[lang].contactError}</p>
-              )}
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <section className="portfolio-section portfolio-experience" id="experience">
+        <div className="portfolio-section-heading">
+          <h2>{t.experience}</h2>
+        </div>
+        <div className="portfolio-experience-list">
+          {experience.map((item) => (
+            <article key={item.company}>
+              <span>{item.period}</span>
+              <div><h3>{item.role}</h3><strong>{item.company}</strong><p>{item.description}</p></div>
+              <Check />
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="portfolio-section portfolio-stack">
+        <div className="portfolio-stack-head">
+          <span className="portfolio-stack-eyebrow">Stack</span>
+          <h2>{lang === "es" ? "Herramientas para construir con intención." : "Tools to build with intention."}</h2>
+          <p>{lang === "es" ? "Las tecnologías que uso a diario para diseñar, desarrollar y lanzar productos." : "The technologies I use every day to design, build and ship products."}</p>
+        </div>
+        <ul className="portfolio-stack-grid">
+          {technologies.map((technology) => (
+            <li
+              key={technology.label}
+              style={{ "--stack-color": technology.color, "--stack-color-dark": technology.darkColor } as React.CSSProperties}
+            >
+              <span className="portfolio-stack-icon">{technology.icon}</span>
+              <span>{technology.label}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="portfolio-contact" id="contact">
+        <div className="portfolio-contact-copy">
+          <h2>{t.contactTitle}</h2>
+          <p>{t.contactIntro}</p>
+          <div className="portfolio-socials">
+            <a href="https://github.com/esam-dev" target="_blank" rel="noreferrer"><Github /> GitHub</a>
+            <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noreferrer"><Linkedin /> LinkedIn</a>
+            <a href={mailto}><Mail /> Email</a>
+          </div>
+        </div>
+        <Card className="portfolio-form-card">
+          <CardContent>
+            <form onSubmit={handleSubmit}>
+              <label>{t.name}<Input required autoComplete="name" value={formData.name} onChange={(event) => setFormData({ ...formData, name: event.target.value })} /></label>
+              <label>{t.email}<Input required type="email" autoComplete="email" value={formData.email} onChange={(event) => setFormData({ ...formData, email: event.target.value })} /></label>
+              <label>{t.message}<Textarea required rows={5} value={formData.message} onChange={(event) => setFormData({ ...formData, message: event.target.value })} /></label>
+              <Button type="submit" disabled={submitting}>{submitting ? t.sending : t.send}<Send /></Button>
+              {status === "success" && <p className="portfolio-status portfolio-status--success">{t.success}</p>}
+              {status === "error" && <p className="portfolio-status portfolio-status--error">{t.error}</p>}
             </form>
-            <div className="order-1 md:order-2 flex flex-col gap-3">
-              <a
-                href="mailto:emails.eliasortiz@gmail.com"
-                className="card-minimal p-5 flex items-center gap-4 transition-colors hover:border-foreground/25"
-              >
-                <Mail className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm font-medium">emails.eliasortiz@gmail.com</span>
-              </a>
-              <a
-                href="https://github.com/esam-dev"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="card-minimal p-5 flex items-center gap-4 transition-colors hover:border-foreground/25"
-              >
-                <Github className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm font-medium">github.com/esam-dev</span>
-              </a>
-              <a
-                href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="card-minimal p-5 flex items-center gap-4 transition-colors hover:border-foreground/25"
-              >
-                <Linkedin className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm font-medium">LinkedIn</span>
-              </a>
+          </CardContent>
+        </Card>
+      </section>
+
+      <footer className="portfolio-footer">
+        <div className="portfolio-footer-inner">
+          <div className="portfolio-footer-brand">
+            <a className="portfolio-footer-logo" href="#top"><Code2 aria-hidden="true" />Elías Ortiz</a>
+            <p>{t.footerTagline}</p>
+            <div className="portfolio-footer-social">
+              <a href="https://github.com/esam-dev" target="_blank" rel="noreferrer" aria-label="GitHub"><Github /></a>
+              <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin /></a>
+              <a href={mailto} aria-label="Email"><Mail /></a>
             </div>
           </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-border/60">
-        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">{t[lang].footerSlogan}</p>
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Elías Ortiz · {t[lang].footerRights}
-          </p>
+          <nav className="portfolio-footer-nav portfolio-footer-nav--two" aria-label={t.footerHeads[0]}>
+            <div>
+              <h4>{t.footerHeads[0]}</h4>
+              <a href="#about">{t.nav[0]}</a>
+              <a href="#projects">{t.nav[1]}</a>
+              <a href="#experience">{t.nav[2]}</a>
+            </div>
+            <div>
+              <h4>{t.footerHeads[1]}</h4>
+              <a href="#contact">{t.contact}</a>
+              <a href="https://github.com/esam-dev" target="_blank" rel="noreferrer">GitHub</a>
+              <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noreferrer">LinkedIn</a>
+            </div>
+          </nav>
+        </div>
+        <div className="portfolio-footer-bottom">
+          <span>© {new Date().getFullYear()} Elías Ortiz · {t.footer}</span>
+          <a href="#top" aria-label={t.backToTop} title={t.backToTop}><ArrowUp /></a>
         </div>
       </footer>
+    </main>
+  );
+}
+
+function LivePreview({ url, label, previewLabel }: { url: string; label: string; previewLabel: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const element = containerRef.current;
+    if (!element || typeof IntersectionObserver === "undefined") {
+      setVisible(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "160px" },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const updateScale = () => {
+      const width = viewport.offsetWidth;
+      if (width > 0) {
+        viewport.style.setProperty("--preview-scale", String(width / 1280));
+      }
+    };
+
+    updateScale();
+    window.addEventListener("resize", updateScale);
+
+    let observer: ResizeObserver | undefined;
+    if (typeof ResizeObserver !== "undefined") {
+      observer = new ResizeObserver(updateScale);
+      observer.observe(viewport);
+    }
+
+    return () => {
+      window.removeEventListener("resize", updateScale);
+      observer?.disconnect();
+    };
+  }, []);
+
+  let host = url;
+  try {
+    host = new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    /* keep raw url */
+  }
+
+  return (
+    <div className="portfolio-live-preview" ref={containerRef}>
+      <div className="portfolio-live-chrome" aria-hidden="true">
+        <i /><i /><i />
+        <span>{host}</span>
+      </div>
+      <div className="portfolio-live-viewport" ref={viewportRef}>
+        {!loaded && (
+          <div className="portfolio-live-loading" aria-hidden="true">
+            <span>{previewLabel}…</span>
+          </div>
+        )}
+        {visible && (
+          <iframe
+            src={url}
+            title={`${label} — live preview`}
+            loading="lazy"
+            referrerPolicy="no-referrer"
+            onLoad={() => setLoaded(true)}
+          />
+        )}
+      </div>
     </div>
   );
 }
