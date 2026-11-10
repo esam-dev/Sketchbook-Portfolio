@@ -9,16 +9,28 @@ export default async function handler(req, res) {
   }
 
   const apiKey = process.env["FORMS_HUB_API_KEY"];
-  console.log("FORMS_HUB_API_KEY present:", !!apiKey, "env keys:", Object.keys(process.env).filter(k => k.includes("FORM") || k.includes("KEY") || k.includes("API")));
+  console.log("FORMS_HUB_API_KEY present:", !!apiKey);
 
   if (!apiKey) {
     res.status(500).json({ error: "Server misconfiguration" });
     return;
   }
 
-  const { name, email, phone, message } = req.body;
-  if (!name || !email || !phone || !message) {
-    res.status(400).json({ error: "name, email, phone and message are required" });
+  const body = req.body ?? {};
+  const name = typeof body.name === "string" ? body.name.trim() : "";
+  const email = typeof body.email === "string" ? body.email.trim() : "";
+  const phone = typeof body.phone === "string" ? body.phone.trim() : "";
+  const message = typeof body.message === "string" ? body.message.trim() : "";
+  if (!name || !message || (!email && !phone)) {
+    res.status(400).json({ error: "name, message and email (or phone) are required" });
+    return;
+  }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    res.status(400).json({ error: "invalid email" });
+    return;
+  }
+  if (name.length > 120 || email.length > 200 || phone.length > 40 || message.length > 5000) {
+    res.status(400).json({ error: "field too long" });
     return;
   }
 
