@@ -5,7 +5,7 @@ import NotificationBell from "@/components/admin/notification-bell";
 
 type Submission = {
   id: string;
-  payload: { name: string; phone: string; message: string };
+  payload: { name: string; email?: string; phone: string; message: string };
   createdAt: string;
 };
 
@@ -63,7 +63,7 @@ export default function Admin() {
           id: item.id || item._id,
           payload: {
             name: item.payload?.name || item.name || "",
-            phone: item.payload?.phone || item.phone || "",
+            email: item.payload?.email || item.email || "", phone: item.payload?.phone || item.phone || "",
             message: item.payload?.message || item.message || "",
           },
           createdAt: item.createdAt || item.created_at || item.date || "",
@@ -94,7 +94,7 @@ export default function Admin() {
       const raw = Array.isArray(data) ? data : data.submissions || data.data || data.rows || [];
       const list = raw.map((item: any) => ({
         id: item.id || item._id,
-        payload: { name: item.payload?.name || item.name || "", phone: item.payload?.phone || item.phone || "", message: item.payload?.message || item.message || "" },
+        payload: { name: item.payload?.name || item.name || "", email: item.payload?.email || item.email || "", phone: item.payload?.phone || item.phone || "", message: item.payload?.message || item.message || "" },
         createdAt: item.createdAt || item.created_at || item.date || "",
       }));
       setSubmissions(list.sort((a: Submission, b: Submission) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
@@ -210,10 +210,10 @@ export default function Admin() {
                   <div>
                     <h2 className="text-base font-semibold tracking-tight">{selected.payload.name}</h2>
                     <a
-                      href={`tel:${selected.payload.phone}`}
+                      href={selected.payload.email ? `mailto:${selected.payload.email}` : `tel:${selected.payload.phone}`}
                       className="text-xs text-muted-foreground hover:text-foreground hover:underline underline-offset-2 transition-colors"
                     >
-                      {selected.payload.phone}
+                      {selected.payload.email || selected.payload.phone}
                     </a>
                   </div>
                 </div>
