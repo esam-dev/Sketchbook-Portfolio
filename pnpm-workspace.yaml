@@ -157,3 +157,4 @@ overrides:
 
 allowBuilds:
   esbuild: set this to true or false
+  lightningcss: set this to true or false
