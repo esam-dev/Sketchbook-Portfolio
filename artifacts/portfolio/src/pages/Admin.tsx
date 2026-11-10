@@ -5,7 +5,7 @@ import NotificationBell from "@/components/admin/notification-bell";
 
 type Submission = {
   id: string;
-  payload: { name: string; phone: string; message: string };
+  payload: { name: string; email?: string; phone: string; message: string };
   createdAt: string;
 };
 
@@ -63,7 +63,7 @@ export default function Admin() {
           id: item.id || item._id,
           payload: {
             name: item.payload?.name || item.name || "",
-            phone: item.payload?.phone || item.phone || "",
+            email: item.payload?.email || item.email || "", phone: item.payload?.phone || item.phone || "",
             message: item.payload?.message || item.message || "",
           },
           createdAt: item.createdAt || item.created_at || item.date || "",
@@ -94,7 +94,7 @@ export default function Admin() {
       const raw = Array.isArray(data) ? data : data.submissions || data.data || data.rows || [];
       const list = raw.map((item: any) => ({
         id: item.id || item._id,
-        payload: { name: item.payload?.name || item.name || "", phone: item.payload?.phone || item.phone || "", message: item.payload?.message || item.message || "" },
+        payload: { name: item.payload?.name || item.name || "", email: item.payload?.email || item.email || "", phone: item.payload?.phone || item.phone || "", message: item.payload?.message || item.message || "" },
         createdAt: item.createdAt || item.created_at || item.date || "",
       }));
       setSubmissions(list.sort((a: Submission, b: Submission) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
@@ -114,98 +114,118 @@ export default function Admin() {
 
   if (!loggedIn) {
     return (
-      <div className="w-screen h-screen overflow-hidden relative desktop-gradient flex items-center justify-center">
-        <div className="panel-gradient h-[28px] flex items-center px-3 text-[12px] text-white fixed top-0 left-0 right-0 z-[1000]" style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
-          <span className="font-semibold">Admin Login</span>
-        </div>
-        <form onSubmit={handleLogin} className="bg-[#d4d0c8] border border-[#404040] shadow-[1px_1px_0px_#000] w-[350px]" style={{ animation: "window-open 0.15s ease-out" }}>
-          <div className="titlebar-gradient flex items-center h-[26px] px-[3px]">
-            <div className="flex-1 text-[12px] font-semibold text-white px-1 leading-[26px]">Admin Login</div>
-          </div>
-          <div className="p-6 bg-white m-[3px] mt-0 bevel-sunken">
-            <h1 className="text-[18px] font-bold text-[#333] mb-4 text-center" style={{ fontFamily: "var(--font-display)" }}>ADMIN</h1>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full px-2 py-1.5 text-[12px] bg-white bevel-sunken focus:outline-none mb-3"
-              autoFocus
-            />
-            {error && <p className="text-[12px] text-[#cc0000] font-semibold mb-3">{error}</p>}
-            <button type="submit" disabled={!password || loading} className="btn-bluecurve w-full py-2 font-bold text-[13px] disabled:opacity-50">
-              {loading ? "LOADING..." : "ENTER"}
-            </button>
-          </div>
+      <div className="min-h-screen hero-gradient flex items-center justify-center px-6 py-20">
+        <form onSubmit={handleLogin} className="card-minimal w-full max-w-sm p-8 shadow-[0_32px_64px_-32px_rgb(0_0_0/0.15)] animate-fade-up">
+          <p className="eyebrow mb-3">Portfolio</p>
+          <h1 className="text-2xl font-bold tracking-tight mb-6">Admin</h1>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            className="input-minimal mb-3"
+            autoFocus
+          />
+          {error && <p className="text-sm text-destructive font-medium mb-3">{error}</p>}
+          <button type="submit" disabled={!password || loading} className="btn-primary w-full">
+            {loading ? "..." : "Enter"}
+          </button>
         </form>
       </div>
     );
   }
 
   return (
-    <div className="w-screen h-screen overflow-hidden relative desktop-gradient flex flex-col">
-      {/* Top panel */}
-      <div className="panel-gradient h-[28px] flex items-center px-3 text-[12px] text-white shrink-0" style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
-        <span className="font-semibold">Admin - Messages</span>
-        <div className="flex-1" />
-        <div className="flex items-center gap-2">
-          <NotificationBell />
-          <button onClick={logout} className="h-[20px] px-3 bg-[#d4d0c8] border border-t-white border-l-white border-b-[#404040] border-r-[#404040] text-black text-[11px] font-semibold hover:brightness-105">
-            Logout
-          </button>
+    <div className="h-screen flex flex-col bg-background text-foreground">
+      {/* Header */}
+      <header className="border-b border-border/60 bg-background/80 backdrop-blur-md shrink-0">
+        <div className="max-w-6xl mx-auto flex items-center justify-between h-16 px-6">
+          <span className="text-sm font-semibold tracking-tight">
+            Admin <span className="text-muted-foreground font-normal">· Messages</span>
+          </span>
+          <div className="flex items-center gap-4">
+            <NotificationBell />
+            <button
+              onClick={logout}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Logout
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
 
       {/* Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar list */}
-        <div className="w-full sm:w-80 bg-[#ececec] border-r border-[#808080] overflow-y-auto bluecurve-scrollbar">
-          {submissions.length === 0 && !loading && <p className="p-6 text-center text-[12px] text-[#888]">No messages yet</p>}
+        <div className="w-full sm:w-80 border-r border-border/60 bg-background overflow-y-auto">
+          {submissions.length === 0 && !loading && (
+            <p className="p-6 text-center text-sm text-muted-foreground">No messages yet</p>
+          )}
           {submissions.map((sub) => {
             const unread = !readIds.has(sub.id);
             return (
-              <button key={sub.id} onClick={() => select(sub)} className={`w-full text-left px-3 py-2.5 border-b border-[#d0d0d0] hover:bg-[#e0e0e0] ${selected?.id === sub.id ? "bg-[#3366aa]/15" : ""}`}>
-                <div className="flex items-start gap-2">
-                  <div className={`w-8 h-8 rounded flex items-center justify-center text-[11px] font-bold text-white shrink-0 ${unread ? "bg-[#3366aa]" : "bg-[#888]"}`}>
+              <button
+                key={sub.id}
+                onClick={() => select(sub)}
+                className={`w-full text-left px-5 py-4 border-b border-border/60 transition-colors ${
+                  selected?.id === sub.id ? "bg-secondary" : "hover:bg-secondary/60"
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 ${
+                    unread ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                  }`}>
                     {sub.payload.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-baseline">
-                      <span className={`text-[12px] truncate ${unread ? "font-bold" : ""}`}>{sub.payload.name}</span>
-                      <span className="text-[10px] text-[#888] ml-2 shrink-0">{formatDate(sub.createdAt)}</span>
+                    <div className="flex justify-between items-baseline gap-2">
+                      <span className={`text-sm truncate ${unread ? "font-semibold" : ""}`}>
+                        {sub.payload.name}
+                      </span>
+                      <span className="text-[11px] text-muted-foreground shrink-0">
+                        {formatDate(sub.createdAt)}
+                      </span>
                     </div>
-                    <p className={`text-[11px] truncate ${unread ? "font-semibold" : "text-[#666]"}`}>{sub.payload.message}</p>
+                    <p className="text-xs text-muted-foreground truncate mt-0.5">
+                      {sub.payload.message}
+                    </p>
                   </div>
                 </div>
               </button>
             );
           })}
-          {loading && <p className="p-4 text-center text-[12px] text-[#888]">Loading...</p>}
+          {loading && <p className="p-6 text-center text-sm text-muted-foreground">Loading...</p>}
         </div>
 
         {/* Detail pane */}
-        <div className="hidden sm:flex flex-1 flex-col bg-[#ececec]">
+        <div className="hidden sm:flex flex-1 flex-col bg-secondary/40">
           {selected ? (
-            <div className="flex-1 overflow-y-auto p-4 bluecurve-scrollbar">
-              <div className="bg-white bevel-sunken p-4 max-w-xl mx-auto">
-                <div className="flex items-center gap-3 mb-3 pb-3 border-b border-[#d0d0d0]">
-                  <div className="w-10 h-10 bg-[#3366aa] flex items-center justify-center text-[14px] font-bold text-white shrink-0">
+            <div className="flex-1 overflow-y-auto p-8">
+              <div className="card-minimal p-6 max-w-xl mx-auto">
+                <div className="flex items-center gap-4 mb-5 pb-5 border-b border-border/60">
+                  <div className="w-11 h-11 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-semibold shrink-0">
                     {selected.payload.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <h2 className="text-[14px] font-bold">{selected.payload.name}</h2>
-                    <a href={`tel:${selected.payload.phone}`} className="text-[11px] text-[#3366aa] hover:underline">{selected.payload.phone}</a>
+                    <h2 className="text-base font-semibold tracking-tight">{selected.payload.name}</h2>
+                    <a
+                      href={selected.payload.email ? `mailto:${selected.payload.email}` : `tel:${selected.payload.phone}`}
+                      className="text-xs text-muted-foreground hover:text-foreground hover:underline underline-offset-2 transition-colors"
+                    >
+                      {selected.payload.email || selected.payload.phone}
+                    </a>
                   </div>
                 </div>
-                <div className="bg-[#f8f8f8] bevel-sunken p-3 mb-3">
-                  <p className="text-[12px] leading-relaxed whitespace-pre-wrap">{selected.payload.message}</p>
-                </div>
-                <p className="text-[10px] text-[#888] text-right">{formatDetailDate(selected.createdAt)}</p>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap">{selected.payload.message}</p>
+                <p className="text-[11px] text-muted-foreground text-right mt-4">
+                  {formatDetailDate(selected.createdAt)}
+                </p>
               </div>
             </div>
           ) : (
             <div className="flex-1 flex items-center justify-center">
-              <p className="text-[14px] text-[#888]">Select a message</p>
+              <p className="text-sm text-muted-foreground">Select a message</p>
             </div>
           )}
         </div>

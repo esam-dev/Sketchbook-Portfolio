@@ -1,444 +1,656 @@
-import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Blocks, Briefcase, CalendarDays, Check, Code2, Gamepad2, Github, Globe, Heart, Lightbulb, Linkedin, Mail, MapPin, Menu, Rocket, ShoppingBag, Star, Target, Volume2, VolumeX, Wallet, X, Zap } from "lucide-react";
-import { SiDocker, SiExpo, SiGit, SiGithub, SiJavascript, SiLinux, SiNodedotjs, SiNextdotjs, SiOpenjdk, SiPostgresql, SiPython, SiRailway, SiReact, SiTypescript, SiVercel } from "react-icons/si";
-import { FaAws } from "react-icons/fa6";
+import { Fragment, useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  ArrowUp,
+  Braces,
+  Bug,
+  Layers,
+  Package,
+  Server,
+  Smartphone,
+  Workflow,
+  Cloud,
+  Cpu,
+  Database,
+  GitBranch,
+  Terminal,
+  Briefcase,
+  LayoutGrid,
+  UserRound,
+  ArrowUpRight,
+  Check,
+  Code2,
+  Github,
+  Linkedin,
+  Mail,
+  Menu,
+  PanelsTopLeft,
+  Rocket,
+  Search,
+  Send,
+  ServerCog,
+  ShoppingBag,
+  TestTube2,
+  WalletCards,
+  X,
+  Globe2,
+} from "lucide-react";
+import {
+  SiAdobelightroom,
+  SiAdobe,
+  SiAtlassian,
+  SiBitbucket,
+  SiCraft,
+  SiDiscord,
+  SiDocker,
+  SiFigma,
+  SiFramer,
+  SiFirebase,
+  SiGit,
+  SiGitlab,
+  SiGithub,
+  SiGraphql,
+  SiHtml5,
+  SiInvision,
+  SiJira,
+  SiLinear,
+  SiLinkedin,
+  SiMongodb,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiNotion,
+  SiNetlify,
+  SiPostgresql,
+  SiPrisma,
+  SiPython,
+  SiReact,
+  SiRedis,
+  SiRender,
+  SiSass,
+  SiShopify,
+  SiSketch,
+  SiSlack,
+  SiStrapi,
+  SiSupabase,
+  SiTailwindcss,
+  SiTelegram,
+  SiTestrail,
+  SiTrello,
+  SiTypescript,
+  SiVercel,
+  SiVite,
+  SiVisualstudiocode,
+  SiWebpack,
+  SiWordpress,
+  SiXd,
+  SiKubernetes,
+  SiStorybook,
+} from "react-icons/si";
+import { VscCode } from "react-icons/vsc";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ModeToggle } from "@/components/mode-toggle";
-import Doodles from "@/components/Doodles";
 import profileImage from "@/assets/images/elias-perfil.png";
+import "./home-features.css";
+import "./home-projects.css";
+import "./home-native.css";
+import "./home-social.css";
+import "./home-mono.css";
 
 type Lang = "es" | "en";
+
 const copy = {
-    es: { nav: ["Sobre mí", "Proyectos", "Experiencia"], eyebrow: "Software developer", title: "Hola, soy Elías Ortiz.", intro: "Bienvenido a mi portfolio. Soy software developer y creo sitios web, aplicaciones y herramientas pensadas para ser útiles, simples y formar parte de la vida cotidiana.", work: "Ver mis proyectos", contact: "Hablemos", available: "Disponible para proyectos", selected: "Proyectos seleccionados", selectedIntro: "Una muestra de soluciones en las que he trabajado, desde la idea y la interfaz hasta el código y la puesta en producción.", aboutTitle: "Sobre mí, en pocas palabras.", about: "Soy Elías Ortiz, software developer y aficionado a la tecnología. Me gusta entender cómo las personas usan el software y convertir sus necesidades en experiencias claras, útiles y agradables.", stack: "Tecnologías que uso", experience: "Mi recorrido", experienceIntro: "Los lugares y equipos que forman parte de mi experiencia como desarrollador.", contactTitle: "¿Trabajamos juntos?", contactIntro: "Si tienes una idea, un proyecto o simplemente quieres conversar sobre tecnología, escríbeme.", name: "Nombre", email: "Email", phone: "Teléfono", message: "Mensaje", send: "Enviar mensaje", sending: "Enviando...", success: "Mensaje enviado. Gracias por escribirme.", error: "No se pudo enviar el mensaje. Inténtalo de nuevo.", live: "En línea", featured: "Proyectos destacados", pages: "en producción", viewGallery: "Ver galería de proyectos", openProject: "Abrir" },
-    en: { nav: ["About", "Projects", "Experience"], eyebrow: "Software developer", title: "Hi, I'm Elías Ortiz.", intro: "Welcome to my portfolio. I'm a software developer who creates websites, applications, and tools made to be useful, simple, and part of people's everyday lives.", work: "See my projects", contact: "Let's talk", available: "Open to projects", selected: "Selected projects", selectedIntro: "A selection of solutions I have worked on, from the idea and interface to the code and production release.", aboutTitle: "About me, in a few words.", about: "I'm Elías Ortiz, a software developer and technology enthusiast. I like understanding how people use software and turning their needs into clear, useful, enjoyable experiences.", stack: "Technologies I use", experience: "My journey", experienceIntro: "The places and teams that have shaped my experience as a developer.", contactTitle: "Shall we work together?", contactIntro: "Have an idea, a project, or simply want to talk about technology? Send me a message.", name: "Name", email: "Email", phone: "Phone", message: "Message", send: "Send message", sending: "Sending...", success: "Message sent. Thanks for reaching out.", error: "Could not send the message. Please try again.", live: "Live", featured: "Featured projects", pages: "in production", viewGallery: "View project gallery", openProject: "Open" },
-};
-
-type Project = { title: string; type: string; tags: string[]; href: string; displayUrl: string; icon: React.ReactNode; iconBg: string; stackLabel: string };
-const projects: Project[] = [
-  { title: "Finanz", type: "App web para gestionar gastos personales", tags: ["React", "Firebase", "TypeScript"], href: "https://finanz-services.web.app/auth", displayUrl: "https://finanz-services.web.app", icon: <Wallet />, iconBg: "var(--nt-purple)", stackLabel: "React · Firebase" },
-  { title: "Catlink", type: "Plataforma de e-commerce multitienda", tags: ["React", "TypeScript", "Moda & retail"], href: "https://www.catlink.app/", displayUrl: "https://www.catlink.app", icon: <ShoppingBag />, iconBg: "var(--nt-orange)", stackLabel: "React · TypeScript" },
-  { title: "Navixsoft", type: "Corporate digital experience", tags: ["React", "TypeScript", "Infrastructure"], href: "https://navixsoft.com", displayUrl: "https://navixsoft.com", icon: <Globe />, iconBg: "var(--nt-green)", stackLabel: "React · TypeScript" },
-];
-const technologies = [
-  { label: "React", icon: <SiReact />, color: "#61DAFB", darkColor: "#61DAFB" }, { label: "Expo", icon: <SiExpo />, color: "#000000", darkColor: "#ffffff" }, { label: "TypeScript", icon: <SiTypescript />, color: "#3178C6", darkColor: "#3178C6" },
-  { label: "JavaScript", icon: <SiJavascript />, color: "#F7DF1E", darkColor: "#F7DF1E" }, { label: "Java", icon: <SiOpenjdk />, color: "#ED8B00", darkColor: "#ED8B00" }, { label: "Node.js", icon: <SiNodedotjs />, color: "#339933", darkColor: "#339933" }, { label: "Python", icon: <SiPython />, color: "#3776AB", darkColor: "#3776AB" },
-  { label: "Docker", icon: <SiDocker />, color: "#2496ED", darkColor: "#2496ED" }, { label: "Linux", icon: <SiLinux />, color: "#FCC624", darkColor: "#FCC624" }, { label: "Git", icon: <SiGit />, color: "#F05032", darkColor: "#F05032" },
-  { label: "GitHub", icon: <SiGithub />, color: "#181717", darkColor: "#ffffff" }, { label: "Next.js", icon: <SiNextdotjs />, color: "#000000", darkColor: "#ffffff" }, { label: "PostgreSQL", icon: <SiPostgresql />, color: "#4169E1", darkColor: "#4169E1" },
-  { label: "Railway", icon: <SiRailway />, color: "#000000", darkColor: "#ffffff" }, { label: "Vercel", icon: <SiVercel />, color: "#000000", darkColor: "#ffffff" }, { label: "AWS", icon: <FaAws />, color: "#FF9900", darkColor: "#FF9900" }, { label: "shadcn/ui", icon: <Blocks />, color: "#111111", darkColor: "#ffffff" },
-];
-const technologyByLabel = Object.fromEntries(technologies.map((technology) => [technology.label, technology]));
-const localizedSections = {
   es: {
-    tools: "Tecnologías con las que trabajo", capabilityLabel: "Crear soluciones", capabilityTitle: "Ideas claras, soluciones que funcionan.", capabilityBody: "Me gusta entender el problema antes de construir. Después conecto diseño, código e infraestructura para crear herramientas útiles y fáciles de mantener.", everyPlatform: "Mi forma de trabajar", web: "Frontend", infrastructure: "Backend", delivery: "Deploy", workflowLabel: "Cómo creo soluciones", workflowTitle: "De un problema real a una solución útil.", workflow: [{ title: "Entender", body: "Escucho el problema, hago preguntas y encuentro lo que realmente necesita resolverse." }, { title: "Proponer", body: "Busco una solución simple, explico las decisiones y defino un camino posible." }, { title: "Construir", body: "Escribo código mantenible y avanzo con entregas concretas." }, { title: "Lanzar", body: "Pongo la solución en marcha y compruebo que funcione en el mundo real." }, { title: "Mejorar", body: "Observo cómo funciona, recibo feedback y sigo iterando." }], projectTypes: ["App web para gestionar gastos personales", "Plataforma de e-commerce multitienda de ropa, moda y accesorios", "Experiencia digital corporativa"], experience: [{ year: "2025 — presente", role: "Mid Software Engineer", company: "Navixsoft", desc: "Desarrollo backend y frontend con Python, Node.js, React e infraestructura cloud." }, { year: "2025 — 2026", role: "Software developer", company: "Botcamp Roshka", desc: "Creación de interfaces y APIs para productos utilizados por equipos reales." }, { year: "2023 — 2024", role: "Desarrollador Junior", company: "StartUp Factory", desc: "Mantenimiento de sistemas legacy y primeros desarrollos web." }], footer: "Diseñado y construido con cuidado" },
+    nav: ["Sobre mí", "Proyectos", "Experiencia"],
+    title: "Creo experiencias digitales que conectan con las personas.",
+    intro: "Soy Elías Ortiz, Software Developer. Diseño y desarrollo experiencias web claras, rápidas y listas para crecer.",
+    projects: "Ver proyectos",
+    contact: "Hablemos",
+    selected: "Proyectos seleccionados",
+    selectedIntro: "Productos reales donde conecté interfaz, lógica e infraestructura para resolver problemas concretos.",
+    aboutLabel: "Una forma de trabajar",
+    aboutTitle: "De la intención a una experiencia que funciona.",
+    about: "Me gusta reducir la complejidad: escuchar el problema, definir lo esencial y construir una solución útil, mantenible y cuidadosa en cada detalle.",
+    experience: "Experiencia",
+    contactTitle: "¿Tienes una idea en mente?",
+    contactIntro: "Cuéntame qué estás construyendo. Me encantaría conocer el reto y pensar una buena forma de resolverlo.",
+    name: "Nombre",
+    email: "Email",
+    message: "Mensaje",
+    send: "Enviar mensaje",
+    sending: "Enviando...",
+    success: "Mensaje enviado. Gracias por escribirme.",
+    error: "No se pudo enviar el mensaje. Inténtalo de nuevo.",
+    footer: "Diseñado y desarrollado por Elías Ortiz.",
+    footerTagline: "Desarrollo productos web claros, rápidos y pensados para las personas que los usan.",
+    footerHeads: ["Navegación", "Contacto"],
+    backToTop: "Volver arriba",
+    preview: "Vista previa",
+    mailSubject: "Consulta de proyecto",
+    mailBody: "Hola Elías,\n\nQuiero hablar contigo sobre un proyecto.\n\nIdea: \nPlazo estimado: \nPresupuesto aproximado: \n\n¡Saludos!",
+  },
   en: {
-    tools: "Technologies I work with", capabilityLabel: "Creating solutions", capabilityTitle: "Clear ideas, solutions that work.", capabilityBody: "I like understanding the problem before building. Then I connect design, code, and infrastructure to create useful, maintainable tools.", everyPlatform: "How I work", web: "Frontend", infrastructure: "Backend", delivery: "Deploy", workflowLabel: "How I create solutions", workflowTitle: "From a real problem to a useful solution.", workflow: [{ title: "Understand", body: "I listen, ask questions, and find what really needs to be solved." }, { title: "Propose", body: "I look for a simple solution, explain the decisions, and define a possible path." }, { title: "Build", body: "I write maintainable code and move forward with concrete deliveries." }, { title: "Launch", body: "I put the solution into practice and make sure it works in the real world." }, { title: "Improve", body: "I observe how it works, gather feedback, and keep iterating." }], projectTypes: ["Web app for managing personal expenses", "Multi-store e-commerce platform for fashion and accessories", "Corporate digital experience"], experience: [{ year: "2025 — now", role: "Mid Software Engineer", company: "Navixsoft", desc: "Building backend and frontend products with Python, Node.js, React, and cloud infrastructure." }, { year: "2025 — 2026", role: "Software developer", company: "Botcamp Roshka", desc: "Creating interfaces and APIs for products used by real teams." }, { year: "2023 — 2024", role: "Junior Developer", company: "StartUp Factory", desc: "Maintaining legacy systems and building web development foundations." }], footer: "Designed and built with care" },
+    nav: ["About", "Projects", "Experience"],
+    title: "I create digital experiences that connect with people.",
+    intro: "I'm Elías Ortiz, a Software Developer. I design and build clear, fast web experiences made to grow.",
+    projects: "View projects",
+    contact: "Let's talk",
+    selected: "Selected work",
+    selectedIntro: "Real products where I connected interface, logic, and infrastructure to solve meaningful problems.",
+    aboutLabel: "How I work",
+    aboutTitle: "From intention to an experience that works.",
+    about: "I like reducing complexity: listening to the problem, defining what matters, and building a useful, maintainable solution with care in every detail.",
+    experience: "Experience",
+    contactTitle: "Have an idea in mind?",
+    contactIntro: "Tell me what you're building. I'd love to learn about the challenge and find a thoughtful way to solve it.",
+    name: "Name",
+    email: "Email",
+    message: "Message",
+    send: "Send message",
+    sending: "Sending...",
+    success: "Message sent. Thanks for getting in touch.",
+    error: "Could not send the message. Please try again.",
+    footer: "Designed and developed by Elías Ortiz.",
+    footerTagline: "I build clear, fast web products designed for the people who use them.",
+    footerHeads: ["Navigation", "Contact"],
+    backToTop: "Back to top",
+    preview: "Preview",
+    mailSubject: "Project inquiry",
+    mailBody: "Hi Elías,\n\nI'd like to talk with you about a project.\n\nIdea: \nEstimated timeline: \nApproximate budget: \n\nBest regards!",
+  },
 };
 
-const navIds = ["about", "projects", "experience"] as const;
+const projects = [
+  {
+    name: "Finanz",
+    kind: "Personal finance",
+    description: "Aplicación para visualizar gastos, ordenar finanzas y tomar mejores decisiones.",
+    href: "https://finanz-services.web.app/auth",
+    stack: ["React", "Firebase", "TypeScript"],
+    tone: "blue",
+  },
+  {
+    name: "Catlink",
+    kind: "Multi-store commerce",
+    description: "Una experiencia de e-commerce para descubrir marcas y comprar con facilidad.",
+    href: "https://www.catlink.app/",
+    stack: ["React", "TypeScript", "Retail"],
+    tone: "violet",
+  },
+  {
+    name: "Navixsoft",
+    kind: "Digital presence",
+    description: "Presencia digital corporativa para comunicar servicios tecnológicos con claridad.",
+    href: "https://navixsoft.com",
+    stack: ["React", "Cloud", "Infrastructure"],
+    tone: "orange",
+  },
+];
 
-const initialServerPlatforms = [
-  { x: 7, y: 86, width: 24 }, { x: 42, y: 75, width: 22 }, { x: 69, y: 64, width: 23 },
-  { x: 42, y: 53, width: 22 }, { x: 10, y: 42, width: 22 }, { x: 43, y: 31, width: 24 },
-  { x: 72, y: 20, width: 20 }, { x: 43, y: 9, width: 19 },
+const experience = [
+  {
+    period: "2025 — present",
+    role: "Mid Software Engineer",
+    company: "Navixsoft",
+    description: "Construyendo productos de frontend, backend e infraestructura cloud.",
+  },
+  {
+    period: "2025 — 2026",
+    role: "Software Developer",
+    company: "Botcamp Roshka",
+    description: "Creación de interfaces y APIs para productos utilizados por equipos reales.",
+  },
+  {
+    period: "2023 — 2024",
+    role: "Junior Developer",
+    company: "StartUp Factory",
+    description: "Mantenimiento de sistemas y primeros desarrollos web.",
+  },
+];
+
+const technologies = [
+  { label: "React", icon: <SiReact />, color: "#61DAFB", darkColor: "#61DAFB" },
+  { label: "TypeScript", icon: <SiTypescript />, color: "#3178C6", darkColor: "#3178C6" },
+  { label: "Next.js", icon: <SiNextdotjs />, color: "#000000", darkColor: "#FFFFFF" },
+  { label: "Node.js", icon: <SiNodedotjs />, color: "#339933", darkColor: "#5DBB63" },
+  { label: "Python", icon: <SiPython />, color: "#3776AB", darkColor: "#4B8BBE" },
+  { label: "PostgreSQL", icon: <SiPostgresql />, color: "#4169E1", darkColor: "#5B86E5" },
+  { label: "Docker", icon: <SiDocker />, color: "#2496ED", darkColor: "#2496ED" },
+  { label: "Git", icon: <SiGit />, color: "#F05032", darkColor: "#F05032" },
+  { label: "GitHub", icon: <SiGithub />, color: "#181717", darkColor: "#FFFFFF" },
+  { label: "HTML5", icon: <SiHtml5 />, color: "#E34C26", darkColor: "#E34C26" },
+  { label: "Tailwind", icon: <SiTailwindcss />, color: "#06B6D4", darkColor: "#22D3EE" },
+  { label: "Vite", icon: <SiVite />, color: "#6533B3", darkColor: "#9B5DE5" },
+  { label: "Sass", icon: <SiSass />, color: "#CC6699", darkColor: "#FF6BD6" },
+  { label: "Figma", icon: <SiFigma />, color: "#F24E1E", darkColor: "#F24E1E" },
+  { label: "Framer", icon: <SiFramer />, color: "#0055FF", darkColor: "#4D99FF" },
+  { label: "VS Code", icon: <VscCode />, color: "#007ACC", darkColor: "#1A7431" },
+  { label: "GraphQL", icon: <SiGraphql />, color: "#E535AB", darkColor: "#E535AB" },
+  { label: "MongoDB", icon: <SiMongodb />, color: "#47A735", darkColor: "#5DD96D" },
+  { label: "Redis", icon: <SiRedis />, color: "#DC382D", darkColor: "#FF4433" },
+  { label: "Kubernetes", icon: <SiKubernetes />, color: "#326CE5", darkColor: "#4D9BFF" },
+  { label: "Webpack", icon: <SiWebpack />, color: "#31C6BE", darkColor: "#5EEAD4" },
+  { label: "Storybook", icon: <SiStorybook />, color: "#FF4785", darkColor: "#FF6B9D" },
 ];
 
 export default function Home() {
-  const [lang, setLang] = useState<Lang>("en");
+  const [lang, setLang] = useState<Lang>("es");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<string>("top");
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [submitting, setSubmitting] = useState(false);
-  const [serverGameOpen, setServerGameOpen] = useState(false);
-  const [serverGameActive, setServerGameActive] = useState(false);
-  const [serverGameOver, setServerGameOver] = useState(false);
-  const [serverGameOverReason, setServerGameOverReason] = useState<"water" | "lightning" | null>(null);
-  const [serverPlayer, setServerPlayer] = useState({ x: 14, y: 79 });
-  const [serverWater, setServerWater] = useState(91);
-  const [serverScore, setServerScore] = useState(0);
-  const [serverBest, setServerBest] = useState(0);
-  const [serverLevel, setServerLevel] = useState(0);
-  const [serverPlatforms, setServerPlatforms] = useState(initialServerPlatforms);
-  const [serverGroundY, setServerGroundY] = useState(86);
-  const [serverDistance, setServerDistance] = useState(0);
-  const [lightningFrame, setLightningFrame] = useState(0);
-  const [serverVelocity, setServerVelocity] = useState(0);
-  const [serverJumping, setServerJumping] = useState(false);
-  const [musicOn, setMusicOn] = useState(false);
-  const audioContextRef = useRef<AudioContext | null>(null);
   const t = copy[lang];
-  const playChipTone = (frequency: number, duration = 0.08) => {
-    if (!musicOn) return;
-    const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
-    const context = audioContextRef.current ?? new AudioContextClass();
-    audioContextRef.current = context;
-    const oscillator = context.createOscillator();
-    const gain = context.createGain();
-    oscillator.type = "square";
-    oscillator.frequency.value = frequency;
-    gain.gain.setValueAtTime(.035, context.currentTime);
-    gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
-    oscillator.connect(gain).connect(context.destination);
-    oscillator.start();
-    oscillator.stop(context.currentTime + duration);
-  };
-  const toggleMusic = () => {
-    const next = !musicOn;
-    setMusicOn(next);
-    if (next) playChipTone(523); 
-  };
-  const closeServerGame = () => { setServerGameOpen(false); setServerGameActive(false); };
-  const startServerGame = () => { setServerGameOpen(true); setServerGameActive(true); setServerGameOver(false); setServerGameOverReason(null); setServerPlayer({ x: 14, y: 79 }); setServerPlatforms(initialServerPlatforms); setServerGroundY(86); setServerWater(91); setServerScore(0); setServerLevel(0); setServerDistance(0); setLightningFrame(0); setServerVelocity(0); setServerJumping(false); playChipTone(392); };
-  const moveServer = (direction: number) => {
-    if (!serverGameActive || serverGameOver) return;
-    setServerPlayer((player) => ({ ...player, x: Math.max(3, Math.min(90, player.x + direction * 4)) }));
-  };
-  const jumpServer = () => {
-    if (!serverGameActive || serverGameOver || serverJumping) return;
-    setServerVelocity(-7.5);
-    setServerJumping(true);
-    playChipTone(660);
-  };
+  const mailto = `mailto:emails.eliasortiz@gmail.com?subject=${encodeURIComponent(t.mailSubject)}&body=${encodeURIComponent(t.mailBody)}`;
+
   useEffect(() => {
-    const saved = window.localStorage.getItem("sv-lang");
+    const saved = window.localStorage.getItem("portfolio-language");
     if (saved === "es" || saved === "en") setLang(saved);
   }, []);
+
   useEffect(() => {
-    if (!serverGameActive || serverGameOver) return;
-    const interval = window.setInterval(() => {
-      setServerDistance((distance) => { const next = distance + 1; setServerBest((best) => Math.max(best, next)); return next; });
-      setLightningFrame((frame) => {
-        const nextFrame = frame >= 100 ? 0 : frame + 4;
-        const lightningLanes = [23, 57, 82];
-        const lightningY = nextFrame - 18;
-        const activeLightning = lightningLanes.find((lane) => Math.abs(lane - serverPlayer.x) < 11 && Math.abs(lightningY - serverPlayer.y) < 10);
-        if (activeLightning !== undefined) {
-          setServerGameOver(true);
-          setServerGameActive(false);
-          setServerGameOverReason("lightning");
-          playChipTone(150, .18);
-        }
-        return nextFrame;
-      });
-      setServerWater((water) => {
-        const nextWater = water - .65;
-        if (nextWater <= serverPlayer.y + 5) {
-          setServerGameOver(true);
-          setServerGameActive(false);
-          setServerGameOverReason("water");
-          playChipTone(160, .18);
-        }
-        return nextWater;
-      });
-    }, 500);
-    return () => window.clearInterval(interval);
-  }, [serverGameActive, serverGameOver, serverPlayer.x, serverPlayer.y]);
-  useEffect(() => {
-    if (!serverGameActive || serverGameOver) return;
-    const interval = window.setInterval(() => {
-      if (!serverJumping) return;
-      setServerPlayer((player) => {
-        const nextY = player.y + serverVelocity;
-        const nextVelocity = serverVelocity + .85;
-        const landing = serverVelocity > 0 && serverPlatforms
-          .filter((platform) => platform.y < serverGroundY && nextY >= platform.y - 7 && player.y <= platform.y - 7 && player.x + 8 >= platform.x && player.x <= platform.x + platform.width)
-          .sort((first, second) => second.y - first.y)[0];
-        if (landing) {
-          setServerVelocity(0);
-          setServerJumping(false);
-          const isNewUpperPlatform = landing.y < serverGroundY;
-          setServerGroundY(landing.y);
-          setServerScore((score) => { const updated = score + 1; setServerBest((best) => Math.max(best, updated)); return updated; });
-          if (isNewUpperPlatform && landing.y <= 20) {
-            const nextPlatform = { x: 12 + ((serverLevel * 29) % 68), y: 25, width: 18 + (serverLevel % 3) * 3 };
-            const upcomingPlatform = { x: 48 + ((serverLevel * 17) % 35), y: 10, width: 18 + ((serverLevel + 1) % 3) * 3 };
-            setServerPlatforms((platforms) => [
-              ...platforms
-                .map((platform) => ({ ...platform, y: platform.y + 15 }))
-                .filter((platform) => platform.y > 25 && platform.y < 88),
-              nextPlatform,
-              upcomingPlatform,
-            ]);
-            setServerLevel((level) => level + 1);
-            setServerWater((water) => Math.min(91, water + 4));
-            return { x: nextPlatform.x + nextPlatform.width / 2 - 4, y: nextPlatform.y - 7 };
-          }
-          playChipTone(740);
-          return { x: player.x, y: landing.y - 7 };
-        }
-        if (nextY >= 96) {
-          setServerGameOver(true);
-          setServerGameActive(false);
-          playChipTone(150, .18);
-        }
-        setServerVelocity(nextVelocity);
-        return { x: player.x, y: nextY };
-      });
-    }, 80);
-    return () => window.clearInterval(interval);
-  }, [serverGameActive, serverGameOver, serverVelocity, serverGroundY, serverJumping]);
-  useEffect(() => {
-    if (!serverGameOpen) return;
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") moveServer(-1);
-      if (event.key === "ArrowRight" || event.key.toLowerCase() === "d") moveServer(1);
-      if (event.key === "ArrowUp" || event.key === " " || event.key.toLowerCase() === "w") jumpServer();
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [serverGameOpen, serverGameActive, serverGameOver]);
-  useEffect(() => () => {
-    audioContextRef.current?.close();
-  }, []);
-  useEffect(() => {
-    window.localStorage.setItem("sv-lang", lang);
+    window.localStorage.setItem("portfolio-language", lang);
   }, [lang]);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setSubmitting(true);
+    setStatus("idle");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) throw new Error("Contact request failed");
+      setFormData({ name: "", email: "", message: "" });
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const [active, setActive] = useState("");
+  const [profileOpen, setProfileOpen] = useState(false);
+  const flowRef = useRef<HTMLDivElement>(null);
+  const [flowLinks, setFlowLinks] = useState<{ x1: number; y1: number; x2: number; y2: number }[]>([]);
   useEffect(() => {
-    const sections = ["top", "about", "projects", "experience", "contact"].map((id) => document.getElementById(id)).filter((el): el is HTMLElement => Boolean(el));
-    if (!sections.length) return;
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (visible?.target.id) setActiveSection(visible.target.id);
-    }, { rootMargin: "-28% 0px -58% 0px", threshold: [0, 0.2, 0.5, 1] });
-    sections.forEach((section) => observer.observe(section));
+    const flow = flowRef.current;
+    if (!flow) return;
+    const measure = () => {
+      const box = flow.getBoundingClientRect();
+      const core = flow.querySelector(".portfolio-diagram-core")?.getBoundingClientRect();
+      if (!core) return;
+      const cx = core.left + core.width / 2 - box.left;
+      const cy = core.top + core.height / 2 - box.top;
+      setFlowLinks(
+        Array.from(flow.querySelectorAll(".portfolio-diagram-node")).map((node) => {
+          const r = node.getBoundingClientRect();
+          return { x1: cx, y1: cy, x2: r.left + r.width / 2 - box.left, y2: r.top + r.height / 2 - box.top };
+        }),
+      );
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(flow);
     return () => observer.disconnect();
   }, []);
-  const closeMenu = () => setMenuOpen(false);
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault(); setSubmitting(true); setStatus("idle");
-    try { const response = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }); if (!response.ok) throw new Error("Request failed"); setStatus("success"); setFormData({ name: "", email: "", phone: "", message: "" }); } catch { setStatus("error"); } finally { setSubmitting(false); }
-  };
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => entry.isIntersecting && setActive(entry.target.id)),
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    ["top", "about", "projects", "experience", "contact"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <>
-    <main className="sv-page">
-      <Doodles />
-      <header className="sv-nav">
-        <a className="sv-brand" href="#top" aria-label="Elías Ortiz home" onClick={closeMenu}><Code2 aria-hidden="true" />Elías Ortiz</a>
-        <nav className={menuOpen ? "sv-links is-open" : "sv-links"}>
-          {navIds.map((id, index) => (
-            <a key={id} href={`#${id}`} className={activeSection === id ? "is-active" : undefined} onClick={closeMenu}>{t.nav[index]}</a>
-          ))}
-          <a href="#contact" className={activeSection === "contact" ? "is-active sv-links-contact" : "sv-links-contact"} onClick={closeMenu}>{t.contact}</a>
+    <main className="portfolio-page">
+      <header className="portfolio-nav">
+        <div className={profileOpen ? "portfolio-profile-pill is-open" : "portfolio-profile-pill"}>
+          <a
+            className="portfolio-brand"
+            href="#top"
+            aria-expanded={profileOpen}
+            onClick={(event) => {
+              setMenuOpen(false);
+              if (window.matchMedia("(max-width: 1100px)").matches) {
+                event.preventDefault();
+                setProfileOpen(!profileOpen);
+              }
+            }}
+          >
+            <span className="portfolio-avatar"><img src={profileImage} alt="" /></span>
+            <span className="portfolio-brand-text"><strong>Elías Ortiz</strong><small>@esam-dev · Software Developer</small></span>
+          </a>
+          <span className="portfolio-pill-social">
+            <a href="https://github.com/esam-dev" target="_blank" rel="noreferrer" aria-label="GitHub"><Github /></a>
+            <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin /></a>
+            <a href={mailto} aria-label="Email"><Mail /></a>
+          </span>
+        </div>
+
+        {profileOpen && (
+          <div className="portfolio-profile-drop">
+            <img src={profileImage} alt="" />
+            <span className="portfolio-brand-text"><strong>Elías Ortiz</strong><small>@esam-dev · Software Developer</small></span>
+            <span className="portfolio-pill-social">
+              <a href="https://github.com/esam-dev" target="_blank" rel="noreferrer" aria-label="GitHub"><Github /></a>
+              <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin /></a>
+              <a href={mailto} aria-label="Email"><Mail /></a>
+            </span>
+          </div>
+        )}
+
+        <nav className={menuOpen ? "portfolio-links is-open" : "portfolio-links"} aria-label="Primary navigation">
+          <a href="#about" className={active === "about" ? "is-active" : undefined} onClick={() => setMenuOpen(false)}><UserRound aria-hidden="true" />{t.nav[0]}</a>
+          <a href="#projects" className={active === "projects" ? "is-active" : undefined} onClick={() => setMenuOpen(false)}><LayoutGrid aria-hidden="true" />{t.nav[1]}</a>
+          <a href="#experience" className={active === "experience" ? "is-active" : undefined} onClick={() => setMenuOpen(false)}><Briefcase aria-hidden="true" />{t.nav[2]}</a>
+          <a className="portfolio-mobile-contact" href="#contact" onClick={() => setMenuOpen(false)}>{t.contact}</a>
         </nav>
-        <div className="sv-nav-actions">
-          <button className="sv-lang" onClick={() => setLang(lang === "es" ? "en" : "es")} aria-label="Change language">{lang.toUpperCase()}</button>
+
+        <div className="portfolio-nav-actions">
+          <button className="portfolio-language" type="button" onClick={() => setLang(lang === "es" ? "en" : "es")} aria-label="Change language">
+            {lang.toUpperCase()}
+          </button>
           <ModeToggle />
-          <a className="sv-btn sv-nav-contact" href="#contact" onClick={closeMenu}>{t.contact} <ArrowUpRight size={14} /></a>
-          <button className="sv-menu-btn" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X /> : <Menu />}</button>
+          <Button asChild className="portfolio-contact-button">
+            <a href="#contact">{t.contact}<ArrowUpRight /></a>
+          </Button>
+          <button className="portfolio-menu" type="button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+            {menuOpen ? <X /> : <Menu />}
+          </button>
         </div>
       </header>
 
-      <section className="sv-hero" id="top">
-        <div className="sv-doc">
-          <p className="sv-eyebrow">{lang === "es" ? "Portafolio · " : "Portfolio · "}{new Date().getFullYear()}</p>
-          <h1 className="sv-hero-title">
-            {lang === "es" ? (<><span className="sv-mark">Hola, soy</span> Elías Ortiz.</>) : (<><span className="sv-mark">Hi, I'm</span> Elías Ortiz.</>)}
-          </h1>
-          <p className="sv-hero-lead">{t.intro}</p>
-          <div className="sv-props">
-            <span className="sv-prop"><Briefcase /> <b>Software developer</b></span>
-            <span className="sv-prop"><MapPin /> <b>{lang === "es" ? "Remote · Latam" : "Remote · Latam"}</b></span>
-            <span className="sv-prop"><CalendarDays /> <b>2023 — {new Date().getFullYear()}</b></span>
-          </div>
-          <div className="sv-actions">
-            <a className="sv-btn sv-btn--primary" href="#projects">{t.work} <ArrowUpRight size={15} /></a>
-            <a className="sv-btn" href="#contact">{t.contact}</a>
-          </div>
-          <div className="sv-stack">
-            <span className="sv-stack-label">{localizedSections[lang].tools}</span>
-            <div className="sv-tech-row">
-              {technologies.map((technology) => (
-                <span className="sv-tech-chip" key={technology.label} style={{ ["--chip-color" as string]: technology.color }}>{technology.icon}{technology.label}</span>
-              ))}
-            </div>
-          </div>
+      <section className="portfolio-hero" id="top">
+        <div className="portfolio-hero-signal" aria-hidden="true"><Code2 /></div>
+        <div className="portfolio-hero-icons" aria-hidden="true">
+          <span style={{ top: "10%", left: "6%" }}><Terminal /></span>
+          <span style={{ top: "24%", left: "22%" }}><Braces /></span>
+          <span style={{ top: "48%", left: "4%" }}><Database /></span>
+          <span style={{ top: "70%", left: "17%" }}><GitBranch /></span>
+          <span style={{ top: "86%", left: "5%" }}><Layers /></span>
+          <span style={{ top: "90%", left: "30%" }}><Bug /></span>
+          <span style={{ top: "9%", right: "7%" }}><Cpu /></span>
+          <span style={{ top: "26%", right: "21%" }}><Server /></span>
+          <span style={{ top: "47%", right: "5%" }}><Cloud /></span>
+          <span style={{ top: "68%", right: "18%" }}><Smartphone /></span>
+          <span style={{ top: "86%", right: "6%" }}><Package /></span>
+          <span style={{ top: "91%", right: "31%" }}><Workflow /></span>
         </div>
-        <button className="sv-btn app-dash-launch" type="button" onClick={startServerGame}>
-          <Gamepad2 size={16} />
-          {lang === "es" ? "Jugar Server Climb" : "Play Server Climb"}
-          <ArrowUpRight size={15} />
-        </button>
-        </section>
-
-      <section className="sv-section sv-about" id="about">
-        <div className="sv-about-copy">
-          <div className="sv-profile">
-            <img src={profileImage} alt="Elías Ortiz" />
-            <div>
-              <strong>Elías Ortiz</strong>
-              <span>Software developer</span>
-            </div>
+        <div className="portfolio-hero-copy">
+          <h1>{t.title}</h1>
+          <p className="portfolio-intro">{t.intro}</p>
+          <div className="portfolio-actions">
+            <Button asChild size="lg">
+              <a href="#projects" className="portfolio-cta">{t.projects}<ArrowUpRight /></a>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <a href="#contact">{t.contact}</a>
+            </Button>
           </div>
-          <div className="sv-sec-header">
-            <div>
-              <span className="sv-sec-label"><span className="sv-mono">01</span> / {t.aboutTitle}</span>
-              <h2>{lang === "es" ? "Convertir ideas en software" : "Turning ideas into software"}</h2>
-            </div>
-          </div>
-          <blockquote className="sv-quote">{t.about}</blockquote>
-        </div>
-        <div className="sv-cap-list">
-          <article className="sv-cap-item">
-            <span className="sv-cap-icon" style={{ background: "var(--nt-blue-bg)", color: "var(--nt-blue)" }}><SiReact /></span>
-            <div>
-              <span className="sv-cap-num">PROP_01</span>
-              <h3>{lang === "es" ? "Interfaces claras" : "Clear interfaces"}</h3>
-              <p>{lang === "es" ? "Diseño y desarrollo experiencias web que son fáciles de entender y usar." : "I design and build web experiences that are easy to understand and use."}</p>
-            </div>
-          </article>
-          <article className="sv-cap-item">
-            <span className="sv-cap-icon" style={{ background: "var(--nt-green-bg)", color: "var(--nt-green)" }}><SiNodedotjs /></span>
-            <div>
-              <span className="sv-cap-num">PROP_02</span>
-              <h3>{lang === "es" ? "Funcionalidad sólida" : "Solid functionality"}</h3>
-              <p>{lang === "es" ? "Conecto frontend, backend y datos para que cada parte cumpla su propósito." : "I connect frontend, backend, and data so every part serves its purpose."}</p>
-            </div>
-          </article>
-          <article className="sv-cap-item">
-            <span className="sv-cap-icon" style={{ background: "var(--nt-orange-bg)", color: "var(--nt-orange)" }}><FaAws /></span>
-            <div>
-              <span className="sv-cap-num">PROP_03</span>
-              <h3>{lang === "es" ? "Listo para usarse" : "Ready to use"}</h3>
-              <p>{lang === "es" ? "Preparo el proyecto para llegar a las personas y seguir mejorando con el tiempo." : "I prepare projects to reach people and keep improving over time."}</p>
-            </div>
-          </article>
         </div>
       </section>
 
-      <section className="sv-section">
-        <div className="sv-sec-header">
-          <div>
-            <span className="sv-sec-label"><span className="sv-mono">02</span> / {localizedSections[lang].workflowLabel}</span>
-            <h2>{localizedSections[lang].workflowTitle}</h2>
+      <section className="portfolio-section portfolio-about" id="about">
+        <div className="portfolio-feature">
+          <div className="portfolio-feature-copy">
+            <h2>{t.aboutTitle}</h2>
+            <p>{t.about}</p>
           </div>
-          <p>{lang === "es" ? "Cinco decisiones repetibles que van de la idea al producto en producción." : "Five repeatable decisions that go from idea to a product in production."}</p>
+          <div className="portfolio-feature-visual portfolio-feature-visual--projects" aria-label="Project dashboard preview">
+            <Card className="portfolio-workspace">
+              <CardHeader>
+                <span className="portfolio-workspace-icon"><img src={profileImage} alt="Elías Ortiz" /></span>
+                <strong>Elías Ortiz</strong>
+                <small>Portfolio workspace</small>
+              </CardHeader>
+              <CardContent>
+                <div className="portfolio-workspace-labels"><span>Producto</span><span>Estado</span></div>
+                <div className="portfolio-workspace-row"><i className="portfolio-product-icon portfolio-product-icon--blue"><WalletCards /></i><b>Finanz</b><span>Live</span></div>
+                <div className="portfolio-workspace-row"><i className="portfolio-product-icon portfolio-product-icon--violet"><ShoppingBag /></i><b>Catlink</b><span>Live</span></div>
+                <div className="portfolio-workspace-row"><i className="portfolio-product-icon portfolio-product-icon--orange"><Globe2 /></i><b>Navixsoft</b><span>Live</span></div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-        <div className="sv-steps">
-          {localizedSections[lang].workflow.map((step, index) => {
-            const icons = [Lightbulb, Blocks, Code2, Rocket, Check];
-            const Icon = icons[index];
-            return (
-              <article className="sv-step" key={step.title}>
-                <span className="sv-step-num"><Icon />0{index + 1}</span>
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
-              </article>
-            );
-          })}
+        <div className="portfolio-feature portfolio-feature--reverse">
+          <div className="portfolio-feature-copy">
+            <h2>De una idea a un producto que genera valor.</h2>
+            <p>Un proyecto sólido no empieza escribiendo código. Primero alineamos objetivos y usuarios, luego diseñamos la solución, construimos con calidad y mejoramos con datos reales.</p>
+          </div>
+          <div className="portfolio-feature-visual portfolio-feature-visual--delivery" aria-label="Development workflow preview">
+            <div className="portfolio-delivery-flow" ref={flowRef}>
+              <svg className="portfolio-diagram-links" aria-hidden="true">
+                {flowLinks.map((link, index) => (
+                  <g key={index}>
+                    <line x1={link.x1} y1={link.y1} x2={link.x2} y2={link.y2} />
+                    <circle cx={link.x2} cy={link.y2} r="3.5" />
+                  </g>
+                ))}
+              </svg>
+              <article className="portfolio-diagram-node portfolio-diagram-node--research"><Search /><span>Brief<br />& usuarios</span></article>
+              <article className="portfolio-diagram-node portfolio-diagram-node--ux"><PanelsTopLeft /><span>UX / UI<br />Arquitectura</span></article>
+              <article className="portfolio-diagram-core"><Code2 /><strong>Producto</strong><small>Web app</small></article>
+              <article className="portfolio-diagram-node portfolio-diagram-node--frontend"><Code2 /><span>Frontend<br />Interfaz</span></article>
+              <article className="portfolio-diagram-node portfolio-diagram-node--backend"><ServerCog /><span>Backend<br />API & datos</span></article>
+              <article className="portfolio-diagram-node portfolio-diagram-node--launch"><Rocket /><span>QA · Deploy<br />Feedback</span></article>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="sv-section" id="projects">
-        <div className="sv-sec-header">
-          <div>
-            <span className="sv-sec-label"><span className="sv-mono">03</span> / {t.selected}</span>
-            <h2>{lang === "es" ? "Lo que construyo" : "What I build"}</h2>
-          </div>
-          <p>{t.selectedIntro}</p>
+      <section className="portfolio-section" id="projects">
+        <div className="portfolio-section-heading">
+          <h2>{t.selected}</h2>
         </div>
-        <div className="sv-gallery">
+        <p className="portfolio-section-intro">{t.selectedIntro}</p>
+        <div className="portfolio-project-grid">
           {projects.map((project, index) => (
-            <article className="sv-gallery-card" key={project.title}>
-              <div className="sv-browser">
-                <div className="sv-browser-bar"><i /><i /><i /><small>{project.displayUrl}</small></div>
-                <iframe src={project.href} title={`${project.title} preview`} loading="lazy" tabIndex={-1} />
-                <a className="sv-browser-link" href={project.href} target="_blank" rel="noreferrer">{t.openProject} <ArrowUpRight size={13} /></a>
-              </div>
-              <div className="sv-gallery-info">
+            <Card className={`portfolio-project-card portfolio-project-card--${project.tone}`} key={project.name}>
+              <CardHeader className="portfolio-project-preview">
+                <LivePreview url={project.href} label={project.name} previewLabel={t.preview} />
+              </CardHeader>
+              <CardContent className="portfolio-project-content">
                 <div>
-                  <h3><a href={project.href} target="_blank" rel="noreferrer">{project.title}</a></h3>
-                  <p>{localizedSections[lang].projectTypes[index]}</p>
+                  <p>{project.kind}</p>
+                  <h3>{project.name}</h3>
+                  <span>{project.description}</span>
                 </div>
-                <div className="sv-tags">
-                  {project.tags.map((tag) => {
-                    const technology = technologyByLabel[tag];
-                    return <span className={`sv-tag${technology ? " is-tech" : ""}`} key={tag}>{technology?.icon}{tag}</span>;
-                  })}
-                </div>
+                <a href={project.href} target="_blank" rel="noreferrer" aria-label={`Open ${project.name}`}>
+                  <ArrowUpRight />
+                </a>
+              </CardContent>
+              <div className="portfolio-tags">
+                {project.stack.map((tag) => <Badge variant="outline" key={tag}>{tag}</Badge>)}
               </div>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <section className="portfolio-section portfolio-experience" id="experience">
+        <div className="portfolio-section-heading">
+          <h2>{t.experience}</h2>
+        </div>
+        <div className="portfolio-experience-list">
+          {experience.map((item) => (
+            <article key={item.company}>
+              <span>{item.period}</span>
+              <div><h3>{item.role}</h3><strong>{item.company}</strong><p>{item.description}</p></div>
+              <Check />
             </article>
           ))}
         </div>
       </section>
 
-      <section className="sv-section" id="experience">
-        <div className="sv-sec-header">
-          <div>
-            <span className="sv-sec-label"><span className="sv-mono">04</span> / {t.experience}</span>
-            <h2>{t.experience}</h2>
-          </div>
-          <p>{t.experienceIntro}</p>
+      <section className="portfolio-section portfolio-stack">
+        <div className="portfolio-stack-head">
+          <span className="portfolio-stack-eyebrow">Stack</span>
+          <h2>{lang === "es" ? "Herramientas para construir con intención." : "Tools to build with intention."}</h2>
+          <p>{lang === "es" ? "Las tecnologías que uso a diario para diseñar, desarrollar y lanzar productos." : "The technologies I use every day to design, build and ship products."}</p>
         </div>
-        <div className="sv-log">
-          {localizedSections[lang].experience.map((item) => (
-            <div className="sv-log-row" key={item.company}>
-              <span className="sv-log-year">{item.year}</span>
-              <div>
-                <h3>{item.role}</h3>
-                <span className="sv-log-company">@ {item.company}</span>
-                <p className="sv-log-desc">{item.desc}</p>
-              </div>
-            </div>
+        <ul className="portfolio-stack-grid">
+          {technologies.map((technology) => (
+            <li
+              key={technology.label}
+              style={{ "--stack-color": technology.color, "--stack-color-dark": technology.darkColor } as React.CSSProperties}
+            >
+              <span className="portfolio-stack-icon">{technology.icon}</span>
+              <span>{technology.label}</span>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
-      <section className="sv-section sv-contact" id="contact">
-        <div className="sv-contact-copy">
-          <span className="sv-sec-label"><span className="sv-mono">05</span> / {t.contact}</span>
+      <section className="portfolio-contact" id="contact">
+        <div className="portfolio-contact-copy">
           <h2>{t.contactTitle}</h2>
           <p>{t.contactIntro}</p>
-          <div className="sv-contact-links">
-            <a className="sv-icon-btn sv-icon-btn--text" href="https://github.com/esam-dev" target="_blank" rel="noreferrer"><Github size={17} /><span>GitHub</span></a>
-            <a className="sv-icon-btn sv-icon-btn--text" href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noreferrer"><Linkedin size={17} /><span>LinkedIn</span></a>
-            <a className="sv-icon-btn sv-icon-btn--text" href="mailto:emails.eliasortiz@gmail.com"><Mail size={17} /><span>Email</span></a>
+          <div className="portfolio-socials">
+            <a href="https://github.com/esam-dev" target="_blank" rel="noreferrer"><Github /> GitHub</a>
+            <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noreferrer"><Linkedin /> LinkedIn</a>
+            <a href={mailto}><Mail /> Email</a>
           </div>
         </div>
-        <form className="sv-form" onSubmit={handleSubmit}>
-          <label>{t.name}<input required name="name" autoComplete="name" placeholder={lang === "es" ? "Tu nombre" : "Your name"} value={formData.name} onChange={(event) => setFormData({ ...formData, name: event.target.value })} /></label>
-          <label>{t.email}<input required name="email" type="email" autoComplete="email" placeholder="tu@email.com" value={formData.email} onChange={(event) => setFormData({ ...formData, email: event.target.value })} /></label>
-          <label>{t.phone}<input required name="phone" type="tel" autoComplete="tel" placeholder="+54 11 0000 0000" value={formData.phone} onChange={(event) => setFormData({ ...formData, phone: event.target.value })} /></label>
-          <label>{t.message}<textarea required name="message" rows={4} placeholder={lang === "es" ? "Cuéntame tu idea…" : "Tell me about your idea…"} value={formData.message} onChange={(event) => setFormData({ ...formData, message: event.target.value })} /></label>
-          <button className="sv-btn sv-btn--primary sv-btn--full" type="submit" disabled={submitting}>{submitting ? t.sending : t.send} <ArrowUpRight size={15} /></button>
-          {status === "success" && <p className="sv-status ok">{t.success}</p>}
-          {status === "error" && <p className="sv-status err">{t.error}</p>}
-        </form>
+        <Card className="portfolio-form-card">
+          <CardContent>
+            <form onSubmit={handleSubmit}>
+              <label>{t.name}<Input required autoComplete="name" value={formData.name} onChange={(event) => setFormData({ ...formData, name: event.target.value })} /></label>
+              <label>{t.email}<Input required type="email" autoComplete="email" value={formData.email} onChange={(event) => setFormData({ ...formData, email: event.target.value })} /></label>
+              <label>{t.message}<Textarea required rows={5} value={formData.message} onChange={(event) => setFormData({ ...formData, message: event.target.value })} /></label>
+              <Button type="submit" disabled={submitting}>{submitting ? t.sending : t.send}<Send /></Button>
+              {status === "success" && <p className="portfolio-status portfolio-status--success">{t.success}</p>}
+              {status === "error" && <p className="portfolio-status portfolio-status--error">{t.error}</p>}
+            </form>
+          </CardContent>
+        </Card>
       </section>
 
-      <footer className="sv-footer">
-        <span>© {new Date().getFullYear()} <b>Elías Ortiz</b> — {localizedSections[lang].footer}</span>
-        <div className="sv-footer-links">
-          <a href="https://github.com/esam-dev" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noreferrer">LinkedIn</a>
-          <a href="mailto:emails.eliasortiz@gmail.com">Email</a>
+      <footer className="portfolio-footer">
+        <div className="portfolio-footer-inner">
+          <div className="portfolio-footer-brand">
+            <a className="portfolio-footer-logo" href="#top"><Code2 aria-hidden="true" />Elías Ortiz</a>
+            <p>{t.footerTagline}</p>
+            <div className="portfolio-footer-social">
+              <a href="https://github.com/esam-dev" target="_blank" rel="noreferrer" aria-label="GitHub"><Github /></a>
+              <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin /></a>
+              <a href={mailto} aria-label="Email"><Mail /></a>
+            </div>
+          </div>
+          <nav className="portfolio-footer-nav portfolio-footer-nav--two" aria-label={t.footerHeads[0]}>
+            <div>
+              <h4>{t.footerHeads[0]}</h4>
+              <a href="#about">{t.nav[0]}</a>
+              <a href="#projects">{t.nav[1]}</a>
+              <a href="#experience">{t.nav[2]}</a>
+            </div>
+            <div>
+              <h4>{t.footerHeads[1]}</h4>
+              <a href="#contact">{t.contact}</a>
+              <a href="https://github.com/esam-dev" target="_blank" rel="noreferrer">GitHub</a>
+              <a href="https://www.linkedin.com/in/el%C3%ADas-ort%C3%ADz-a5895224b/" target="_blank" rel="noreferrer">LinkedIn</a>
+            </div>
+          </nav>
+        </div>
+        <div className="portfolio-footer-bottom">
+          <span>© {new Date().getFullYear()} Elías Ortiz · {t.footer}</span>
+          <a href="#top" aria-label={t.backToTop} title={t.backToTop}><ArrowUp /></a>
         </div>
       </footer>
     </main>
-    {serverGameOpen && (
-      <div className="app-dash-modal-backdrop" role="presentation" onClick={(event) => { if (event.target === event.currentTarget) closeServerGame(); }}>
-        <section className="app-dash-modal server-climb-modal" role="dialog" aria-modal="true" aria-labelledby="server-climb-title">
-          <div className="app-dash-modal-head">
-            <div>
-              <span className="app-dash-eyebrow">SERVER CLIMB · {lang === "es" ? "JUEGO" : "GAME"}</span>
-              <h2 id="server-climb-title">{serverGameOver ? (serverGameOverReason === "lightning" ? (lang === "es" ? "¡Te alcanzó un rayo!" : "Lightning hit the server!") : (lang === "es" ? "¡El agua te alcanzó!" : "The water got you!")) : (lang === "es" ? "Sube antes de mojarte" : "Climb before you get wet")}</h2>
-              <p>{serverGameOver ? (lang === "es" ? `Llegaste al bloque ${serverScore}.` : `You reached block ${serverScore}.`) : (lang === "es" ? "Guía el servidor hasta arriba antes de que suba el agua." : "Guide the server upward before the water rises.")}</p>
-            </div>
-            <button className="app-dash-modal-close" type="button" onClick={closeServerGame} aria-label={lang === "es" ? "Cerrar juego" : "Close game"}><X size={19} /></button>
-          </div>
-          <div className="app-dash-modal-score"><span>{lang === "es" ? "Distancia" : "Distance"} <b>{serverDistance.toString().padStart(4, "0")}</b> · {lang === "es" ? "Nivel" : "Level"} <b>{serverLevel + 1}</b></span><button type="button" onClick={toggleMusic}>{musicOn ? <Volume2 size={15} /> : <VolumeX size={15} />} {musicOn ? (lang === "es" ? "Música activa" : "Music on") : (lang === "es" ? "Música apagada" : "Music off")}</button></div>
-          <div className="server-climb-board" style={{ "--water-level": `${100 - serverWater}%` } as React.CSSProperties}>
-            <div className="server-climb-water" />
-            {serverPlatforms.map((platform, index) => <div key={`${platform.x}-${platform.y}`} className="server-climb-platform" style={{ left: `${platform.x}%`, bottom: `${100 - platform.y}%`, width: `${platform.width}%` }}><span>{index + 1}</span></div>)}
-            <div className={`server-player${serverGameActive ? " is-running" : ""}`} style={{ left: `${serverPlayer.x}%`, bottom: `${100 - serverPlayer.y}%` }}><b className="server-rack-label">SERVER</b><span className="server-rack-vent" /><span className="server-screen">&gt;_</span><i /><em /><em /><em /></div>
-            {[23, 57, 82].map((lane, index) => <div key={lane} className={`server-lightning server-lightning-${index + 1}`} style={{ left: `${lane}%`, top: `${lightningFrame - 18}%`, opacity: lightningFrame < 12 ? 0 : 1 }}>⚡</div>)}
-            <div className="server-climb-waterline"><span>WATER LEVEL</span></div>
-          </div>
-          <div className="server-climb-controls"><button type="button" onClick={() => moveServer(-1)} aria-label={lang === "es" ? "Mover servidor a la izquierda" : "Move server left"}>←</button><button type="button" onClick={jumpServer}>{lang === "es" ? "SALTAR / SUBIR" : "JUMP / CLIMB"}</button><button type="button" onClick={() => moveServer(1)} aria-label={lang === "es" ? "Mover servidor a la derecha" : "Move server right"}>→</button></div>
-          <p className="server-climb-help">{serverGameOver ? (serverGameOverReason === "lightning" ? (lang === "es" ? "El rayo cayó en tu carril. Inténtalo de nuevo." : "The lightning struck your lane. Try again.") : (lang === "es" ? "El agua cubrió el bloque. Inténtalo de nuevo." : "The water covered the block. Try again.")) : (lang === "es" ? "Mueve con ← →, esquiva los rayos y pulsa SALTAR / SUBIR." : "Move with ← →, dodge the lightning and press JUMP / CLIMB.")}</p>
-          <button className="app-dash-start" type="button" onClick={startServerGame}>{serverGameOver ? (lang === "es" ? "VOLVER A JUGAR" : "PLAY AGAIN") : (lang === "es" ? "REINICIAR" : "RESTART")} <ArrowUpRight size={15} /></button>
-        </section>
+  );
+}
+
+function LivePreview({ url, label, previewLabel }: { url: string; label: string; previewLabel: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const element = containerRef.current;
+    if (!element || typeof IntersectionObserver === "undefined") {
+      setVisible(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "160px" },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const updateScale = () => {
+      const width = viewport.offsetWidth;
+      if (width > 0) {
+        viewport.style.setProperty("--preview-scale", String(width / 1280));
+      }
+    };
+
+    updateScale();
+    window.addEventListener("resize", updateScale);
+
+    let observer: ResizeObserver | undefined;
+    if (typeof ResizeObserver !== "undefined") {
+      observer = new ResizeObserver(updateScale);
+      observer.observe(viewport);
+    }
+
+    return () => {
+      window.removeEventListener("resize", updateScale);
+      observer?.disconnect();
+    };
+  }, []);
+
+  let host = url;
+  try {
+    host = new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    /* keep raw url */
+  }
+
+  return (
+    <div className="portfolio-live-preview" ref={containerRef}>
+      <div className="portfolio-live-chrome" aria-hidden="true">
+        <i /><i /><i />
+        <span>{host}</span>
       </div>
-    )}
-    </>
+      <div className="portfolio-live-viewport" ref={viewportRef}>
+        {!loaded && (
+          <div className="portfolio-live-loading" aria-hidden="true">
+            <span>{previewLabel}…</span>
+          </div>
+        )}
+        {visible && (
+          <iframe
+            src={url}
+            title={`${label} — live preview`}
+            loading="lazy"
+            referrerPolicy="no-referrer"
+            onLoad={() => setLoaded(true)}
+          />
+        )}
+      </div>
+    </div>
   );
 }
