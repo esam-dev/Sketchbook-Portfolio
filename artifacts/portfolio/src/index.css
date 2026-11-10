@@ -36,79 +36,60 @@
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
 
-  --font-sans: 'Noto Sans', 'Luxi Sans', 'DejaVu Sans', sans-serif;
-  --font-mono: 'DejaVu Sans Mono', 'Courier New', monospace;
-  --font-display: 'Archivo Black', sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  --radius-sm: 2px;
-  --radius-md: 3px;
-  --radius-lg: 4px;
-  --radius-xl: 6px;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
 }
 
 /* ============================================
-   BLUECURVE THEME - Fedora Core 1 (2003)
+   MINIMALIST MODERN THEME
+   Neutral palette, hairline borders,
+   soft gradients, generous whitespace
    ============================================ */
 
 :root {
-  /* Core Bluecurve palette */
-  --background: 210 30% 96%;       /* #ececec widget gray */
-  --foreground: 0 0% 5%;           /* near-black text */
+  --background: 0 0% 99%;
+  --foreground: 240 10% 4%;
 
-  --border: 0 0% 60%;              /* #999999 */
+  --border: 240 6% 90%;
 
-  --card: 0 0% 100%;               /* white content */
-  --card-foreground: 0 0% 5%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 4%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 5%;
+  --popover-foreground: 240 10% 4%;
 
-  --primary: 213 52% 45%;          /* #3366aa Bluecurve blue */
-  --primary-foreground: 0 0% 100%;
+  --primary: 240 10% 9%;
+  --primary-foreground: 0 0% 98%;
 
-  --secondary: 210 15% 85%;        /* #d4d0c8 widget face */
-  --secondary-foreground: 0 0% 5%;
+  --secondary: 240 5% 96%;
+  --secondary-foreground: 240 6% 10%;
 
-  --muted: 210 10% 90%;
-  --muted-foreground: 0 0% 40%;
+  --muted: 240 5% 96%;
+  --muted-foreground: 240 4% 46%;
 
-  --accent: 213 52% 45%;
+  --accent: 221 83% 53%;
   --accent-foreground: 0 0% 100%;
 
-  --destructive: 0 60% 50%;
-  --destructive-foreground: 0 0% 100%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
 
-  --input: 0 0% 100%;
-  --ring: 213 52% 45%;
+  --input: 240 6% 90%;
+  --ring: 240 10% 9%;
 
-  --chart-1: 213 52% 45%;
-  --chart-2: 120 40% 40%;
-  --chart-3: 40 80% 45%;
-  --chart-4: 0 50% 50%;
-  --chart-5: 280 40% 50%;
+  --chart-1: 221 83% 53%;
+  --chart-2: 160 84% 39%;
+  --chart-3: 38 92% 50%;
+  --chart-4: 0 72% 51%;
+  --chart-5: 271 91% 65%;
 
-  /* Bluecurve-specific tokens */
-  --panel-bg: #3c6fa0;
-  --panel-bg-light: #5a8fc4;
-  --panel-bg-dark: #2a5580;
-  --panel-text: #ffffff;
-  --panel-height: 28px;
-
-  --titlebar-active: linear-gradient(180deg, #5a8fc4 0%, #3c6fa0 30%, #2d5f8a 100%);
-  --titlebar-inactive: linear-gradient(180deg, #94a8b8 0%, #7a8f9f 30%, #6a7f8f 100%);
-  --titlebar-text: #ffffff;
-
-  --widget-bg: #ececec;
-  --widget-face: #d4d0c8;
-  --widget-highlight: #ffffff;
-  --widget-shadow: #808080;
-  --widget-dark-shadow: #404040;
-
-  --desktop-bg-top: #1a3a5c;
-  --desktop-bg-bottom: #0d2137;
-
-  --selection-bg: #3366aa;
-  --selection-text: #ffffff;
+  --selection-bg: hsl(221 83% 53% / 0.15);
+  --selection-text: inherit;
 }
 
 /* ============================================
@@ -121,26 +102,22 @@
     box-sizing: border-box;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply antialiased;
     font-family: var(--font-sans);
-    font-size: 13px;
-    line-height: 1.4;
+    font-size: 16px;
+    line-height: 1.6;
     color: var(--foreground);
-    background: var(--widget-bg);
+    background: hsl(var(--background));
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  #root {
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   ::selection {
@@ -150,188 +127,156 @@
 }
 
 /* ============================================
-   BEVEL UTILITIES (3D raised/sunken borders)
+   MINIMAL UTILITIES
    ============================================ */
 
 @layer utilities {
-  /* Raised bevel - like buttons and panels */
-  .bevel-raised {
-    border: 1px solid;
-    border-color: var(--widget-highlight) var(--widget-dark-shadow) var(--widget-dark-shadow) var(--widget-highlight);
-    box-shadow:
-      inset 1px 1px 0px var(--widget-highlight),
-      inset -1px -1px 0px var(--widget-shadow);
+  /* Hairline border card */
+  .card-minimal {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius-lg);
   }
 
-  /* Stronger raised bevel for active buttons */
-  .bevel-raised-strong {
-    border: 2px solid;
-    border-color: var(--widget-highlight) var(--widget-dark-shadow) var(--widget-dark-shadow) var(--widget-highlight);
-    box-shadow:
-      inset 1px 1px 0px #ffffff,
-      inset -1px -1px 0px var(--widget-shadow);
-  }
-
-  /* Sunken bevel - for input fields and content areas */
-  .bevel-sunken {
-    border: 2px solid;
-    border-color: var(--widget-shadow) var(--widget-highlight) var(--widget-highlight) var(--widget-shadow);
-    box-shadow:
-      inset 1px 1px 2px var(--widget-dark-shadow),
-      inset -1px -1px 0px var(--widget-highlight);
-  }
-
-  /* Flat bevel for status bars */
-  .bevel-flat {
-    border: 1px solid;
-    border-color: var(--widget-shadow) var(--widget-highlight) var(--widget-highlight) var(--widget-shadow);
-  }
-
-  /* Panel gradient */
-  .panel-gradient {
-    background: linear-gradient(180deg, #5a8fc4 0%, #3c6fa0 40%, #2d5f8a 100%);
-  }
-
-  /* Titlebar gradient - active window */
-  .titlebar-gradient {
-    background: linear-gradient(180deg, #5a8fc4 0%, #3c6fa0 30%, #2d5f8a 100%);
-  }
-
-  /* Titlebar gradient - inactive window */
-  .titlebar-inactive {
-    background: linear-gradient(180deg, #94a8b8 0%, #7a8f9f 30%, #6a7f8f 100%);
-  }
-
-  /* Desktop background gradient */
-  .desktop-gradient {
-    background: linear-gradient(160deg, #2a5a8c 0%, #1a3a5c 30%, #0d2137 100%);
-  }
-
-  /* Widget background */
-  .widget-bg {
-    background-color: var(--widget-bg);
-  }
-
-  /* Content area white */
-  .content-white {
-    background-color: #ffffff;
-  }
-
-  /* Bluecurve blue button */
-  .btn-bluecurve {
-    background: linear-gradient(180deg, #6a9fd8 0%, #4a7fb8 40%, #3a6fa8 100%);
-    color: white;
+  /* Primary pill button */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
     font-weight: 600;
-    border: 1px solid #2a5580;
-    box-shadow:
-      inset 1px 1px 0px rgba(255,255,255,0.3),
-      inset -1px -1px 0px rgba(0,0,0,0.2);
+    font-size: 0.875rem;
+    line-height: 1;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    border: 1px solid transparent;
     cursor: pointer;
-    padding: 3px 12px;
-    font-size: 12px;
-    border-radius: 3px;
-    transition: none;
+    transition: opacity 200ms ease, transform 200ms ease, box-shadow 200ms ease;
   }
 
-  .btn-bluecurve:hover {
-    background: linear-gradient(180deg, #7aafde 0%, #5a8fc8 40%, #4a7fb8 100%);
+  .btn-primary:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px -8px hsl(var(--primary) / 0.45);
   }
 
-  .btn-bluecurve:active {
-    background: linear-gradient(180deg, #3a6fa8 0%, #4a7fb8 40%, #5a8fc8 100%);
-    box-shadow:
-      inset -1px -1px 0px rgba(255,255,255,0.3),
-      inset 1px 1px 0px rgba(0,0,0,0.2);
+  .btn-primary:active {
+    transform: translateY(0);
   }
 
-  /* Default button (gray widget) */
-  .btn-widget {
-    background: var(--widget-face);
-    color: var(--foreground);
+  .btn-primary:disabled {
+    opacity: 0.5;
+    transform: none;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  /* Secondary outline button */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: hsl(var(--foreground));
     font-weight: 500;
-    border: 2px solid;
-    border-color: var(--widget-highlight) var(--widget-dark-shadow) var(--widget-dark-shadow) var(--widget-highlight);
-    box-shadow:
-      inset 1px 1px 0px #ffffff,
-      inset -1px -1px 0px var(--widget-shadow);
+    font-size: 0.875rem;
+    line-height: 1;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    border: 1px solid hsl(var(--border));
     cursor: pointer;
-    padding: 4px 16px;
-    font-size: 12px;
-    font-family: var(--font-sans);
-    border-radius: 3px;
+    transition: background-color 200ms ease, border-color 200ms ease, transform 200ms ease;
   }
 
-  .btn-widget:hover {
-    background: #e0dcd4;
+  .btn-ghost:hover {
+    background: hsl(var(--secondary));
+    border-color: hsl(240 6% 84%);
+    transform: translateY(-1px);
   }
 
-  .btn-widget:active {
-    border-color: var(--widget-dark-shadow) var(--widget-highlight) var(--widget-highlight) var(--widget-dark-shadow);
-    box-shadow:
-      inset 1px 1px 2px rgba(0,0,0,0.3);
-    padding: 5px 15px 3px 17px;
+  .btn-ghost:active {
+    transform: translateY(0);
   }
 
-  /* Menu item hover */
-  .menu-item-hover {
-    background: var(--selection-bg);
-    color: var(--selection-text);
+  /* Minimal text input */
+  .input-minimal {
+    width: 100%;
+    background: hsl(var(--card));
+    color: hsl(var(--foreground));
+    font-size: 0.875rem;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid hsl(var(--input));
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
   }
 
-  /* Separator groove */
-  .groove {
-    border-top: 1px solid var(--widget-shadow);
-    border-bottom: 1px solid var(--widget-highlight);
+  .input-minimal::placeholder {
+    color: hsl(var(--muted-foreground) / 0.7);
   }
 
-  /* Scrollbar styling */
-  .bluecurve-scrollbar::-webkit-scrollbar {
-    width: 16px;
-    height: 16px;
+  .input-minimal:focus {
+    border-color: hsl(var(--foreground) / 0.35);
+    box-shadow: 0 0 0 3px hsl(var(--foreground) / 0.06);
   }
 
-  .bluecurve-scrollbar::-webkit-scrollbar-track {
-    background: #c0c0c0;
-    border: 1px solid #808080;
+  /* Section eyebrow label */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
   }
 
-  .bluecurve-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--widget-face);
-    border: 2px solid;
-    border-color: var(--widget-highlight) var(--widget-dark-shadow) var(--widget-dark-shadow) var(--widget-highlight);
-    box-shadow: inset 1px 1px 0px #ffffff;
+  /* Hero soft gradient backdrop */
+  .hero-gradient {
+    background:
+      radial-gradient(60% 50% at 50% 0%, hsl(221 83% 60% / 0.07) 0%, transparent 70%),
+      radial-gradient(40% 40% at 85% 10%, hsl(271 91% 65% / 0.05) 0%, transparent 70%),
+      radial-gradient(40% 40% at 12% 15%, hsl(160 84% 45% / 0.04) 0%, transparent 70%);
   }
 
-  .bluecurve-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #d8d4cc;
+  /* Subtle gradient sheen for feature sections */
+  .section-gradient {
+    background: linear-gradient(180deg, transparent 0%, hsl(240 5% 96% / 0.5) 50%, transparent 100%);
   }
 
-  .bluecurve-scrollbar::-webkit-scrollbar-button {
-    background: var(--widget-face);
-    border: 2px solid;
-    border-color: var(--widget-highlight) var(--widget-dark-shadow) var(--widget-dark-shadow) var(--widget-highlight);
-    display: block;
-    height: 16px;
-    width: 16px;
+  /* Faint grid texture */
+  .grid-texture {
+    background-image:
+      linear-gradient(to right, hsl(240 6% 90% / 0.6) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(240 6% 90% / 0.6) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
   }
 }
 
 /* ============================================
-   ANIMATIONS (minimal, period-appropriate)
+   ANIMATIONS (subtle, premium)
    ============================================ */
 
-@keyframes window-open {
+@keyframes fade-up {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
   }
 }
 
-@keyframes blink-cursor {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+.animate-fade-up {
+  animation: fade-up 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }
